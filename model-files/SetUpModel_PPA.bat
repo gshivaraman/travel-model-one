@@ -8,7 +8,7 @@
 SET computer_prefix=%computername:~0,4%
 
 :: copy over CTRAMP
-set GITHUB_DIR=\\mainmodel\MainModelShare\travel-model-one-1.5.2.1
+set GITHUB_DIR= F:\23791501\GitHub\travel-model-one
 mkdir CTRAMP\model
 mkdir CTRAMP\runtime
 mkdir CTRAMP\scripts
@@ -30,7 +30,7 @@ if "%COMPUTER_PREFIX%" == "WIN-"    (copy "%GITHUB_DIR%\utilities\monitoring\not
 if "%COMPUTER_PREFIX%" == "WIN-"    set HOST_IP_ADDRESS=10.0.0.33
 
 :: copy over INPUTs from baseline
-set MODEL_SETUP_BASE_DIR=M:\Application\Model One\RTP2021\ProjectPerformanceAssessment\Projects\2050_TM151_PPA_CG_11
+set MODEL_SETUP_BASE_DIR=F:\23791501\2015_TM152_IPA_16
 c:\windows\system32\Robocopy.exe /E "%MODEL_SETUP_BASE_DIR%\INPUT\landuse"                       INPUT\landuse
 c:\windows\system32\Robocopy.exe /E "%MODEL_SETUP_BASE_DIR%\INPUT\logsums"                       INPUT\logsums
 c:\windows\system32\Robocopy.exe /E "%MODEL_SETUP_BASE_DIR%\INPUT\metrics"                       INPUT\metrics
@@ -41,12 +41,12 @@ copy /Y "%MODEL_SETUP_BASE_DIR%\INPUT\params.properties"                        
 
 :: copy over ShadowPricing file from baseline
 :: needed for all project runs; not needed for baseline runs
-copy /Y "%MODEL_SETUP_BASE_DIR%\OUTPUT\main\ShadowPricing_7.csv"                                 INPUT\logsums
+:: copy /Y "%MODEL_SETUP_BASE_DIR%\OUTPUT\main\ShadowPricing_7.csv"                                 INPUT\logsums
 
 :: copy over project specific inputs
-set MODEL_SETUP_DIR=M:\Application\Model One\RTP2021\ProjectPerformanceAssessment\Projects\2202_BART_DMU_Brentwood\2050_TM151_PPA_CG_11_666_Project
-c:\windows\system32\Robocopy.exe /E "%MODEL_SETUP_DIR%\hwy"                           INPUT\hwy
-c:\windows\system32\Robocopy.exe /E "%MODEL_SETUP_DIR%\trn"                           INPUT\trn
+set MODEL_SETUP_DIR=%MODEL_SETUP_BASE_DIR%
+c:\windows\system32\Robocopy.exe /E "%MODEL_SETUP_DIR%\INPUT\hwy"                           INPUT\hwy
+c:\windows\system32\Robocopy.exe /E "%MODEL_SETUP_DIR%\INPUT\trn"                           INPUT\trn
 
 :: set the location of the output folder; this is where the extractor directory will be copied to
 set M_DIR=%MODEL_SETUP_DIR%
@@ -77,7 +77,7 @@ set ALPHABET=%computername:~7,1%
 echo Set oWS = WScript.CreateObject("WScript.Shell") >> %TEMP_SCRIPT%
 echo sLinkFile = "%M_DIR%/model_run_on_%computername%.lnk" >> %TEMP_SCRIPT%
 echo Set oLink = oWS.CreateShortcut(sLinkFile) >> %TEMP_SCRIPT%
-echo oLink.TargetPath = "M:" >> %TEMP_SCRIPT%
+echo oLink.TargetPath = "F:" >> %TEMP_SCRIPT%
 echo oLink.TargetPath = "\\%computername%\%PROJECT_DIR%" >> %TEMP_SCRIPT%
 
 echo oLink.Save >> %TEMP_SCRIPT%
