@@ -2,13 +2,13 @@
 :: Utility to set the path.  Used in RunModel as well as RunMain and RunNodeX. 
 
 :: The commpath
-SET COMMPATH=F:\23791501\2015_TM152_IPA_16\Model
+SET COMMPATH=F:\23791501\2015_TM152_IPA_16\2015_TM152_IPA_16\
 
 :: The location of the 64-bit java development kit
 set JAVA_PATH=C:\Program Files\Java\jdk-16.0.1
 
 :: The location of the GAWK binary executable files
-set GAWK_PATH=E:\Program Files (x86)\GnuWin32\bin
+set GAWK_PATH=E:\Program Files (x86)\GnuWin32
 
 :: The location of R and R libraries
 set R_HOME=E:\Program Files\R\R-4.0.5
@@ -16,10 +16,10 @@ set R_LIB=E:\Program Files\R\R-4.0.5\library
 
 :: The location of the RUNTPP executable from Citilabs
 :: The API was obtained from here: https://communities.bentley.com/products/mobility-simulation-analytics/m/cube-files/275055
-set TPP_PATH=E:\Program Files (x86)\Citilabs\CubeVoyager; F:\23791501\2015_TM152_IPA_16\Model\CUBE6_VoyagerAPI\Dlls\x64
+set TPP_PATH=E:\Program Files (x86)\Citilabs\CubeVoyager; F:\23791501\2015_TM152_IPA_16\2015_TM152_IPA_16\CUBE6_VoyagerAPI\Dlls\x64
 
 :: The location of python
-set PYTHON_PATH=E:\Python27
+set PYTHON_PATH=E:\Program Files\Python27
 
 :: The location of the MTC.JAR file
 set RUNTIME=CTRAMP/runtime
