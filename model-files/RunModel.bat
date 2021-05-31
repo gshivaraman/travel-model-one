@@ -95,7 +95,7 @@ if %FUTURE%==X (
 echo on
 echo turn echo back on
 
-python "CTRAMP\scripts\notify_slack.py" "Starting *%MODEL_DIR%*"
+"E:\Program Files\Python27\python.exe" "CTRAMP\scripts\notify_slack.py" "Starting *%MODEL_DIR%*"
 
 set MAXITERATIONS=3
 :: --------TrnAssignment Setup -- Standard Configuration
@@ -152,11 +152,11 @@ copy INPUT\logsums              logsums\
 
 :: Runtime configuration: set project directory, auto operating cost, 
 :: and synthesized household/population files in the appropriate places
-python CTRAMP\scripts\preprocess\RuntimeConfiguration.py
+"E:\Program Files\Python27\python.exe" CTRAMP\scripts\preprocess\RuntimeConfiguration.py
 if ERRORLEVEL 1 goto done
 
 :: Set the prices in the roadway network (convert csv to dbf first)
-python CTRAMP\scripts\preprocess\csvToDbf.py hwy\tolls.csv hwy\tolls.dbf
+"E:\Program Files\Python27\python.exe" CTRAMP\scripts\preprocess\csvToDbf.py hwy\tolls.csv hwy\tolls.dbf
 IF ERRORLEVEL 1 goto done
 
 :: Set the prices in the roadway network
@@ -193,7 +193,7 @@ if ERRORLEVEL 2 goto done
 
 :: Step 4.5: Build initial transit files
 set PYTHONPATH=%USERPROFILE%\Documents\GitHub\NetworkWrangler;%USERPROFILE%\Documents\GitHub\NetworkWrangler\_static
-python CTRAMP\scripts\skims\transitDwellAccess.py NORMAL NoExtraDelay Simple complexDwell %COMPLEXMODES_DWELL% complexAccess %COMPLEXMODES_ACCESS%
+"E:\Program Files\Python27\python.exe" CTRAMP\scripts\skims\transitDwellAccess.py NORMAL NoExtraDelay Simple complexDwell %COMPLEXMODES_DWELL% complexAccess %COMPLEXMODES_ACCESS%
 if ERRORLEVEL 2 goto done
 
 
@@ -222,7 +222,7 @@ call CTRAMP\RunIteration.bat
 if ERRORLEVEL 2 goto done
 
 :: Runtime configuration: setup initial telecommute constants
-python CTRAMP\scripts\preprocess\updateTelecommuteConstants.py
+"E:\Program Files\Python27\python.exe" CTRAMP\scripts\preprocess\updateTelecommuteConstants.py
 if ERRORLEVEL 1 goto done
 :: copy over result for use
 copy /Y main\telecommute_constants_0%ITER%.csv main\telecommute_constants.csv
@@ -245,7 +245,7 @@ set SAMPLESHARE=0.15
 set SEED=0
 
 :: Runtime configuration: set the workplace shadow pricing parameters
-python CTRAMP\scripts\preprocess\RuntimeConfiguration.py --iter %ITER%
+"E:\Program Files\Python27\python.exe" CTRAMP\scripts\preprocess\RuntimeConfiguration.py --iter %ITER%
 if ERRORLEVEL 1 goto done
 
 :: Call RunIteration batch file
@@ -253,7 +253,7 @@ call CTRAMP\RunIteration.bat
 if ERRORLEVEL 2 goto done
 
 :: Runtime configuration: update telecommute constants using iter1 results
-python CTRAMP\scripts\preprocess\updateTelecommuteConstants.py
+"E:\Program Files\Python27\python.exe" CTRAMP\scripts\preprocess\updateTelecommuteConstants.py
 if ERRORLEVEL 1 goto done
 :: copy over result for use
 copy /Y main\telecommute_constants_0%ITER%.csv main\telecommute_constants.csv
@@ -275,7 +275,7 @@ set SAMPLESHARE=0.30
 set SEED=0
 
 :: Runtime configuration: set the workplace shadow pricing parameters
-python CTRAMP\scripts\preprocess\RuntimeConfiguration.py --iter %ITER%
+"E:\Program Files\Python27\python.exe" CTRAMP\scripts\preprocess\RuntimeConfiguration.py --iter %ITER%
 if ERRORLEVEL 1 goto done
 
 :: Call RunIteration batch file
@@ -283,7 +283,7 @@ call CTRAMP\RunIteration.bat
 if ERRORLEVEL 2 goto done
 
 :: Runtime configuration: update telecommute constants using iter2 results
-python CTRAMP\scripts\preprocess\updateTelecommuteConstants.py
+"E:\Program Files\Python27\python.exe" CTRAMP\scripts\preprocess\updateTelecommuteConstants.py
 if ERRORLEVEL 1 goto done
 :: copy over result for use
 copy /Y main\telecommute_constants_0%ITER%.csv main\telecommute_constants.csv
@@ -305,7 +305,7 @@ set SAMPLESHARE=0.50
 set SEED=0
 
 :: Runtime configuration: set the workplace shadow pricing parameters
-python CTRAMP\scripts\preprocess\RuntimeConfiguration.py --iter %ITER%
+"E:\Program Files\Python27\python.exe" CTRAMP\scripts\preprocess\RuntimeConfiguration.py --iter %ITER%
 if ERRORLEVEL 1 goto done
 
 :: Call RunIteration batch file
@@ -317,7 +317,7 @@ C:\Windows\SysWOW64\taskkill /f /im "java.exe"
 
 
 :: update telecommute constants one more time just to evaluate the situation
-python CTRAMP\scripts\preprocess\updateTelecommuteConstants.py
+"E:\Program Files\Python27\python.exe" CTRAMP\scripts\preprocess\updateTelecommuteConstants.py
 
 :: ------------------------------------------------------------------------------------------------------
 ::
@@ -423,7 +423,7 @@ call Run_QAQC
 :success
 ECHO FINISHED SUCCESSFULLY!
 
-python "CTRAMP\scripts\notify_slack.py" "Finished *%MODEL_DIR%*"
+"E:\Program Files\Python27\python.exe" "CTRAMP\scripts\notify_slack.py" "Finished *%MODEL_DIR%*"
 
 if "%COMPUTER_PREFIX%" == "WIN-" (
   
@@ -433,7 +433,7 @@ if "%COMPUTER_PREFIX%" == "WIN-" (
   cd %myfolder%
 
   rem shutdown
-  python "CTRAMP\scripts\notify_slack.py" "Finished *%MODEL_DIR%* - shutting down"
+  "E:\Program Files\Python27\python.exe" "CTRAMP\scripts\notify_slack.py" "Finished *%MODEL_DIR%* - shutting down"
   C:\Windows\System32\shutdown.exe /s
 )
 
@@ -445,6 +445,6 @@ goto donedone
 ECHO FINISHED.  
 
 :: if we got here and didn't shutdown -- assume something went wrong
-python "CTRAMP\scripts\notify_slack.py" ":exclamation: Error in *%MODEL_DIR%*"
+"E:\Program Files\Python27\python.exe" "CTRAMP\scripts\notify_slack.py" ":exclamation: Error in *%MODEL_DIR%*"
 
 :donedone
