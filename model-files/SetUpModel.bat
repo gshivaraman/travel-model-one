@@ -62,18 +62,18 @@ title %myfolder%
 :: create a shortcut of the project directory using a temporary VBScript
 ::-----------------------------------------------------------------------
 
-set TEMP_SCRIPT=%CD%\temp_script_to_create_shortcut.vbs
-set PROJECT_DIR=%~p0
-set ALPHABET=%computername:~7,1%
+:: set TEMP_SCRIPT=%CD%\temp_script_to_create_shortcut.vbs
+:: set PROJECT_DIR=%~p0
+:: set ALPHABET=%computername:~7,1%
 
-echo Set oWS = WScript.CreateObject(WScript.Shell) >> %TEMP_SCRIPT%
-echo sLinkFile = %M_DIR%/model_run_on_%computername%.lnk >> %TEMP_SCRIPT%
-echo Set oLink = oWS.CreateShortcut(sLinkFile) >> %TEMP_SCRIPT%
-echo oLink.TargetPath = F: >> %TEMP_SCRIPT%
-echo oLink.TargetPath = \\%computername%\%PROJECT_DIR% >> %TEMP_SCRIPT%
+:: echo Set oWS = WScript.CreateObject(WScript.Shell) >> %TEMP_SCRIPT%
+:: echo sLinkFile = %M_DIR%/model_run_on_%computername%.lnk >> %TEMP_SCRIPT%
+:: echo Set oLink = oWS.CreateShortcut(sLinkFile) >> %TEMP_SCRIPT%
+:: echo oLink.TargetPath = F: >> %TEMP_SCRIPT%
+:: echo oLink.TargetPath = \\%computername%\%PROJECT_DIR% >> %TEMP_SCRIPT%
 
-echo oLink.Save >> %TEMP_SCRIPT%
+:: echo oLink.Save >> %TEMP_SCRIPT%
 
-::C:\Windows\SysWOW64\cscript.exe /nologo %TEMP_SCRIPT%
-C:\Windows\SysWOW64\cscript.exe %TEMP_SCRIPT%
-del %TEMP_SCRIPT%
+:: C:\Windows\SysWOW64\cscript.exe /nologo %TEMP_SCRIPT%
+:: C:\Windows\SysWOW64\cscript.exe %TEMP_SCRIPT%
+:: del %TEMP_SCRIPT%
