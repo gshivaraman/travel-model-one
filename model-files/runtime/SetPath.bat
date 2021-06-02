@@ -2,7 +2,7 @@
 :: Utility to set the path.  Used in RunModel as well as RunMain and RunNodeX. 
 
 :: The commpath
-SET COMMPATH=F:\23791501\2015_TM152_Steer\
+SET COMMPATH=F:\23791501\2015_TM152_STR_BA\
 
 :: The location of the 64-bit java development kit
 set JAVA_PATH=C:\Program Files\Java\jdk-16.0.1
