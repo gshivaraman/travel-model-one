@@ -64,21 +64,30 @@ if %MODEL_YEAR% GTR 3000 (
   exit /b 2
 )
 
+:: an example of a folder name with the naming convention used below would be 2015_TM152_IPA_16
 set PROJECT=%myfolder:~11,3%
+:: this would yield "IPA" in the example above
 set FUTURE_ABBR=%myfolder:~15,2%
+:: this would yield "16" in the example above
 set FUTURE=X
+:: FUTURE is initialised to X so that further down it can be tested whether another definition has been set or not.  
 
 :: FUTURE ------------------------- make sure FUTURE_ABBR is one of the five [RT,CG,BF] -------------------------
 :: The long names are: BaseYear ie 2015, Blueprint aka PBA50, CleanAndGreen, BackToTheFuture, or RisingTidesFallingFortunes
 
-if %PROJECT%==IPA (SET FUTURE=PBA50)
-if %PROJECT%==DBP (SET FUTURE=PBA50)
-if %PROJECT%==FBP (SET FUTURE=PBA50)
-if %PROJECT%==EIR (SET FUTURE=PBA50)
-if %PROJECT%==PPA (
-  if %FUTURE_ABBR%==RT (set FUTURE=RisingTidesFallingFortunes)
-  if %FUTURE_ABBR%==CG (set FUTURE=CleanAndGreen)
-  if %FUTURE_ABBR%==BF (set FUTURE=BackToTheFuture)
+::if %PROJECT%==IPA (SET FUTURE=PBA50)
+::if %PROJECT%==DBP (SET FUTURE=PBA50)
+::if %PROJECT%==FBP (SET FUTURE=PBA50)
+::if %PROJECT%==EIR (SET FUTURE=PBA50)
+::if %PROJECT%==PPA (
+::  if %FUTURE_ABBR%==RT (set FUTURE=RisingTidesFallingFortunes)
+::  if %FUTURE_ABBR%==CG (set FUTURE=CleanAndGreen)
+::  if %FUTURE_ABBR%==BF (set FUTURE=BackToTheFuture)
+::)
+
+:: Steer modification for base run, considering that the model folder will be called "2015_TM152_STR_BA" for the base run.  
+if %PROJECT%==STR (
+	if %FUTURE_ABBR%==BA (set FUTURE=PBA50)
 )
 
 echo on
