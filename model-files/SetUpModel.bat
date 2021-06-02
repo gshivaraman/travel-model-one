@@ -44,7 +44,9 @@ c:\windows\system32\Robocopy.exe /E %MODEL_SETUP_BASE_DIR%\INPUT\warmstart      
 c:\windows\system32\Robocopy.exe /E %MODEL_SETUP_BASE_DIR%\INPUT\hwy                           INPUT\hwy
 c:\windows\system32\Robocopy.exe /E %MODEL_SETUP_BASE_DIR%\INPUT\trn                           INPUT\trn
 
-copy /Y %MODEL_SETUP_BASE_DIR%\INPUT\params.properties                                         INPUT\params.properties
+:: params2015.properties copied to params.properties as the version from %MODEL_SETUP_BASE_DIR%\INPUT was producing an error: "Couldn't find Bike_Infra_C_IVT_Multiplier in INPUT\params.properties"
+:: copy /Y %MODEL_SETUP_BASE_DIR%\INPUT\params.properties                                         INPUT\params.properties
+copy /Y %GITHUB_DIR%\config\params2015.properties						INPUT\params.properties
 
 ::-----------------------------------------------------------------------
 :: add folder name to the command prompt window 
