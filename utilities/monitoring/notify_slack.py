@@ -33,7 +33,7 @@ if __name__ == '__main__':
         SLACK_WEBHOOK_URL_FILE = "M:\Software\Slack\TravelModel_SlackWebhook.txt"
         print("Running on mtc host; using {}".format(SLACK_WEBHOOK_URL_FILE))
     else:
-        SLACK_WEBHOOK_URL_FILE = "C:\Software\Slack\TravelModel_SlackWebhook.txt"
+        SLACK_WEBHOOK_URL_FILE = https://hooks.slack.com/services/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
         print("Running on non-mtc host; using {}".format(SLACK_WEBHOOK_URL_FILE))
 
     SLACK_WEBHOOK_URL      = None # will be read
