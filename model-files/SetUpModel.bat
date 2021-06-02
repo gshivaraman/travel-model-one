@@ -8,7 +8,7 @@
 SET computer_prefix=%computername:~0,4%
 
 :: copy over CTRAMP
-set GITHUB_DIR= F:\23791501\GitHub\travel-model-one
+set GITHUB_DIR= F:\23791501\GitHub\travel-model-one-alexmitrani
 mkdir CTRAMP\model
 mkdir CTRAMP\runtime
 mkdir CTRAMP\scripts
@@ -29,30 +29,22 @@ copy /Y %GITHUB_DIR%\utilities\RTP\ExtractKeyFiles.bat                   .
 if %COMPUTER_PREFIX% == BIGI    (copy %GITHUB_DIR%\utilities\monitoring\notify_slack.py  CTRAMP\scripts\notify_slack.py)
 if %COMPUTER_PREFIX% == BIGI    set HOST_IP_ADDRESS=10.60.10.70
 
+:: copy over CUBE6_VoyagerAPI
+set MODEL_ROOT_DIR=F:\23791501
+c:\windows\system32\Robocopy.exe /E %MODEL_ROOT_DIR%\CUBE6_VoyagerAPI                       	CUBE6_VoyagerAPI
+
 :: copy over INPUTs from baseline
-set MODEL_SETUP_BASE_DIR=F:\23791501\2015_TM152_IPA_16\2015_TM152_IPA_16
+set MODEL_SETUP_BASE_DIR=F:\23791501\mtcdrive\2015_TM152_IPA_16
 c:\windows\system32\Robocopy.exe /E %MODEL_SETUP_BASE_DIR%\INPUT\landuse                       INPUT\landuse
 c:\windows\system32\Robocopy.exe /E %MODEL_SETUP_BASE_DIR%\INPUT\logsums                       INPUT\logsums
 c:\windows\system32\Robocopy.exe /E %MODEL_SETUP_BASE_DIR%\INPUT\metrics                       INPUT\metrics
 c:\windows\system32\Robocopy.exe /E %MODEL_SETUP_BASE_DIR%\INPUT\nonres                        INPUT\nonres
 c:\windows\system32\Robocopy.exe /E %MODEL_SETUP_BASE_DIR%\INPUT\popsyn                        INPUT\popsyn
 c:\windows\system32\Robocopy.exe /E %MODEL_SETUP_BASE_DIR%\INPUT\warmstart                     INPUT\warmstart
+c:\windows\system32\Robocopy.exe /E %MODEL_SETUP_BASE_DIR%\INPUT\hwy                           INPUT\hwy
+c:\windows\system32\Robocopy.exe /E %MODEL_SETUP_BASE_DIR%\INPUT\trn                           INPUT\trn
+
 copy /Y %MODEL_SETUP_BASE_DIR%\INPUT\params.properties                                         INPUT\params.properties
-
-:: copy over ShadowPricing file from baseline
-:: needed for all project runs; not needed for baseline runs
-:: copy /Y %MODEL_SETUP_BASE_DIR%\OUTPUT\main\ShadowPricing_7.csv                                 INPUT\logsums
-
-:: copy over project specific inputs
-set MODEL_SETUP_DIR=%MODEL_SETUP_BASE_DIR%
-c:\windows\system32\Robocopy.exe /E %MODEL_SETUP_DIR%\INPUT\hwy                           INPUT\hwy
-c:\windows\system32\Robocopy.exe /E %MODEL_SETUP_DIR%\INPUT\trn                           INPUT\trn
-
-:: set the location of the output folder; this is where the extractor directory will be copied to
-set M_DIR=%MODEL_SETUP_DIR%
-
-:: copy this batch file itself to M
-copy SetUpModel.bat %M_DIR%\SetUpModel.bat
 
 ::-----------------------------------------------------------------------
 :: add folder name to the command prompt window 

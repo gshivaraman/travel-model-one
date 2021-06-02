@@ -2,7 +2,7 @@
 :: Utility to set the path.  Used in RunModel as well as RunMain and RunNodeX. 
 
 :: The commpath
-SET COMMPATH=F:\23791501\2015_TM152_IPA_16\2015_TM152_IPA_16\
+SET COMMPATH=F:\23791501\2015_TM152_Steer\
 
 :: The location of the 64-bit java development kit
 set JAVA_PATH=C:\Program Files\Java\jdk-16.0.1
@@ -16,7 +16,7 @@ set R_LIB=E:\Program Files\R\R-4.0.5\library
 
 :: The location of the RUNTPP executable from Citilabs
 :: The API was obtained from here: https://communities.bentley.com/products/mobility-simulation-analytics/m/cube-files/275055
-set TPP_PATH=E:\Program Files (x86)\Citilabs\CubeVoyager; F:\23791501\2015_TM152_IPA_16\2015_TM152_IPA_16\CUBE6_VoyagerAPI\Dlls\x64
+set TPP_PATH=E:\Program Files (x86)\Citilabs\CubeVoyager; %COMMPATH%\CUBE6_VoyagerAPI\Dlls\x64
 
 :: The location of python
 set PYTHON_PATH=E:\Program Files\Python27
