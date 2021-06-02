@@ -40,6 +40,6 @@ if ERRORLEVEL 2 goto done
 C:\Windows\SysWOW64\taskkill /f /im "java.exe"
 
 :: if we got here and didn't shutdown -- assume something went wrong
-python "CTRAMP\scripts\notify_slack.py" "Finished running trace"
+:: python "CTRAMP\scripts\notify_slack.py" "Finished running trace"
 
 :donedone

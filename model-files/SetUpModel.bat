@@ -17,7 +17,7 @@ c:\windows\system32\Robocopy.exe /E %GITHUB_DIR%\model-files\model       CTRAMP\
 c:\windows\system32\Robocopy.exe /E %GITHUB_DIR%\model-files\runtime     CTRAMP\runtime
 c:\windows\system32\Robocopy.exe /E %GITHUB_DIR%\model-files\scripts     CTRAMP\scripts
 c:\windows\system32\Robocopy.exe /E %GITHUB_DIR%\utilities\RTP\metrics   CTRAMP\scripts\metrics
-copy /Y %GITHUB_DIR%\utilities\monitoring\notify_slack.py                CTRAMP\scripts
+:: copy /Y %GITHUB_DIR%\utilities\monitoring\notify_slack.py                CTRAMP\scripts
 copy /Y %GITHUB_DIR%\model-files\RunModel.bat                            .
 copy /Y %GITHUB_DIR%\model-files\RunIteration.bat                        CTRAMP
 copy /Y %GITHUB_DIR%\model-files\RunLogsums.bat                          .
@@ -26,7 +26,7 @@ copy /Y %GITHUB_DIR%\utilities\RTP\RunMetrics.bat                        .
 copy /Y %GITHUB_DIR%\utilities\RTP\RunScenarioMetrics.bat                .
 copy /Y %GITHUB_DIR%\utilities\RTP\ExtractKeyFiles.bat                   .
 
-if %COMPUTER_PREFIX% == BIGI    (copy %GITHUB_DIR%\utilities\monitoring\notify_slack.py  CTRAMP\scripts\notify_slack.py)
+:: if %COMPUTER_PREFIX% == BIGI    (copy %GITHUB_DIR%\utilities\monitoring\notify_slack.py  CTRAMP\scripts\notify_slack.py)
 if %COMPUTER_PREFIX% == BIGI    set HOST_IP_ADDRESS=10.60.10.70
 
 :: copy over CUBE6_VoyagerAPI

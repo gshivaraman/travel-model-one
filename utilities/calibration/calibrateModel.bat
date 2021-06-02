@@ -22,7 +22,7 @@ c:\windows\system32\Robocopy.exe /E "%GITHUB_DIR%\model-files\model"       CTRAM
 c:\windows\system32\Robocopy.exe /E "%GITHUB_DIR%\model-files\runtime"     CTRAMP\runtime
 c:\windows\system32\Robocopy.exe /E "%GITHUB_DIR%\model-files\scripts"     CTRAMP\scripts
 c:\windows\system32\Robocopy.exe /E "%GITHUB_DIR%\utilities\RTP\metrics" CTRAMP\scripts\metrics
-copy /y "%GITHUB_DIR%\utilities\monitoring\notify_slack.py"                CTRAMP\scripts
+:: copy /y "%GITHUB_DIR%\utilities\monitoring\notify_slack.py"                CTRAMP\scripts
 
 :setup_inputs
 :: copy over INPUTs from baseline
@@ -165,6 +165,6 @@ if ERRORLEVEL 2 goto done
 C:\Windows\SysWOW64\taskkill /f /im "java.exe"
 
 set INSTANCE=%COMPUTERNAME%
-python CTRAMP\scripts\notify_slack.py "Finished calibration iteration"
+:: "E:\Program Files\Python27\python.exe" CTRAMP\scripts\notify_slack.py "Finished calibration iteration"
 
 :done

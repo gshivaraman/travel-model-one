@@ -104,7 +104,7 @@ if %FUTURE%==X (
 echo on
 echo turn echo back on
 
-"E:\Program Files\Python27\python.exe" "CTRAMP\scripts\notify_slack.py" "Starting *%MODEL_DIR%*"
+:: "E:\Program Files\Python27\python.exe" "CTRAMP\scripts\notify_slack.py" "Starting *%MODEL_DIR%*"
 
 set MAXITERATIONS=3
 :: --------TrnAssignment Setup -- Standard Configuration
@@ -432,7 +432,7 @@ call Run_QAQC
 :success
 ECHO FINISHED SUCCESSFULLY!
 
-"E:\Program Files\Python27\python.exe" "CTRAMP\scripts\notify_slack.py" "Finished *%MODEL_DIR%*"
+:: "E:\Program Files\Python27\python.exe" "CTRAMP\scripts\notify_slack.py" "Finished *%MODEL_DIR%*"
 
 if "%COMPUTER_PREFIX%" == "WIN-" (
   
@@ -442,7 +442,7 @@ if "%COMPUTER_PREFIX%" == "WIN-" (
   cd %myfolder%
 
   rem shutdown
-  "E:\Program Files\Python27\python.exe" "CTRAMP\scripts\notify_slack.py" "Finished *%MODEL_DIR%* - shutting down"
+::  "E:\Program Files\Python27\python.exe" "CTRAMP\scripts\notify_slack.py" "Finished *%MODEL_DIR%* - shutting down"
   C:\Windows\System32\shutdown.exe /s
 )
 
@@ -454,6 +454,6 @@ goto donedone
 ECHO FINISHED.  
 
 :: if we got here and didn't shutdown -- assume something went wrong
-"E:\Program Files\Python27\python.exe" "CTRAMP\scripts\notify_slack.py" ":exclamation: Error in *%MODEL_DIR%*"
+:: "E:\Program Files\Python27\python.exe" "CTRAMP\scripts\notify_slack.py" ":exclamation: Error in *%MODEL_DIR%*"
 
 :donedone

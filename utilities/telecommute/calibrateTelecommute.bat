@@ -25,7 +25,7 @@ mkdir CTRAMP\scripts\metrics
 c:\windows\system32\Robocopy.exe /E "%GITHUB_DIR%\model-files\model"       CTRAMP\model
 c:\windows\system32\Robocopy.exe /E "%GITHUB_DIR%\model-files\runtime"     CTRAMP\runtime
 c:\windows\system32\Robocopy.exe /E "%GITHUB_DIR%\model-files\scripts"     CTRAMP\scripts
-copy /y "%GITHUB_DIR%\utilities\monitoring\notify_slack.py"                CTRAMP\scripts
+:: copy /y "%GITHUB_DIR%\utilities\monitoring\notify_slack.py"                CTRAMP\scripts
 
 :setup_inputs
 :: copy over INPUTs from baseline
@@ -158,7 +158,7 @@ if ERRORLEVEL 1 goto done
 :: copy over result for use
 copy main\telecommute_constants_%CALIB_ITER%.csv main\telecommute_constants.csv
 
-python CTRAMP\scripts\notify_slack.py "Starting telecommute calibration iteration %CALIB_ITER%"
+:: python CTRAMP\scripts\notify_slack.py "Starting telecommute calibration iteration %CALIB_ITER%"
 
 :core
 rem run matrix manager, household manager and jppf driver
@@ -176,7 +176,7 @@ if ERRORLEVEL 2 goto done
 C:\Windows\SysWOW64\taskkill /f /im "java.exe"
 
 set INSTANCE=%COMPUTERNAME%
-python CTRAMP\scripts\notify_slack.py "Finished telecommute calibration iteration %CALIB_ITER%"
+:: python CTRAMP\scripts\notify_slack.py "Finished telecommute calibration iteration %CALIB_ITER%"
 
 echo TODO: increment CALIB_ITER if you are calibrating SD-based constants. Otherwise, leave at 00.
 
