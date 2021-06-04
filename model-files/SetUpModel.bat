@@ -47,6 +47,9 @@ c:\windows\system32\Robocopy.exe /E %MODEL_SETUP_BASE_DIR%\INPUT\trn            
 :: params2015.properties copied to params.properties as the version from %MODEL_SETUP_BASE_DIR%\INPUT was producing an error: "Couldn't find Bike_Infra_C_IVT_Multiplier in INPUT\params.properties"
 :: copy /Y %MODEL_SETUP_BASE_DIR%\INPUT\params.properties                                         INPUT\params.properties
 copy /Y %GITHUB_DIR%\config\params_2015.properties						INPUT\params.properties
+:: the following line was taken from SetUpModel_PBA50.bat
+copy /Y %GITHUB_DIR%\utilities\telecommute\telecommute_max_rate_county.csv                  INPUT\landuse
+
 
 ::-----------------------------------------------------------------------
 :: add folder name to the command prompt window 
