@@ -8,7 +8,7 @@
 SET computer_prefix=%computername:~0,4%
 
 :: copy over CTRAMP
-set GITHUB_DIR= %USERPROFILE%\GitHub\travel-model-one
+set GITHUB_DIR= %USERPROFILE%\Documents\GitHub\travel-model-one
 mkdir CTRAMP\model
 mkdir CTRAMP\runtime
 mkdir CTRAMP\scripts
