@@ -392,8 +392,8 @@ if ERRORLEVEL 2 goto done
 ::
 :: ------------------------------------------------------------------------------------------------------
 
-:: Commenting out RunMetrics for now because it crashes and is probably not needed for the present purpose.  
-:: call RunMetrics
+:: Kept the parts of RunMetrics that ran successfully. Commented out lines from vmt_vht_metrics onwards in RunMetrics, but kept RunMetrics as part of the main process.  
+call RunMetrics
 if ERRORLEVEL 2 goto done
 
 :: ------------------------------------------------------------------------------------------------------
