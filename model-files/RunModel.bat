@@ -87,7 +87,7 @@ set FUTURE=X
 
 :: Steer modification for base run, considering that the model folder will be called "2015_TM152_STR_BA" for the base run.  
 if %PROJECT%==STR (
-	if %FUTURE_ABBR%==BA (set FUTURE=PBA50)
+	if %FUTURE_ABBR%==BA (set FUTURE=NA)
 )
 
 echo on
