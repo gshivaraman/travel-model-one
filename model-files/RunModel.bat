@@ -322,7 +322,9 @@ call CTRAMP\RunIteration.bat
 if ERRORLEVEL 2 goto done
 
 :: Shut down java
-C:\Windows\SysWOW64\taskkill /f /im "java.exe"
+:: The following line has been commented out to enable restart runs.  
+:: LMZ - "And to clarify, for the baseline run, you’d run all three iterations, but then comment out this line which kills the java components."
+:: C:\Windows\SysWOW64\taskkill /f /im "java.exe"
 
 
 :: update telecommute constants one more time just to evaluate the situation
@@ -367,9 +369,11 @@ call RunPrepareEmfac.bat SB375 WithFreight
 
 :: call RunAccessibility
 :: if ERRORLEVEL 2 goto done
-
-call RunLogsums
+:: LMZ - "You should also comment out RunLogsums since that uses the model core"
+:: call RunLogsums
 if ERRORLEVEL 2 goto done
+
+:: LMZ - "you could comment out other summarization processes like CoreSummaries, Metrics, ScenarioMetrics"
 
 :: ------------------------------------------------------------------------------------------------------
 ::
@@ -388,7 +392,8 @@ if ERRORLEVEL 2 goto done
 ::
 :: ------------------------------------------------------------------------------------------------------
 
-call RunMetrics
+:: Commenting out RunMetrics for now because it crashes and is probably not needed for the present purpose.  
+:: call RunMetrics
 if ERRORLEVEL 2 goto done
 
 :: ------------------------------------------------------------------------------------------------------
@@ -397,7 +402,8 @@ if ERRORLEVEL 2 goto done
 ::
 :: ------------------------------------------------------------------------------------------------------
 
-call RunScenarioMetrics
+:: Commenting out RunScenarioMetrics for now.  
+:: call RunScenarioMetrics
 if ERRORLEVEL 2 goto done
 
 :: ------------------------------------------------------------------------------------------------------
