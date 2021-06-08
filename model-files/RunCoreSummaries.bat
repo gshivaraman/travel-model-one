@@ -58,13 +58,14 @@ if not exist core_summaries\TelecommuteByIncome.csv (
   if %ERRORLEVEL% GTR 0 goto done
 )
 
+:: commented out code to produce outputs for Tableau
 :: convert the avgload5period.csv
-if not exist "%TARGET_DIR%\core_summaries\avgload5period.tde" (
-  python "%CODE_DIR%\csvToTableauExtract.py" "%TARGET_DIR%\hwy\iter%ITER%" "%TARGET_DIR%\core_summaries" avgload5period.csv
-  if %ERRORLEVEL% GTR 0 goto done
+:: if not exist "%TARGET_DIR%\core_summaries\avgload5period.tde" (
+::  python "%CODE_DIR%\csvToTableauExtract.py" "%TARGET_DIR%\hwy\iter%ITER%" "%TARGET_DIR%\core_summaries" avgload5period.csv
+::  if %ERRORLEVEL% GTR 0 goto done
   
-  echo.
-)
+::  echo.
+::)
 
 :: create trn\trnline.csv
 if not exist "%TARGET_DIR%\trn\trnline.csv" (
