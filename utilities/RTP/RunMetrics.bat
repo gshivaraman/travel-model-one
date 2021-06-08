@@ -141,51 +141,53 @@ if not exist metrics\nonmot_times.csv (
   if ERRORLEVEL 2 goto error
 )
 
-if not exist metrics\vmt_vht_metrics.csv (
-  rem Summarize network links to vmt, vht, and other collision and emissions estimations
-  rem Input: hwy\iter%ITER%\avgload5period_vehclasses.csv
-  rem Output: metrics\vmt_vht_metrics.csv
-  call python "%CODE_DIR%\hwynet.py" --filter %FUTURE% --year %MODEL_YEAR% hwy\iter%ITER%\avgload5period_vehclasses.csv
-  IF ERRORLEVEL 2 goto error
-)
+:: commented out lines from vmt_vht_metrics onwards
 
-if not exist trn\quickboards.xls (
-  rem Create quickboards summaries of transit output
-  rem Input: trn\trnlink[timperiod]_[acc]_[trnmode]_[egr].dbf, quickboards.ctl
-  rem Output: trn\quickboards.xls
-  call "%CODE_DIR%\quickboards.bat" "%CODE_DIR%\quickboards.ctl" quickboards.xls
-  if ERRORLEVEL 1 goto error
-  move quickboards.xls trn
- )
+:: if not exist metrics\vmt_vht_metrics.csv (
+::  rem Summarize network links to vmt, vht, and other collision and emissions estimations
+::  rem Input: hwy\iter%ITER%\avgload5period_vehclasses.csv
+::  rem Output: metrics\vmt_vht_metrics.csv
+::  call python "%CODE_DIR%\hwynet.py" --filter %FUTURE% --year %MODEL_YEAR% hwy\iter%ITER%\avgload5period_vehclasses.csv
+::  IF ERRORLEVEL 2 goto error
+::)
+
+::if not exist trn\quickboards.xls (
+::  rem Create quickboards summaries of transit output
+::  rem Input: trn\trnlink[timperiod]_[acc]_[trnmode]_[egr].dbf, quickboards.ctl
+::  rem Output: trn\quickboards.xls
+::  call "%CODE_DIR%\quickboards.bat" "%CODE_DIR%\quickboards.ctl" quickboards.xls
+::  if ERRORLEVEL 1 goto error
+::  move quickboards.xls trn
+:: )
 
 :transit
-if not exist metrics\transit_boards_miles.csv (
-  rem Summarize quickboards output to pull daily boardings and passenger miles
-  rem Input: trn\quickboards.xls
-  rem Output: metrics\transit_board_miles.csv
-  call python "%CODE_DIR%\transit.py" trn\quickboards.xls
-)
+:: if not exist metrics\transit_boards_miles.csv (
+::   rem Summarize quickboards output to pull daily boardings and passenger miles
+::   rem Input: trn\quickboards.xls
+::   rem Output: metrics\transit_board_miles.csv
+::   call python "%CODE_DIR%\transit.py" trn\quickboards.xls
+:: )
 
-if not exist metrics\transit_crowding.csv (
-  rem Summarize transit crowding
-  rem Input: \\mainmodel\MainModelShare\travel-model-one-master\utilities\RTP\metrics\transitSeatCap.csv
-  rem        trn\trnlink[timeperiod]_ALLMSA.dbf
-  rem Output: metrics\transit_crowding_complete.csv
-  rem         metrics\transit_crowding.csv
-  rem         metrics\transit_crowding.log
-  call python "%CODE_DIR%\transitcrowding.py" .
-)
+::if not exist metrics\transit_crowding.csv (
+::  rem Summarize transit crowding
+::  rem Input: \\mainmodel\MainModelShare\travel-model-one-master\utilities\RTP\metrics\transitSeatCap.csv
+::  rem        trn\trnlink[timeperiod]_ALLMSA.dbf
+::  rem Output: metrics\transit_crowding_complete.csv
+::  rem         metrics\transit_crowding.csv
+::  rem         metrics\transit_crowding.log
+::  call python "%CODE_DIR%\transitcrowding.py" .
+::)
 
 :topsheet
-if not exist metrics\topsheet.csv (
-  rem Short summaries for across many runs
-  rem Input: tazdata, popsyn files, avgload5period_vehclasses.csv, core_summaries\VehicleMilesTraveled.csv
-  rem Output: metrics\topsheet.csv
-  call "%R_HOME%\bin\x64\Rscript.exe" "%CODE_DIR%\topsheet.R"
-)
+::if not exist metrics\topsheet.csv (
+::  rem Short summaries for across many runs
+::  rem Input: tazdata, popsyn files, avgload5period_vehclasses.csv, core_summaries\VehicleMilesTraveled.csv
+::  rem Output: metrics\topsheet.csv
+::  call "%R_HOME%\bin\x64\Rscript.exe" "%CODE_DIR%\topsheet.R"
+::)
 
-if not exist "%ALL_PROJECT_METRICS_DIR%" (mkdir "%ALL_PROJECT_METRICS_DIR%")
-python "%CODE_DIR%\RunResults.py" metrics "%ALL_PROJECT_METRICS_DIR%"
+:: if not exist "%ALL_PROJECT_METRICS_DIR%" (mkdir "%ALL_PROJECT_METRICS_DIR%")
+:: python "%CODE_DIR%\RunResults.py" metrics "%ALL_PROJECT_METRICS_DIR%"
 
 :cleanup
 move *.PRN logs
