@@ -1,8 +1,20 @@
 :: SetPath.bat
 :: Utility to set the path.  Used in RunModel as well as RunMain and RunNodeX. 
 
+:: The path for storing outputs
+SET OUTPUTSPATH=F:\23791501\outputs\
+
 :: The commpath
 SET COMMPATH=F:\23791501\2015_TM152_STR_BA\
+
+@echo off
+FOR /f %%a IN ('WMIC OS GET LocalDateTime ^| FIND "."') DO SET DTS=%%a
+SET TimeStamp=%DTS:~0,4%%DTS:~4,2%%DTS:~6,2%%DTS:~8,2%%DTS:~10,2%%DTS:~12,2%
+echo %TimeStamp%
+
+:: The path to the backup folder
+mkdir %OUTPUTSPATH%\%TimeStamp%
+SET M_DIR=%OUTPUTSPATH%\outputs\%TimeStamp%
 
 :: The location of the 64-bit java development kit
 set JAVA_PATH=C:\Program Files\Java\jdk-16.0.1
