@@ -14,7 +14,7 @@ echo %TimeStamp%
 
 :: The path to the backup folder
 mkdir %OUTPUTSPATH%\%TimeStamp%
-SET M_DIR=%OUTPUTSPATH%\outputs\%TimeStamp%
+SET M_DIR=%OUTPUTSPATH%%TimeStamp%
 
 :: The location of the 64-bit java development kit
 set JAVA_PATH=C:\Program Files\Java\jdk-16.0.1
