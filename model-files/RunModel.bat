@@ -441,17 +441,7 @@ ECHO FINISHED SUCCESSFULLY!
 
 :: "E:\Program Files\Python27\python.exe" "CTRAMP\scripts\notify_slack.py" "Finished *%MODEL_DIR%*"
 
-if "%COMPUTER_PREFIX%" == "WIN-" (
-  
-  rem go up a directory and sync model folder to s3
-  cd ..
-  "C:\Program Files\Amazon\AWSCLI\aws" s3 sync %myfolder% s3://travel-model-runs/%myfolder%
-  cd %myfolder%
-
-  rem shutdown
-::  "E:\Program Files\Python27\python.exe" "CTRAMP\scripts\notify_slack.py" "Finished *%MODEL_DIR%* - shutting down"
-  C:\Windows\System32\shutdown.exe /s
-)
+:: deleted some lines that were specific to a previous configuration that used AWS instances
 
 :: no errors
 goto donedone
