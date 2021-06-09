@@ -431,8 +431,9 @@ del *.prn
 del *.script.*
 del *.script
 
+:: commented out call to Run_QAQC as this was for specific future scenarios
 :: run QA/QC for PBA50
-call Run_QAQC
+:: call Run_QAQC
 
 :: Success target and message
 :success
