@@ -87,7 +87,7 @@ set FUTURE=X
 
 :: Steer modification for base run, considering that the model folder will be called "2015_TM152_STR_BA" for the base run.  
 if %PROJECT%==STR (
-	if %FUTURE_ABBR%==BA (set FUTURE=NA)
+	if %FUTURE_ABBR%==BA (set FUTURE=PBA50)
 )
 
 echo on
@@ -415,7 +415,7 @@ if ERRORLEVEL 2 goto done
 
 :: Extract key files
 call extractkeyfiles
-c:\windows\system32\Robocopy.exe /E extractor "%M_DIR%\OUTPUT"
+c:\windows\system32\Robocopy.exe /E extractor "%M_DIR%OUTPUT"
 
 
 : cleanup

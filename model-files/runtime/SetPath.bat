@@ -5,8 +5,8 @@
 SET COMMPATH=F:\23791501\2015_TM152_STR_BA\
 
 :: The path to the backup folder
-mkdir %OUTPUTSPATH%\%TimeStamp%
-SET M_DIR=%OUTPUTSPATH%%TimeStamp%
+mkdir %OUTPUTSPATH%%TimeStamp%
+SET M_DIR=%OUTPUTSPATH%%TimeStamp%\
 
 :: The location of the 64-bit java development kit
 set JAVA_PATH=C:\Program Files\Java\jdk-16.0.1
