@@ -20,9 +20,6 @@
 :: Set the path
 call CTRAMP\runtime\SetPath.bat
 
-:: Define the GitHub directory
-set GITHUB_DIR= %USERPROFILE%\Documents\GitHub\travel-model-one
-
 :: Start the cube cluster
 Cluster %COMMPATH%\CTRAMP 1-48 Starthide Exit
 
@@ -145,7 +142,7 @@ set SEED=0
 :: Runtime configuration: set the workplace shadow pricing parameters
 
 :: Here it is necessary to switch in the restart run version of mtcTourBased.properties
-copy /Y %GITHUB_DIR%\model-files\runtime\mtcTourBasedRestartRun.properties                        CTRAMP\runtime\mtcTourBased.properties
+copy /Y CTRAMP\runtime\mtcTourBasedRestartRun.properties                        CTRAMP\runtime\mtcTourBased.properties
 
 :: Here, changes get made to mtcTourBased.properties:
 "E:\Program Files\Python27\python.exe" CTRAMP\scripts\preprocess\RuntimeConfiguration.py --iter %ITER%

@@ -160,7 +160,7 @@ copy INPUT\logsums              logsums\
 : Pre-Process
 
 :: Here it is necessary to switch in the full run version of mtcTourBased.properties, to avoid possible confusion with the restart run version which may have been previously put into place.  
-copy /Y %GITHUB_DIR%\model-files\runtime\mtcTourBasedFullRun.properties						CTRAMP\runtime\mtcTourBased.properties
+copy /Y CTRAMP\runtime\mtcTourBasedFullRun.properties						CTRAMP\runtime\mtcTourBased.properties
 
 
 :: Runtime configuration: set project directory, auto operating cost, 
