@@ -1,6 +1,9 @@
 :: SetPath.bat
 :: Utility to set the path.  Used in RunModel as well as RunMain and RunNodeX. 
 
+:: The GitHub directory
+set GITHUB_DIR= %USERPROFILE%\Documents\GitHub\travel-model-one
+
 :: The commpath
 SET COMMPATH=F:\23791501\2015_TM152_STR_BA\
 
