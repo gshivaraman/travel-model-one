@@ -106,7 +106,7 @@ echo turn echo back on
 
 :: "E:\Program Files\Python27\python.exe" "CTRAMP\scripts\notify_slack.py" "Starting *%MODEL_DIR%*"
 
-set MAXITERATIONS=3
+set MAXITERATIONS=1
 :: --------TrnAssignment Setup -- Standard Configuration
 :: CHAMP has dwell  configured for buses (local and premium)
 :: CHAMP has access configured for for everything
@@ -120,209 +120,37 @@ set TRNCONFIG=FAST
 set COMPLEXMODES_DWELL= 
 set COMPLEXMODES_ACCESS= 
 
-:: ------------------------------------------------------------------------------------------------------
-::
-:: Step 2:  Create the directory structure
-::
-:: ------------------------------------------------------------------------------------------------------
-
-:: Create the working directories
-mkdir hwy
-mkdir trn
-mkdir skims
-mkdir landuse
-mkdir popsyn
-mkdir nonres
-mkdir main
-mkdir logs
-mkdir database
-mkdir logsums
-
 :: Stamp the feedback report with the date and time of the model start
-echo STARTED MODEL RUN  %DATE% %TIME% >> logs\feedback.rpt 
-
-:: Move the input files, which are not accessed by the model, to the working directories
-copy INPUT\hwy\                 hwy\
-copy INPUT\trn\                 trn\
-copy INPUT\landuse\             landuse\
-copy INPUT\popsyn\              popsyn\
-copy INPUT\nonres\              nonres\
-copy INPUT\warmstart\main\      main\
-copy INPUT\warmstart\nonres\    nonres\
-copy INPUT\logsums              logsums\
+echo STARTED RESTART MODEL RUN  %DATE% %TIME% >> logs\feedback.rpt 
 
 :: ------------------------------------------------------------------------------------------------------
 ::
-:: Step 3:  Pre-process steps
-::
-:: ------------------------------------------------------------------------------------------------------
-
-: Pre-Process
-
-:: Here it is necessary to switch in the full run version of mtcTourBased.properties, to avoid possible confusion with the restart run version which may have been previously put into place.  
-copy /Y %GITHUB_DIR%\model-files\runtime\mtcTourBasedFullRun.properties						CTRAMP\runtime\mtcTourBased.properties
-
-
-:: Runtime configuration: set project directory, auto operating cost, 
-:: and synthesized household/population files in the appropriate places
-"E:\Program Files\Python27\python.exe" CTRAMP\scripts\preprocess\RuntimeConfiguration.py
-if ERRORLEVEL 1 goto done
-
-:: Set the prices in the roadway network (convert csv to dbf first)
-"E:\Program Files\Python27\python.exe" CTRAMP\scripts\preprocess\csvToDbf.py hwy\tolls.csv hwy\tolls.dbf
-IF ERRORLEVEL 1 goto done
-
-:: Set the prices in the roadway network
-runtpp CTRAMP\scripts\preprocess\SetTolls.job
-if ERRORLEVEL 2 goto done
-
-:: Set a penalty to dummy links connecting HOV/HOT lanes and general purpose lanes
-runtpp CTRAMP\scripts\preprocess\SetHovXferPenalties.job
-if ERRORLEVEL 2 goto done
-
-:: Create time-of-day-specific 
-runtpp CTRAMP\scripts\preprocess\CreateFiveHighwayNetworks.job
-if ERRORLEVEL 2 goto done
-
-:: Create HSR trip tables to/from Bay Area stations
-runtpp CTRAMP\scripts\preprocess\HsrTripGeneration.job
-if ERRORLEVEL 2 goto done
-
-:: ------------------------------------------------------------------------------------------------------
-::
-:: Step 4:  Build non-motorized level-of-service matrices
-::
-:: ------------------------------------------------------------------------------------------------------
-
-: Non-Motorized Skims
-
-:: Translate the roadway network into a non-motorized network
-runtpp CTRAMP\scripts\skims\CreateNonMotorizedNetwork.job
-if ERRORLEVEL 2 goto done
-
-:: Build the skim tables
-runtpp CTRAMP\scripts\skims\NonMotorizedSkims.job
-if ERRORLEVEL 2 goto done
-
-:: Step 4.5: Build initial transit files
-set PYTHONPATH=%USERPROFILE%\Documents\GitHub\NetworkWrangler;%USERPROFILE%\Documents\GitHub\NetworkWrangler\_static
-"E:\Program Files\Python27\python.exe" CTRAMP\scripts\skims\transitDwellAccess.py NORMAL NoExtraDelay Simple complexDwell %COMPLEXMODES_DWELL% complexAccess %COMPLEXMODES_ACCESS%
-if ERRORLEVEL 2 goto done
-
-
-:: ------------------------------------------------------------------------------------------------------
-::
-:: Step 5:  Prepare for Iteration 0
-::
-:: ------------------------------------------------------------------------------------------------------
-
-: iter0
-
-:: Set the iteration parameters
-set ITER=0
-set PREV_ITER=0
-set WGT=1.0
-set PREV_WGT=0.00
-
-
-:: ------------------------------------------------------------------------------------------------------
-::
-:: Step 6:  Execute the RunIteration batch file
-::
-:: ------------------------------------------------------------------------------------------------------
-
-call CTRAMP\RunIteration.bat
-if ERRORLEVEL 2 goto done
-
-:: Runtime configuration: setup initial telecommute constants
-"E:\Program Files\Python27\python.exe" CTRAMP\scripts\preprocess\updateTelecommuteConstants.py
-if ERRORLEVEL 1 goto done
-:: copy over result for use
-copy /Y main\telecommute_constants_0%ITER%.csv main\telecommute_constants.csv
-
-
-:: ------------------------------------------------------------------------------------------------------
-::
-:: Step 7:  Prepare for iteration 1 and execute RunIteration batch file
-::
-:: ------------------------------------------------------------------------------------------------------
-
-: iter1
-
-:: Set the iteration parameters
-set ITER=1
-set PREV_ITER=1
-set WGT=1.0
-set PREV_WGT=0.00
-set SAMPLESHARE=0.15
-set SEED=0
-
-:: Runtime configuration: set the workplace shadow pricing parameters
-"E:\Program Files\Python27\python.exe" CTRAMP\scripts\preprocess\RuntimeConfiguration.py --iter %ITER%
-if ERRORLEVEL 1 goto done
-
-:: Call RunIteration batch file
-call CTRAMP\RunIteration.bat
-if ERRORLEVEL 2 goto done
-
-:: Runtime configuration: update telecommute constants using iter1 results
-"E:\Program Files\Python27\python.exe" CTRAMP\scripts\preprocess\updateTelecommuteConstants.py
-if ERRORLEVEL 1 goto done
-:: copy over result for use
-copy /Y main\telecommute_constants_0%ITER%.csv main\telecommute_constants.csv
-
-:: ------------------------------------------------------------------------------------------------------
-::
-:: Step 8:  Prepare for iteration 2 and execute RunIteration batch file
-::
-:: ------------------------------------------------------------------------------------------------------
-
-: iter2
-
-:: Set the iteration parameters
-set ITER=2
-set PREV_ITER=1
-set WGT=0.50
-set PREV_WGT=0.50
-set SAMPLESHARE=0.30
-set SEED=0
-
-:: Runtime configuration: set the workplace shadow pricing parameters
-"E:\Program Files\Python27\python.exe" CTRAMP\scripts\preprocess\RuntimeConfiguration.py --iter %ITER%
-if ERRORLEVEL 1 goto done
-
-:: Call RunIteration batch file
-call CTRAMP\RunIteration.bat
-if ERRORLEVEL 2 goto done
-
-:: Runtime configuration: update telecommute constants using iter2 results
-"E:\Program Files\Python27\python.exe" CTRAMP\scripts\preprocess\updateTelecommuteConstants.py
-if ERRORLEVEL 1 goto done
-:: copy over result for use
-copy /Y main\telecommute_constants_0%ITER%.csv main\telecommute_constants.csv
-
-:: ------------------------------------------------------------------------------------------------------
-::
-:: Step 9:  Prepare for iteration 3 and execute RunIteration batch file
+:: Step 9:  Prepare for iteration 4 and execute RunIteration batch file
 ::
 :: ------------------------------------------------------------------------------------------------------
 
 : iter3
 
 :: Set the iteration parameters
-set ITER=3
-set PREV_ITER=2
+set ITER=4
+set PREV_ITER=3
 set WGT=0.33
 set PREV_WGT=0.67
 set SAMPLESHARE=0.50
 set SEED=0
 
 :: Runtime configuration: set the workplace shadow pricing parameters
+
+:: Here it is necessary to switch in the restart run version of mtcTourBased.properties
+copy /Y %GITHUB_DIR%\model-files\runtime\mtcTourBasedRestartRun.properties						CTRAMP\runtime\mtcTourBased.properties
+
+:: Here, changes get made to mtcTourBased.properties:
 "E:\Program Files\Python27\python.exe" CTRAMP\scripts\preprocess\RuntimeConfiguration.py --iter %ITER%
 if ERRORLEVEL 1 goto done
 
-:: Call RunIteration batch file
-call CTRAMP\RunIteration.bat
+:: Call RestartRunIteration batch file
+:: This is a slightly modified version of RunIteration.bat, changed to accomodate the Household manager Java process already running for a restart run, while the other Java processes will require restarting.  
+call CTRAMP\RestartRunIteration.bat
 if ERRORLEVEL 2 goto done
 
 :: Shut down java
@@ -333,6 +161,7 @@ if ERRORLEVEL 2 goto done
 
 :: update telecommute constants one more time just to evaluate the situation
 "E:\Program Files\Python27\python.exe" CTRAMP\scripts\preprocess\updateTelecommuteConstants.py
+
 
 :: ------------------------------------------------------------------------------------------------------
 ::
@@ -441,7 +270,7 @@ del *.script
 
 :: Success target and message
 :success
-ECHO FINISHED SUCCESSFULLY!
+ECHO RESTART RUN FINISHED SUCCESSFULLY!
 
 :: "E:\Program Files\Python27\python.exe" "CTRAMP\scripts\notify_slack.py" "Finished *%MODEL_DIR%*"
 
