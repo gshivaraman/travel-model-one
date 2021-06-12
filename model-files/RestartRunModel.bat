@@ -20,6 +20,9 @@
 :: Set the path
 call CTRAMP\runtime\SetPath.bat
 
+:: Define the GitHub directory
+set GITHUB_DIR= %USERPROFILE%\Documents\GitHub\travel-model-one
+
 :: Start the cube cluster
 Cluster %COMMPATH%\CTRAMP 1-48 Starthide Exit
 
