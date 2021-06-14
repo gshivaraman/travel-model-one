@@ -131,12 +131,10 @@ echo STARTED RESTART MODEL RUN  %DATE% %TIME% >> logs\feedback.rpt
 
 : Pre-Process
 
-:: Switch in the corresponding version of runMain.cmd
-copy /Y CTRAMP\runtime\JavaOnly_Restart_runMain.cmd                        CTRAMP\runtime\JavaOnly_runMain.cmd
-
-
-:: Here it is necessary to switch in the restart run version of mtcTourBased.properties
-copy /Y CTRAMP\runtime\mtcTourBasedRestartRun.properties                        CTRAMP\runtime\mtcTourBased.properties
+:: Switch in the corresponding versions of key files
+copy /Y CTRAMP\runtime\JavaOnly_Restart_runMain.cmd                        	CTRAMP\runtime\JavaOnly_runMain.cmd
+copy /Y CTRAMP\runtime\mtcTourBasedRestartRun.properties                   	CTRAMP\runtime\mtcTourBased.properties
+copy /Y CTRAMP\RestartRunIteration.bat                   					CTRAMP\RunIteration.bat
 
 :: Runtime configuration: set project directory, auto operating cost, 
 :: and synthesized household/population files in the appropriate places

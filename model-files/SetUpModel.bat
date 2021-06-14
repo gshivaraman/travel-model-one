@@ -23,6 +23,7 @@ copy /Y %GITHUB_DIR%\model-files\RestartRunModel.bat                     .
 copy /Y %GITHUB_DIR%\model-files\LogRunModel.bat 						 .
 copy /Y %GITHUB_DIR%\model-files\LogRestartRunModel.bat					 .
 copy /Y %GITHUB_DIR%\model-files\RunIteration.bat                        CTRAMP
+copy /Y %GITHUB_DIR%\model-files\FullRunIteration.bat                    CTRAMP
 copy /Y %GITHUB_DIR%\model-files\RestartRunIteration.bat                 CTRAMP
 copy /Y %GITHUB_DIR%\model-files\RunLogsums.bat                          .
 copy /Y %GITHUB_DIR%\model-files\RunCoreSummaries.bat                    .
