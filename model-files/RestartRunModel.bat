@@ -106,7 +106,7 @@ echo turn echo back on
 
 :: "E:\Program Files\Python27\python.exe" "CTRAMP\scripts\notify_slack.py" "Starting *%MODEL_DIR%*"
 
-set MAXITERATIONS=1
+set MAXITERATIONS=3
 :: --------TrnAssignment Setup -- Standard Configuration
 :: CHAMP has dwell  configured for buses (local and premium)
 :: CHAMP has access configured for for everything
@@ -132,8 +132,8 @@ echo STARTED RESTART MODEL RUN  %DATE% %TIME% >> logs\feedback.rpt
 : iter3
 
 :: Set the iteration parameters
-set ITER=4
-set PREV_ITER=3
+set ITER=3
+set PREV_ITER=2
 set WGT=0.33
 set PREV_WGT=0.67
 set SAMPLESHARE=0.50
