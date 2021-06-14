@@ -131,6 +131,9 @@ echo STARTED RESTART MODEL RUN  %DATE% %TIME% >> logs\feedback.rpt
 
 : Pre-Process
 
+:: Here it is necessary to switch in the restart run version of mtcTourBased.properties
+copy /Y CTRAMP\runtime\mtcTourBasedRestartRun.properties                        CTRAMP\runtime\mtcTourBased.properties
+
 :: Runtime configuration: set project directory, auto operating cost, 
 :: and synthesized household/population files in the appropriate places
 "E:\Program Files\Python27\python.exe" CTRAMP\scripts\preprocess\RuntimeConfiguration.py
@@ -153,9 +156,6 @@ set SAMPLESHARE=0.50
 set SEED=0
 
 :: Runtime configuration: set the workplace shadow pricing parameters
-
-:: Here it is necessary to switch in the restart run version of mtcTourBased.properties
-copy /Y CTRAMP\runtime\mtcTourBasedRestartRun.properties                        CTRAMP\runtime\mtcTourBased.properties
 
 :: Here, changes get made to mtcTourBased.properties:
 "E:\Program Files\Python27\python.exe" CTRAMP\scripts\preprocess\RuntimeConfiguration.py --iter %ITER%
