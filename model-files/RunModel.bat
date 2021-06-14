@@ -159,6 +159,9 @@ copy INPUT\logsums              logsums\
 
 : Pre-Process
 
+:: Switch in the corresponding version of runMain.cmd
+copy /Y CTRAMP\runtime\JavaOnly_FullRun_runMain.cmd                        CTRAMP\runtime\JavaOnly_runMain.cmd
+
 :: Here it is necessary to switch in the full run version of mtcTourBased.properties, to avoid possible confusion with the restart run version which may have been previously put into place.  
 copy /Y CTRAMP\runtime\mtcTourBasedFullRun.properties						CTRAMP\runtime\mtcTourBased.properties
 
