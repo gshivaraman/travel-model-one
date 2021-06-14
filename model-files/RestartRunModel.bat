@@ -125,7 +125,20 @@ echo STARTED RESTART MODEL RUN  %DATE% %TIME% >> logs\feedback.rpt
 
 :: ------------------------------------------------------------------------------------------------------
 ::
-:: Step 9:  Prepare for iteration 4 and execute RunIteration batch file
+:: Step 3:  Pre-process steps
+::
+:: ------------------------------------------------------------------------------------------------------
+
+: Pre-Process
+
+:: Runtime configuration: set project directory, auto operating cost, 
+:: and synthesized household/population files in the appropriate places
+"E:\Program Files\Python27\python.exe" CTRAMP\scripts\preprocess\RuntimeConfiguration.py
+if ERRORLEVEL 1 goto done
+
+:: ------------------------------------------------------------------------------------------------------
+::
+:: Step 9:  Prepare for iteration and execute RunIteration batch file
 ::
 :: ------------------------------------------------------------------------------------------------------
 
