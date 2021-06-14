@@ -47,7 +47,7 @@ if ERRORLEVEL 2 goto done
 
 :core
 
-if %ITER%==4 (
+:: if %ITER%==1 (
   rem run matrix manager, household manager and jppf driver
   cd CTRAMP\runtime
   call javaOnly_Restart_runMain.cmd 
@@ -55,7 +55,7 @@ if %ITER%==4 (
   rem run jppf node
   cd CTRAMP\runtime
   call javaOnly_runNode0.cmd
-)
+::)
 
 ::  Call the MtcTourBasedModel class
 java -showversion -Xmx6000m -cp %CLASSPATH% -Dlog4j.configuration=log4j.xml -Djava.library.path=%RUNTIME% -Djppf.config=jppf-clientDistributed.properties com.pb.mtc.ctramp.MtcTourBasedModel mtcTourBased -iteration %ITER% -sampleRate %SAMPLESHARE% -sampleSeed %SEED%
