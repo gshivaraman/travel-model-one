@@ -50,7 +50,7 @@ if ERRORLEVEL 2 goto done
 :: if %ITER%==1 (
   rem run matrix manager, household manager and jppf driver
   cd CTRAMP\runtime
-  call javaOnly_Restart_runMain.cmd 
+  call javaOnly_runMain.cmd 
 
   rem run jppf node
   cd CTRAMP\runtime
