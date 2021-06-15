@@ -165,7 +165,7 @@ if ERRORLEVEL 1 goto done
 
 :: Call RestartRunIteration batch file
 :: This is a slightly modified version of RunIteration.bat, changed to accomodate the Household manager Java process already running for a restart run, while the other Java processes will require restarting.  
-call CTRAMP\RestartRunIteration.bat
+call CTRAMP\RunIteration.bat
 if ERRORLEVEL 2 goto done
 
 :: Shut down java

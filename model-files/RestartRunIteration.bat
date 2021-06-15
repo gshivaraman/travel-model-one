@@ -28,14 +28,14 @@ if %ITER%==0 goto hwyAssign
 :skims
 
 :: Create the automobile level-of-service matrices
-runtpp CTRAMP\scripts\skims\HwySkims.job
+:: runtpp CTRAMP\scripts\skims\HwySkims.job
 if ERRORLEVEL 2 goto done
 
 :: No need to build transit skims here; they were built by the previous assignment
 
 
 :: Create accessibility measures for use by the automobile ownership sub-model
-runtpp CTRAMP\scripts\skims\Accessibility.job
+:: runtpp CTRAMP\scripts\skims\Accessibility.job
 if ERRORLEVEL 2 goto done
 
 
