@@ -32,7 +32,9 @@ if %ITER%==0 goto hwyAssign
 if ERRORLEVEL 2 goto done
 
 :: No need to build transit skims here; they were built by the previous assignment
-
+:: Actually, for the restart runs we probably do need to do transit skims to take into account changes to fares.  
+runtpp CTRAMP\scripts\skims\TransitSkims.job
+if ERRORLEVEL 2 goto done
 
 :: Create accessibility measures for use by the automobile ownership sub-model
 :: runtpp CTRAMP\scripts\skims\Accessibility.job
