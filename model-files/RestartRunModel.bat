@@ -122,6 +122,9 @@ set COMPLEXMODES_ACCESS=
 :: Stamp the feedback report with the date and time of the model start
 echo STARTED RESTART MODEL RUN  %DATE% %TIME% >> logs\feedback.rpt 
 
+:: Move the input files, which are not accessed by the model, to the working directories
+copy /Y INPUT\trn\                 trn\
+
 :: ------------------------------------------------------------------------------------------------------
 ::
 :: Step 3:  Pre-process steps
