@@ -10,7 +10,6 @@
 ::
 ::~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-
 :: ------------------------------------------------------------------------------------------------------
 ::
 :: Step 1:  Set the necessary path variables
@@ -140,6 +139,47 @@ copy /Y CTRAMP\RestartRunIteration.bat                   					CTRAMP\RunIteratio
 :: and synthesized household/population files in the appropriate places
 "E:\Program Files\Python27\python.exe" CTRAMP\scripts\preprocess\RuntimeConfiguration.py
 if ERRORLEVEL 1 goto done
+
+:: Set the prices in the roadway network (convert csv to dbf first)
+"E:\Program Files\Python27\python.exe" CTRAMP\scripts\preprocess\csvToDbf.py hwy\tolls.csv hwy\tolls.dbf
+IF ERRORLEVEL 1 goto done
+
+:: Set the prices in the roadway network
+runtpp CTRAMP\scripts\preprocess\SetTolls.job
+if ERRORLEVEL 2 goto done
+
+:: Set a penalty to dummy links connecting HOV/HOT lanes and general purpose lanes
+runtpp CTRAMP\scripts\preprocess\SetHovXferPenalties.job
+if ERRORLEVEL 2 goto done
+
+:: Create time-of-day-specific 
+runtpp CTRAMP\scripts\preprocess\CreateFiveHighwayNetworks.job
+if ERRORLEVEL 2 goto done
+
+:: Create HSR trip tables to/from Bay Area stations
+runtpp CTRAMP\scripts\preprocess\HsrTripGeneration.job
+if ERRORLEVEL 2 goto done
+
+:: ------------------------------------------------------------------------------------------------------
+::
+:: Step 4:  Build non-motorized level-of-service matrices
+::
+:: ------------------------------------------------------------------------------------------------------
+
+: Non-Motorized Skims
+
+:: Translate the roadway network into a non-motorized network
+runtpp CTRAMP\scripts\skims\CreateNonMotorizedNetwork.job
+if ERRORLEVEL 2 goto done
+
+:: Build the skim tables
+runtpp CTRAMP\scripts\skims\NonMotorizedSkims.job
+if ERRORLEVEL 2 goto done
+
+:: Step 4.5: Build initial transit files
+set PYTHONPATH=%USERPROFILE%\Documents\GitHub\NetworkWrangler;%USERPROFILE%\Documents\GitHub\NetworkWrangler\_static
+"E:\Program Files\Python27\python.exe" CTRAMP\scripts\skims\transitDwellAccess.py NORMAL NoExtraDelay Simple complexDwell %COMPLEXMODES_DWELL% complexAccess %COMPLEXMODES_ACCESS%
+if ERRORLEVEL 2 goto done
 
 :: ------------------------------------------------------------------------------------------------------
 ::
