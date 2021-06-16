@@ -152,8 +152,8 @@ if ERRORLEVEL 1 goto done
 :: Set the iteration parameters
 set ITER=4
 set PREV_ITER=3
-set WGT=0.33
-set PREV_WGT=0.67
+set WGT=1.0
+set PREV_WGT=0.0
 set SAMPLESHARE=0.50
 set SEED=0
 
