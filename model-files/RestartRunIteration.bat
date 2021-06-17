@@ -17,9 +17,6 @@
 :: ------------------------------------------------------------------------------------------------------
 
 if %ITER%==0 goto hwyAssign
-set PREV_TRN_ITER=%PREV_ITER%
-set TRNASSIGNITER=%ITER%
-set PREVTRNASSIGNITER=%PREV_ITER%
 
 :: ------------------------------------------------------------------------------------------------------
 ::
@@ -29,10 +26,13 @@ set PREVTRNASSIGNITER=%PREV_ITER%
 
 :skims
 
-:trnAssignSkim
+:: Create the automobile level-of-service matrices
+runtpp CTRAMP\scripts\skims\HwySkims.job
+if ERRORLEVEL 2 goto done
+
 :: copy a local version for easier restarting
-copy CTRAMP\scripts\skims\trnRestartAssign.bat trnRestartAssign_iter%ITER%.bat
-call trnRestartAssign_iter%ITER%.bat
+copy CTRAMP\scripts\skims\trnAssign.bat trnAssign_iter%ITER%.bat
+call trnAssign_iter%ITER%.bat
 if ERRORLEVEL 2 goto done
 
 :: Create accessibility measures for use by the automobile ownership sub-model
