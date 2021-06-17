@@ -18,7 +18,8 @@
 
 if %ITER%==0 goto hwyAssign
 set PREV_TRN_ITER=%PREV_ITER%
-
+set TRNASSIGNITER=%ITER%
+set PREVTRNASSIGNITER=%PREV_ITER%
 
 :: ------------------------------------------------------------------------------------------------------
 ::
@@ -28,55 +29,10 @@ set PREV_TRN_ITER=%PREV_ITER%
 
 :skims
 
-echo on
-
-set ALLTIMEPERIODS=AM MD PM EV EA
-
-:: Create the automobile level-of-service matrices
-runtpp CTRAMP\scripts\skims\HwySkims.job
-if ERRORLEVEL 2 goto done
-
-mkdir trn\TransitAssignment.iter%ITER%
-cd trn\TransitAssignment.iter%ITER%
-
-:copyTransitLin
-:: bring in the latest transit files -- original if postprocessing
-IF %ITER% EQU POSTPROC (
-  FOR %%H in (%ALLTIMEPERIODS%) DO copy /y ..\transitOriginal%%H.lin transit%%H_0.lin
-)
-IF NOT %ITER% EQU POSTPROC (
-  IF %ITER% EQU 0 (
-    FOR %%H in (%ALLTIMEPERIODS%) DO copy /y ..\transitOriginal%%H.lin transit%%H_0.lin
-  )
-  :: otherwise go from where the previous iteration left off
-  IF %ITER% GTR 0 (
-    FOR %%H in (%ALLTIMEPERIODS%) DO copy /y ..\TransitAssignment.iter%PREV_TRN_ITER%\transit%%H.lin transit%%H_0.lin
-  )
-)
-FOR %%H in (%ALLTIMEPERIODS%) DO (
-  copy /y transit%%H_0.lin transit%%H.lin
-  set LASTITER_%%H=0
-  set LASTSUBDIR_%%H=Subdir0
-)
-
-echo START TRNASSIGN BuildTransitNetworks %DATE% %TIME% >> ..\..\logs\feedback.rpt
-
-:: Prepare the highway network for use by the transit network
-runtpp ..\..\CTRAMP\scripts\skims\PrepHwyNet.job
-if ERRORLEVEL 2 (
-  set TRN_ERRORLEVEL=2
-  goto donedone
-)
-
-:: Create the transit networks
-runtpp ..\..\CTRAMP\scripts\skims\BuildTransitNetworks.job
-if ERRORLEVEL 2 (
-  set TRN_ERRORLEVEL=2
-  goto donedone
-)
-
-:: For the restart runs it may be necessary to do transit skims to take into account changes to fares.  
-runtpp CTRAMP\scripts\skims\TransitSkims.job
+:trnAssignSkim
+:: copy a local version for easier restarting
+copy CTRAMP\scripts\skims\trnRestartAssign.bat trnRestartAssign_iter%ITER%.bat
+call trnRestartAssign_iter%ITER%.bat
 if ERRORLEVEL 2 goto done
 
 :: Create accessibility measures for use by the automobile ownership sub-model
