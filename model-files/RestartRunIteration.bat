@@ -31,7 +31,7 @@ runtpp CTRAMP\scripts\skims\HwySkims.job
 if ERRORLEVEL 2 goto done
 
 :: copy a local version for easier restarting
-copy CTRAMP\scripts\skims\trnAssign.bat trnAssign_iter%ITER%.bat
+copy /Y CTRAMP\scripts\skims\trnAssign.bat trnAssign_iter%ITER%.bat
 call trnAssign_iter%ITER%.bat
 if ERRORLEVEL 2 goto done
 
