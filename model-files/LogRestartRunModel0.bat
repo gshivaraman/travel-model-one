@@ -26,6 +26,7 @@ copy /Y %INPUTFARESPATH%\Ferry.far                            	%PROJECTPATH%%SCE
 copy /Y %INPUTFARESPATH%\HSR.far                            	%PROJECTPATH%%SCENARIONAME%\INPUT\trn
 copy /Y %INPUTFARESPATH%\SMART.far                            	%PROJECTPATH%%SCENARIONAME%\INPUT\trn
 copy /Y %INPUTFARESPATH%\xfare.far                            	%PROJECTPATH%%SCENARIONAME%\INPUT\trn
+copy /Y %INPUTFARESPATH%\TransitSkims.job                       %PROJECTPATH%%SCENARIONAME%\CTRAMP\scripts\skims
 
 @echo off
 FOR /f %%a IN ('WMIC OS GET LocalDateTime ^| FIND "."') DO SET DTS=%%a
