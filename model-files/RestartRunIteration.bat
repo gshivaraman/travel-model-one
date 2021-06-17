@@ -193,10 +193,3 @@ echo FINISHED ITERATION %ITER%  %DATE% %TIME% >> logs\feedback.rpt
 
 :done
 
-:donedone
-cd ..
-cd ..
-
-:: pass on errorlevel
-EXIT /B %TRN_ERRORLEVEL%
-
