@@ -17,6 +17,7 @@
 :: ------------------------------------------------------------------------------------------------------
 
 if %ITER%==0 goto hwyAssign
+set PREV_TRN_ITER=%PREV_ITER%
 
 
 :: ------------------------------------------------------------------------------------------------------
@@ -235,3 +236,11 @@ echo FINISHED ITERATION %ITER%  %DATE% %TIME% >> logs\feedback.rpt
 :: python "CTRAMP\scripts\notify_slack.py" "Finished iteration %ITER% in %MODEL_DIR%"
 
 :done
+
+:donedone
+cd ..
+cd ..
+
+:: pass on errorlevel
+EXIT /B %TRN_ERRORLEVEL%
+
