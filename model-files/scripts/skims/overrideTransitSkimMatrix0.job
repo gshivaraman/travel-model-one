@@ -8,7 +8,7 @@
 ;
 
 token_skims_src = '%SKIMS_SOURCE_DIR%'
-token_skims_out = '%SKIMS_SOURCE_DIR%\output'
+token_skims_out = '%SKIMS_OUTPUT_DIR%'
 
 ; time period loop
 loop period = 1,5

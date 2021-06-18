@@ -17,6 +17,13 @@ SET LOGPATH=%PROJECTPATH%logs\
 :: The path for input fares files
 SET INPUTFARESPATH=%PROJECTPATH%inputs\%SCENARIOINDEX%
 
+:: The path for input skims
+SET SKIMS_SOURCE_DIR=%PROJECTPATH%%SCENARIONAME%\INPUT\skims
+
+:: The path for output skims
+SET SKIMS_OUTPUT_DIR=%PROJECTPATH%%SCENARIONAME%\skims
+
+:: Move input files to the working directories
 copy /Y %INPUTFARESPATH%\ACE.far                            					%PROJECTPATH%%SCENARIONAME%\INPUT\trn
 copy /Y %INPUTFARESPATH%\Amtrak.far                          					%PROJECTPATH%%SCENARIONAME%\INPUT\trn
 copy /Y %INPUTFARESPATH%\BART.far                            					%PROJECTPATH%%SCENARIONAME%\INPUT\trn
@@ -26,12 +33,12 @@ copy /Y %INPUTFARESPATH%\Ferry.far                            					%PROJECTPATH%
 copy /Y %INPUTFARESPATH%\HSR.far                            					%PROJECTPATH%%SCENARIONAME%\INPUT\trn
 copy /Y %INPUTFARESPATH%\SMART.far                            					%PROJECTPATH%%SCENARIONAME%\INPUT\trn
 copy /Y %INPUTFARESPATH%\xfare.far                            					%PROJECTPATH%%SCENARIONAME%\INPUT\trn
-copy /Y %INPUTFARESPATH%\TransitSkims%SCENARIOINDEX%.job                       	%PROJECTPATH%%SCENARIONAME%\CTRAMP\scripts\skims
+copy /Y %INPUTFARESPATH%\TransitSkims%SCENARIOINDEX%.job                       	%PROJECTPATH%%SCENARIONAME%\CTRAMP\scripts\skims\TransitSkims.job
 copy /Y %INPUTFARESPATH%\overrideTransitSkimMatrix%SCENARIOINDEX%.job         	%PROJECTPATH%%SCENARIONAME%\CTRAMP\scripts\skims\overrideTransitSkimMatrix.job
 copy /Y %INPUTFARESPATH%\RestartRunIteration%SCENARIOINDEX%.bat 				%PROJECTPATH%%SCENARIONAME%\CTRAMP\RestartRunIteration.bat
 
-:: Move the input files, which are not accessed by the model, to the working directories
 copy /Y INPUT\trn\                 trn\
+copy /Y INPUT\skims\               skims\
 
 @echo off
 FOR /f %%a IN ('WMIC OS GET LocalDateTime ^| FIND "."') DO SET DTS=%%a
