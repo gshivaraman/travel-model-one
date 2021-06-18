@@ -46,7 +46,7 @@ SET TimeStamp=%DTS:~0,4%%DTS:~4,2%%DTS:~6,2%%DTS:~8,2%%DTS:~10,2%%DTS:~12,2%
 echo %TimeStamp%
 
 :: The following environment variable allows the sample share to be varied from this scenario-specific file which is used to trigger the model run.  
-set MYSAMPLESHARE=0.1
+set MYSAMPLESHARE=0.5
 
 Call RestartRunModel.bat > %LOGPATH%%TimeStamp%RestartRunModel.txt
 
