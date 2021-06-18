@@ -30,7 +30,9 @@ if %ITER%==0 goto hwyAssign
 runtpp CTRAMP\scripts\skims\HwySkims.job
 if ERRORLEVEL 2 goto done
 
+:: make changes to transit fares
 runtpp CTRAMP\scripts\skims\overrideTransitSkimMatrix.job
+if ERRORLEVEL 2 goto done
 
 :: Create accessibility measures for use by the automobile ownership sub-model
 runtpp CTRAMP\scripts\skims\Accessibility.job
