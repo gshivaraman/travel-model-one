@@ -422,6 +422,10 @@ if ERRORLEVEL 2 goto done
 call extractkeyfiles
 c:\windows\system32\Robocopy.exe /E extractor "%M_DIR%OUTPUT"
 
+:: skims are copied to INPUT/skims so that there will be a safe set of skims for use as an input to the restart runs.
+mkdir INPUT\skims
+copy /Y skims                           	INPUT\skims
+
 
 : cleanup
 
