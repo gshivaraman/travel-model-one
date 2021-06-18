@@ -21,7 +21,7 @@
 call CTRAMP\runtime\SetPath.bat
 
 :: Start the cube cluster
-Cluster %COMMPATH%\CTRAMP 1-48 Starthide Exit
+Cluster %COMMPATH%\CTRAMP 1-40 Starthide Exit
 
 ::  Set the IP address of the host machine which sends tasks to the client machines 
 if %computername%==BIGIRON			   set HOST_IP_ADDRESS=10.60.10.70
@@ -433,7 +433,7 @@ copy /Y skims                           	INPUT\skims
 copy *.prn logs\*.prn
 
 :: Close the cube cluster
-Cluster "%COMMPATH%\CTRAMP" 1-48 Close Exit
+Cluster "%COMMPATH%\CTRAMP" 1-40 Close Exit
 
 :: Delete all the temporary TP+ printouts and cluster files
 del *.prn
