@@ -1,8 +1,8 @@
 ;
-; Quick script to over-ride transit skim matrices, as an alternative to running the transit assignment/skimming process
+; Quick script to override transit skim matrices, as an alternative to running the transit assignment/skimming process
 ;
 ; Reads transit skims from %SKIMS_SOURCE_DIR% (e.g. E:\Model2C-Share\Projects\2035_TM152_FBP_Plus_19\skims)
-; Write updatesd skim into .\skims
+; Write updated skim into .\skims
 ;
 ; Uses 5 x 3 = 15 CTRAMP processes
 ;

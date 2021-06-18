@@ -27,7 +27,7 @@ copy /Y %INPUTFARESPATH%\HSR.far                            	%PROJECTPATH%%SCENA
 copy /Y %INPUTFARESPATH%\SMART.far                            	%PROJECTPATH%%SCENARIONAME%\INPUT\trn
 copy /Y %INPUTFARESPATH%\xfare.far                            	%PROJECTPATH%%SCENARIONAME%\INPUT\trn
 copy /Y %INPUTFARESPATH%\TransitSkims.job                       %PROJECTPATH%%SCENARIONAME%\CTRAMP\scripts\skims
-copy /Y %INPUTFARESPATH%\overrideTransitSkimMatrix.job          %PROJECTPATH%%SCENARIONAME%\CTRAMP\scripts\skims
+copy /Y %INPUTFARESPATH%\overrideTransitSkimMatrix0.job          %PROJECTPATH%%SCENARIONAME%\CTRAMP\scripts\skims\overrideTransitSkimMatrix.job
 
 :: Move the input files, which are not accessed by the model, to the working directories
 copy /Y INPUT\trn\                 trn\
