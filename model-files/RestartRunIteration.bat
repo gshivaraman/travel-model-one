@@ -30,7 +30,7 @@ if %ITER%==0 goto hwyAssign
 runtpp CTRAMP\scripts\skims\HwySkims.job
 if ERRORLEVEL 2 goto done
 
-set SKIMS_SOURCE_DIR = %PROJECTPATH%%SCENARIONAME%\skims
+set SKIMS_SOURCE_DIR=%PROJECTPATH%%SCENARIONAME%\skims
 runtpp CTRAMP\scripts\skims\overrideTransitSkimMatrix.job
 
 :: Create accessibility measures for use by the automobile ownership sub-model
