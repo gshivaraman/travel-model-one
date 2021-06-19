@@ -131,6 +131,7 @@ echo STARTED RESTART MODEL RUN  %DATE% %TIME% >> logs\feedback.rpt
 : Pre-Process
 
 :: Clean up the model directory, removing subfolders that will be recreated later to store fresh outputs
+rmdir emfac_prep /s /q
 rmdir core_summaries /s /q
 rmdir updated_output /s /q
 rmdir metrics /s /q
