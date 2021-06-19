@@ -308,7 +308,7 @@ if ERRORLEVEL 2 goto done
 
 
 :: Extract key files
-call extractkeyfiles
+call RestartExtractKeyFiles
 c:\windows\system32\Robocopy.exe /E extractor "%M_DIR%OUTPUT"
 
 

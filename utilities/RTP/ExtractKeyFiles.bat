@@ -25,7 +25,7 @@ copy hwy\iter%ITER%\avgload5period_vehclasses.csv extractor\avgload5period_vehcl
 
 :: Transit assignment results
 mkdir extractor\trn
-copy trn\TransitAssignment.iter3\trnline*.csv    extractor\trn
+copy trn\TransitAssignment.iter%ITER%\trnline*.csv    extractor\trn
 copy trn\trnlink*.dbf                            extractor\trn
 copy trn\trnlink.csv                             extractor\trn
 copy trn\trnline.csv                             extractor\trn

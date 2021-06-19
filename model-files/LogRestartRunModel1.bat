@@ -36,6 +36,7 @@ copy /Y %INPUTFARESPATH%\xfare.far                            					%PROJECTPATH%
 copy /Y %INPUTFARESPATH%\TransitSkims%SCENARIOINDEX%.job                       	%PROJECTPATH%%SCENARIONAME%\CTRAMP\scripts\skims\TransitSkims.job
 copy /Y %INPUTFARESPATH%\overrideTransitSkimMatrix%SCENARIOINDEX%.job         	%PROJECTPATH%%SCENARIONAME%\CTRAMP\scripts\skims\overrideTransitSkimMatrix.job
 copy /Y %INPUTFARESPATH%\RestartRunIteration%SCENARIOINDEX%.bat 				%PROJECTPATH%%SCENARIONAME%\CTRAMP\RestartRunIteration.bat
+copy /Y %INPUTFARESPATH%\RestartExtractKeyFiles.bat								%PROJECTPATH%%SCENARIONAME%\RestartExtractKeyFiles.bat
 
 copy /Y INPUT\trn\                 trn\
 copy /Y INPUT\skims\               skims\
