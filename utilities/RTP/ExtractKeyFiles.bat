@@ -12,8 +12,6 @@
 ::~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 echo STARTED EXTRACTOR RUN  %DATE% %TIME% >> logs\feedback.rpt
 
-rmdir extractor /s /q
-
 :: Create the needed directories
 mkdir extractor
 
