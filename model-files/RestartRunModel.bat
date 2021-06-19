@@ -130,6 +130,12 @@ echo STARTED RESTART MODEL RUN  %DATE% %TIME% >> logs\feedback.rpt
 
 : Pre-Process
 
+:: Clean up the model directory, removing subfolders that will be recreated later to store fresh outputs
+rmdir core_summaries /s /q
+rmdir updated_output /s /q
+rmdir metrics /s /q
+rmdir extractor /s /q
+
 :: Switch in the corresponding versions of key files
 copy /Y CTRAMP\runtime\JavaOnly_Restart_runMain.cmd                        	CTRAMP\runtime\JavaOnly_runMain.cmd
 copy /Y CTRAMP\runtime\mtcTourBasedRestartRun.properties                   	CTRAMP\runtime\mtcTourBased.properties
@@ -270,7 +276,6 @@ if ERRORLEVEL 2 goto done
 :: ------------------------------------------------------------------------------------------------------
 
 : core_summaries
-
 call RunCoreSummaries
 if ERRORLEVEL 2 goto done
 
