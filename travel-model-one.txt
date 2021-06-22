@@ -1,3 +1,5 @@
 <NotepadPlus>
-    <Project name="travel-model-one" />
+    <Project name="travel-model-one">
+        <File name="model-files\RunModel.bat" />
+    </Project>
 </NotepadPlus>
