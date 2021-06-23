@@ -19,6 +19,7 @@
         <File name="model-files\scripts\core_summaries\CoreSummaries.R" />
         <File name="model-files\scripts\core_summaries\TelecommuteByIncome.py" />
         <File name="utilities\RTP\RunMetrics.bat" />
+        <File name="utilities\RTP\metrics\sumTransitTimes.job" />
         <File name="utilities\RTP\metrics\prepAssignIncome.job" />
         <File name="utilities\RTP\metrics\sumTransitTimes.job" />
     </Project>
