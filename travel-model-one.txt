@@ -17,8 +17,8 @@
         <File name="model-files\scripts\skims\overrideTransitSkimMatrix_LL.job" />
         <File name="model-files\RunCoreSummaries.bat" />
         <File name="model-files\scripts\core_summaries\CoreSummaries.R" />
-        <File name="utilities\RTP\metrics\sumTransitTimes.job" />
         <File name="utilities\RTP\RunMetrics.bat" />
+        <File name="utilities\RTP\metrics\sumTransitTimes.job" />
         <File name="utilities\RTP\metrics\prepAssignIncome.job" />
     </Project>
 </NotepadPlus>
