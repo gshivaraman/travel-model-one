@@ -78,7 +78,7 @@ loop period = 1,5
           MW[10] = 0
 
 ;*******************************************************************************
-; implementing Lisa's FBD example here
+; implementing LMZ's FBD example here
 
               MW[1 ] =MI.1.ivt      
               MW[2 ] =MI.1.iwait    
