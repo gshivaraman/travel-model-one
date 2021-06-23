@@ -7,7 +7,7 @@
 set R_HOME=C:\Program Files\R\R-3.2.3
 set R_LIB=C:/Users/mtcpb/Documents/R/win-library/3.2
 
-set ITER=3
+set ITER=%ITER%
 set SAMPLESHARE=0.50
 
 set DIRS=2020_06_690 2020_06_695 2035_06_690 2040_06_691 2040_06_695

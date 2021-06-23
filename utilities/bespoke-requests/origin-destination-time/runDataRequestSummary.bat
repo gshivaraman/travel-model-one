@@ -3,7 +3,7 @@
 :: Set SCRIPT and run in the target directory
 ::
 set R_HOME=C:\Program Files\R\R-3.1.1
-set ITER=3
+set ITER=%ITER%
 set TARGET_DIR=%CD%
 set CODE_DIR=C:\Users\lzorn\Documents\Travel-Model-One-Utilities\CoreSummaries\DataRequests
 :: leave off the .Rmd

@@ -4,7 +4,7 @@ REM --------------------------------------
 
 REM before running the script
 set PATH=%PATH%;C:\Python27;C:\Python27\Scripts
-set ITER=3
+set ITER=%ITER%
 set SAMPLESHARE=0.50
 
 

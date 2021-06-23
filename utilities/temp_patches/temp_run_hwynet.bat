@@ -15,7 +15,7 @@ set GITHUB_DIR=C:\Users\ftsang\Documents\GitHub\travel-model-one\utilities\RTP\m
 set path=%path%;c:\python27
 
 :: set environment variables that are constant across model runs
-set ITER=3
+set ITER=%ITER%
 
 
 ::-----------------------------------------------------------------------------------------------

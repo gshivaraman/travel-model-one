@@ -17,7 +17,7 @@ echo STARTED EXTRACTOR RUN  %DATE% %TIME% >> logs\feedback.rpt
 mkdir extractor
 
 :: Assume this is set already
-:: set ITER=3
+set ITER=%ITER%
 
 :: Highway assignment results
 copy hwy\iter%ITER%\avgload5period.net            extractor\avgload5period.net
