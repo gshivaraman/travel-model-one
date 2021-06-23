@@ -12,8 +12,7 @@ rem ############  JPPF DRIVER  ############
 start "JPPF Server" java -server -Xmx16m -Dlog4j.configuration=log4j-driver.properties -Djppf.config=jppf-driver.properties org.jppf.server.DriverLauncher
 
 rem ############  HH MANAGER  ############
-:: the following line is commented out because for a restart run, the household manager should already be running.
-:: start "Household Manager" java -Xms20000m -Xmx20000m -Dlog4j.configuration=log4j_hh.xml com.pb.mtc.ctramp.MtcHouseholdDataManager -hostname %HOST_IP%
+start "Household Manager" java -Xms20000m -Xmx20000m -Dlog4j.configuration=log4j_hh.xml com.pb.mtc.ctramp.MtcHouseholdDataManager -hostname %HOST_IP%
 
 rem ############  Matrix MANAGER #########
 start "Matrix Manager" java -Xms14000m -Xmx14000m -Dlog4j.configuration=log4j_mtx.xml -Djava.library.path="CTRAMP/runtime" com.pb.models.ctramp.MatrixDataServer -hostname %HOST_IP%

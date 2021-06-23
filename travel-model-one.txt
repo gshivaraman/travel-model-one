@@ -4,10 +4,15 @@
         <File name="model-files\SetUpModel.bat" />
         <File name="model-files\LogRunModel.bat" />
         <File name="model-files\RunModel.bat" />
+        <File name="model-files\scripts\preprocess\RuntimeConfiguration.py" />
+        <File name="model-files\runtime\accessibilities.properties" />
+        <File name="model-files\runtime\mtcTourBased.properties" />
         <File name="model-files\RunIteration.bat" />
         <File name="model-files\LogRestartRunModel0.bat" />
         <File name="model-files\RestartRunModel.bat" />
+        <File name="model-files\runtime\mtcTourBasedRestartRun.properties" />
         <File name="model-files\RestartRunIteration0.bat" />
+        <File name="model-files\runtime\JavaOnly_Restart_runMain.cmd" />
         <File name="model-files\scripts\assign\PrepAssign.job" />
         <File name="model-files\scripts\assign\HwyAssign.job" />
         <File name="model-files\scripts\skims\trnAssign.bat" />
