@@ -16,7 +16,7 @@ set RDATA=ActiveTransport ActivityPattern AutomobileOwnership CommuteByEmploymen
 set CODE_DIR=.\CTRAMP\scripts\core_summaries
 
 :: Model run environment variables
-set ITER=3
+set ITER=%ITER%
 set TARGET_DIR=%CD%
 
 :: Rename these to standard names
