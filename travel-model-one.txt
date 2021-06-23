@@ -1,5 +1,14 @@
 <NotepadPlus>
     <Project name="travel-model-one">
+        <File name="model-files\SetUpModel.bat" />
+        <File name="model-files\LogRunModel.bat" />
         <File name="model-files\RunModel.bat" />
+        <File name="model-files\RunIteration.bat" />
+        <File name="model-files\LogRestartRunModel0.bat" />
+        <File name="model-files\RestartRunModel.bat" />
+        <File name="model-files\RestartRunIteration0.bat" />
+        <File name="model-files\scripts\skims\TransitSkims.job" />
+        <File name="model-files\scripts\skims\TransitSkims_fbd_example.job" />
+        <File name="model-files\scripts\skims\overrideTransitSkimMatrix0.job" />
     </Project>
 </NotepadPlus>
