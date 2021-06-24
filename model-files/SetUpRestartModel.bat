@@ -71,7 +71,6 @@ c:\windows\system32\Robocopy.exe /E "%MODEL_SETUP_BASE_DIR%\INPUT\warmstart"    
 c:\windows\system32\Robocopy.exe /E "%MODEL_SETUP_BASE_DIR%\INPUT\skims"          	INPUT\skims
 c:\windows\system32\Robocopy.exe /E "%MODEL_SETUP_BASE_DIR%\hwy"            		hwy
 c:\windows\system32\Robocopy.exe /E "%MODEL_SETUP_BASE_DIR%\trn"            		trn
-c:\windows\system32\Robocopy.exe /E "%MODEL_SETUP_BASE_DIR%\main"            		main
 
 copy /Y "%MODEL_SETUP_BASE_DIR%\INPUT\params.properties"                          	INPUT\params.properties
 
