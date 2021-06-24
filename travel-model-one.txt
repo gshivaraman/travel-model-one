@@ -4,6 +4,7 @@
         <File name="utilities\calibration\calibrateModel.bat" />
         <File name="model-files\SetUpModel.bat" />
         <File name="model-files\SetUpRestartModel.bat" />
+        <File name="model-files\SetUpRestartModelOnTopOfPriorRun.bat" />
         <File name="model-files\LogRunModel.bat" />
         <File name="model-files\RunModel.bat" />
         <File name="model-files\scripts\preprocess\RuntimeConfiguration.py" />
