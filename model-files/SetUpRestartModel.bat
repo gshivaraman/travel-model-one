@@ -64,17 +64,19 @@ c:\windows\system32\Robocopy.exe /E %MODEL_ROOT_DIR%\CUBE6_VoyagerAPI           
 set MODEL_SETUP_BASE_DIR=F:\23791501\2015_TM152_STR_BA
 ECHO %MODEL_SETUP_BASE_DIR%
 
-c:\windows\system32\Robocopy.exe /E "%MODEL_SETUP_BASE_DIR%\INPUT\landuse"        INPUT\landuse
-c:\windows\system32\Robocopy.exe /E "%MODEL_SETUP_BASE_DIR%\INPUT\nonres"         INPUT\nonres
-c:\windows\system32\Robocopy.exe /E "%MODEL_SETUP_BASE_DIR%\INPUT\popsyn"         INPUT\popsyn
-c:\windows\system32\Robocopy.exe /E "%MODEL_SETUP_BASE_DIR%\INPUT\warmstart"      INPUT\warmstart
-c:\windows\system32\Robocopy.exe /E "%MODEL_SETUP_BASE_DIR%\INPUT\hwy"            INPUT\hwy
-c:\windows\system32\Robocopy.exe /E "%MODEL_SETUP_BASE_DIR%\INPUT\trn"            INPUT\trn
-c:\windows\system32\Robocopy.exe /E "%MODEL_SETUP_BASE_DIR%\INPUT\skims"          INPUT\skims
-copy /Y "%MODEL_SETUP_BASE_DIR%\INPUT\params.properties"                          INPUT\params.properties
+c:\windows\system32\Robocopy.exe /E "%MODEL_SETUP_BASE_DIR%\INPUT\landuse"        	INPUT\landuse
+c:\windows\system32\Robocopy.exe /E "%MODEL_SETUP_BASE_DIR%\INPUT\nonres"         	INPUT\nonres
+c:\windows\system32\Robocopy.exe /E "%MODEL_SETUP_BASE_DIR%\INPUT\popsyn"         	INPUT\popsyn
+c:\windows\system32\Robocopy.exe /E "%MODEL_SETUP_BASE_DIR%\INPUT\warmstart"      	INPUT\warmstart
+c:\windows\system32\Robocopy.exe /E "%MODEL_SETUP_BASE_DIR%\INPUT\skims"          	INPUT\skims
+c:\windows\system32\Robocopy.exe /E "%MODEL_SETUP_BASE_DIR%\hwy"            		hwy
+c:\windows\system32\Robocopy.exe /E "%MODEL_SETUP_BASE_DIR%\trn"            		trn
+c:\windows\system32\Robocopy.exe /E "%MODEL_SETUP_BASE_DIR%\main"            		main
+
+copy /Y "%MODEL_SETUP_BASE_DIR%\INPUT\params.properties"                          	INPUT\params.properties
 
 
-copy "%MODEL_SETUP_BASE_DIR%\main\ShadowPricing_7.csv"                            main
+copy "%MODEL_SETUP_BASE_DIR%\main\ShadowPricing_7.csv"                            	main
 
 :: source of skims to copy
 set SKIM_DIR=%MODEL_SETUP_BASE_DIR%
