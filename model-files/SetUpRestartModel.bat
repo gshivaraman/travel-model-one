@@ -81,13 +81,21 @@ c:\windows\system32\Robocopy.exe /E "%MODEL_SETUP_BASE_DIR%\trn"            		tr
 
 copy /Y "%MODEL_SETUP_BASE_DIR%\INPUT\params.properties"                          	INPUT\params.properties
 
-
 copy "%MODEL_SETUP_BASE_DIR%\main\ShadowPricing_7.csv"                            	main
+
+:: Stamp the feedback report with the date and time of the model start
+echo STARTED MODEL RUN  %DATE% %TIME% >> logs\feedback.rpt 
+
+:: Move the input files, which are not accessed by the model, to the working directories
+copy INPUT\landuse\             landuse\
+copy INPUT\popsyn\              popsyn\
+copy INPUT\nonres\              nonres\
+copy INPUT\warmstart\main\      main\
+copy INPUT\warmstart\nonres\    nonres\
 
 :: source of skims to copy
 set SKIM_DIR=%MODEL_SETUP_BASE_DIR%
 ECHO %SKIM_DIR%
-
 
 :copy_skims
 copy "%SKIM_DIR%\skims\HWYSKM*"           										skims
