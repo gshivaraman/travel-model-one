@@ -537,7 +537,7 @@ def config_distribution(replacements):
         for nodenum in range(5): filenames.append("jppf-node%d.properties" % nodenum)
         for filename in filenames:
             filepath = os.path.join("CTRAMP","runtime","config",filename)
-            replacements[filepath]["(\nprocessing.threads[ \t]*=[ \t]*)(\S*)"] = r"\g<1>20"
+            replacements[filepath]["(\nprocessing.threads[ \t]*=[ \t]*)(\S*)"] = r"\g<1>40"
 
         # hwyassign
         print "Copying HwyIntraStep_48.block to HwyIntraStep.block"
@@ -581,7 +581,7 @@ def config_distribution(replacements):
         for nodenum in range(5): filenames.append("jppf-node%d.properties" % nodenum)
         for filename in filenames:
             filepath = os.path.join("CTRAMP","runtime","config",filename)
-            replacements[filepath]["(\nprocessing.threads[ \t]*=[ \t]*)(\S*)"] = r"\g<1>20"
+            replacements[filepath]["(\nprocessing.threads[ \t]*=[ \t]*)(\S*)"] = r"\g<1>40"
 
         # hwyassign
         print "Copying HwyIntraStep_48.block to HwyIntraStep.block"

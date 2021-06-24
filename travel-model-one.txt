@@ -7,6 +7,7 @@
         <File name="model-files\LogRunModel.bat" />
         <File name="model-files\RunModel.bat" />
         <File name="model-files\scripts\preprocess\RuntimeConfiguration.py" />
+        <File name="config\params_2015.properties" />
         <File name="model-files\runtime\accessibilities.properties" />
         <File name="model-files\runtime\mtcTourBased.properties" />
         <File name="model-files\RunIteration.bat" />
