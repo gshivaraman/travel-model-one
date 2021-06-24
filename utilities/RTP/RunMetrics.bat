@@ -48,14 +48,14 @@ if not exist metrics (mkdir metrics)
 copy INPUT\metrics\BC_config.csv metrics
 
 
-:: if not exist metrics\autos_owned.csv (
+if not exist metrics\autos_owned.csv (
   rem Tally auto ownership from household data
   rem Input: main\householdData_%ITER%.csv
   rem Output: metrics\autos_owned.csv
   python "%CODE_DIR%\tallyAutos.py"
-::)
+)
 
-::if not exist metrics\parking_costs_tour.csv (
+if not exist metrics\parking_costs_tour.csv (
   rem Tally parking costs from tours and trips, persons (for free parking choice)
   rem and tazdata (for parking costs)
   rem Input: updated_output\tours.rdata, updated_output\trips.rdata
@@ -63,20 +63,20 @@ copy INPUT\metrics\BC_config.csv metrics
   rem Output: metrics\parking_costs_tour.csv,     metrics\parking_costs_tour_destTaz.csv
   rem         metrics\parking_costs_trip_destTaz, metrics\parking_costs_trip_distBins.csv
   call "%R_HOME%\bin\x64\Rscript.exe" "%CODE_DIR%\tallyParking.R"
-::)
+)
 
-::if not exist main\indivTripDataIncome_%ITER%.csv (
+if not exist main\indivTripDataIncome_%ITER%.csv (
   rem Attach income to individual trips.  Uses 2 processes.
   rem Input : main\householdData_%ITER%.csv,
   rem         main\indivTripData_%ITER%.csv, main\jointTripData_%ITER%.csv
   rem Output: main\indivTripDataIncome.csv,  main\JointTripDataIncome.csv
   call "%R_HOME%\bin\x64\Rscript.exe" "%CODE_DIR%\joinTripsWithIncome.R"
   IF ERRORLEVEL 2 goto error
-::)
+)
 
-::if not exist metrics (mkdir metrics)
+if not exist metrics (mkdir metrics)
 
-::if not exist main\tripsEVinc1.dat (
+if not exist main\tripsEVinc1.dat (
   rem Convert trip tables into time/income/mode OD matrices
   rem Input : main\(indiv|joint)TripDataIncome_%ITER%.csv
   rem         main\jointTourData_%ITER%.csv
@@ -88,9 +88,9 @@ copy INPUT\metrics\BC_config.csv metrics
   rem         metrics\unique_active_travelers.csv
   python "%CODE_DIR%\countTrips.py"
   if ERRORLEVEL 2 goto error
-::)
+)
 
-::if not exist main\tripsAM_no_zpv_allinc.tpp (
+if not exist main\tripsAM_no_zpv_allinc.tpp (
   rem Convert person trip tables into time/income/mode OD person trip matrices
   rem Input : main\trips(EA|AM|MD|PM|EV)inc[1-4].dat,
   rem         main\trips(EA|AM|MD|PM|EV)_2074.dat,
@@ -101,9 +101,9 @@ copy INPUT\metrics\BC_config.csv metrics
   rem         main\trips(EA|AM|MD|PM|EV)_no_zpv_allinc.tpp
   runtpp "%CODE_DIR%\prepAssignIncome.job"
   IF ERRORLEVEL 2 goto error
-::)
+)
 
-::if not exist metrics\transit_times_by_mode_income.csv (
+if not exist metrics\transit_times_by_mode_income.csv (
   rem Reads person trip tables and skims and outputs tallies for trip attributes
   rem Input : main\trips(EA|AM|MD|PM|EV)_no_zpv_allinc.tpp,
   rem         main\trips(EA|AM|MD|PM|EV)_no_zpv__2074.tpp,
@@ -114,9 +114,9 @@ copy INPUT\metrics\BC_config.csv metrics
   rem         metrics\transit_times_by_mode_income.csv
   runtpp "%CODE_DIR%\sumTransitTimes.job"
   if ERRORLEVEL 2 goto error
-::)
+)
 
-::if not exist metrics\auto_times.csv (
+if not exist metrics\auto_times.csv (
   rem Reads trip tables and skims and outputs tallies for trip attributes
   rem Input : main\trips(EA|AM|MD|PM|EV)(_no)?_zpv_inc[1-4].tpp
   rem         nonres\tripsIx(EA|AM|MD|PM|EV).tpp
@@ -128,9 +128,9 @@ copy INPUT\metrics\BC_config.csv metrics
   rem Output: metrics\auto_times.csv
   runtpp "%CODE_DIR%\sumAutoTimes.job"
   if ERRORLEVEL 2 goto error
-::)
+)
 
-::if not exist metrics\nonmot_times.csv (
+if not exist metrics\nonmot_times.csv (
   rem Reads trip tables and skims and outputs tallies for trip attributes
   rem Input : trips(EA|AM|MD|PM|EV)_no_zpv_inc[1-4].tpp
   rem         trips(EA|AM|MD|PM|EV)_no_zpv__2074.tpp
@@ -139,7 +139,7 @@ copy INPUT\metrics\BC_config.csv metrics
   rem Output: metrics\nonmot_times.csv
   runtpp "%CODE_DIR%\sumNonmotTimes.job"
   if ERRORLEVEL 2 goto error
-::)
+)
 
 :: commented out lines from vmt_vht_metrics onwards
 
