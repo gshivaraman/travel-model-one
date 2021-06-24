@@ -28,6 +28,13 @@ mkdir CTRAMP\scripts
 mkdir CTRAMP\scripts\metrics
 mkdir skims
 mkdir main
+mkdir logs
+mkdir landuse
+mkdir popsyn
+mkdir nonres
+mkdir database
+mkdir logsums
+
 c:\windows\system32\Robocopy.exe /E %GITHUB_DIR%\model-files\model       CTRAMP\model
 c:\windows\system32\Robocopy.exe /E %GITHUB_DIR%\model-files\runtime     CTRAMP\runtime
 c:\windows\system32\Robocopy.exe /E %GITHUB_DIR%\model-files\scripts     CTRAMP\scripts
