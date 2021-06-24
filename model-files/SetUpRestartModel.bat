@@ -92,6 +92,7 @@ copy INPUT\popsyn\              popsyn\
 copy INPUT\nonres\              nonres\
 copy INPUT\warmstart\main\      main\
 copy INPUT\warmstart\nonres\    nonres\
+c:\windows\system32\Robocopy.exe /E "%MODEL_SETUP_BASE_DIR%\main"            		main
 
 :: source of skims to copy
 set SKIM_DIR=%MODEL_SETUP_BASE_DIR%
