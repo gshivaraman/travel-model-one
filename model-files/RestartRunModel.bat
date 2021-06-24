@@ -217,13 +217,10 @@ if ERRORLEVEL 2 goto done
 
 :: Shut down java
 :: The following line has been commented out to enable restart runs.  
-:: LMZ - "And to clarify, for the baseline run, you’d run all three iterations, but then comment out this line which kills the java components."
-:: C:\Windows\SysWOW64\taskkill /f /im "java.exe"
-
+C:\Windows\SysWOW64\taskkill /f /im "java.exe"
 
 :: update telecommute constants one more time just to evaluate the situation
 "E:\Program Files\Python27\python.exe" CTRAMP\scripts\preprocess\updateTelecommuteConstants.py
-
 
 :: ------------------------------------------------------------------------------------------------------
 ::
