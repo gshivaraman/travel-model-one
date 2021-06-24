@@ -1,9 +1,6 @@
 :: SetPath.bat
 :: Utility to set the path.  Used in RunModel as well as RunMain and RunNodeX. 
 
-:: The commpath
-SET COMMPATH=F:\23791501\2015_TM152_STR_BA\
-
 :: The path to the backup folder
 mkdir %OUTPUTSPATH%%TimeStamp%
 SET M_DIR=%OUTPUTSPATH%%TimeStamp%\

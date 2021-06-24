@@ -15,14 +15,19 @@
 ::
 :: ------------------------------------------------------------------------------------------------------
 
+ECHO on
 SET computer_prefix=%computername:~0,4%
+ECHO %computer_prefix%
 
 :: copy over CTRAMP
 set GITHUB_DIR= %USERPROFILE%\Documents\GitHub\travel-model-one
+ECHO %GITHUB_DIR%
 mkdir CTRAMP\model
 mkdir CTRAMP\runtime
 mkdir CTRAMP\scripts
 mkdir CTRAMP\scripts\metrics
+mkdir skims
+mkdir main
 c:\windows\system32\Robocopy.exe /E %GITHUB_DIR%\model-files\model       CTRAMP\model
 c:\windows\system32\Robocopy.exe /E %GITHUB_DIR%\model-files\runtime     CTRAMP\runtime
 c:\windows\system32\Robocopy.exe /E %GITHUB_DIR%\model-files\scripts     CTRAMP\scripts
@@ -51,11 +56,13 @@ if %COMPUTER_PREFIX% == BIGI    set HOST_IP_ADDRESS=10.60.10.70
 
 :: copy over CUBE6_VoyagerAPI
 set MODEL_ROOT_DIR=F:\23791501
+ECHO %MODEL_ROOT_DIR%
 c:\windows\system32\Robocopy.exe /E %MODEL_ROOT_DIR%\CUBE6_VoyagerAPI                       	CUBE6_VoyagerAPI
 
 :setup_inputs
 :: copy over INPUTs from baseline
 set MODEL_SETUP_BASE_DIR=F:\23791501\2015_TM152_STR_BA
+ECHO %MODEL_SETUP_BASE_DIR%
 
 c:\windows\system32\Robocopy.exe /E "%MODEL_SETUP_BASE_DIR%\INPUT\landuse"        INPUT\landuse
 c:\windows\system32\Robocopy.exe /E "%MODEL_SETUP_BASE_DIR%\INPUT\nonres"         INPUT\nonres
@@ -66,19 +73,20 @@ c:\windows\system32\Robocopy.exe /E "%MODEL_SETUP_BASE_DIR%\INPUT\trn"          
 c:\windows\system32\Robocopy.exe /E "%MODEL_SETUP_BASE_DIR%\INPUT\skims"          INPUT\skims
 copy /Y "%MODEL_SETUP_BASE_DIR%\INPUT\params.properties"                          INPUT\params.properties
 
-mkdir main
+
 copy "%MODEL_SETUP_BASE_DIR%\main\ShadowPricing_7.csv"                            main
 
 :: source of skims to copy
 set SKIM_DIR=%MODEL_SETUP_BASE_DIR%
+ECHO %SKIM_DIR%
 
-:: copy skims
+
 :copy_skims
-copy "%SKIM_DIR%\skims\HWYSKM*"           skims
-copy "%SKIM_DIR%\skims\COM_HWYSKIM*"      skims
-copy "%SKIM_DIR%\skims\trnskm*"           skims
-copy "%SKIM_DIR%\skims\nonmotskm.tpp"     skims
-copy "%SKIM_DIR%\skims\accessibility.csv" skims
+copy "%SKIM_DIR%\skims\HWYSKM*"           										skims
+copy "%SKIM_DIR%\skims\COM_HWYSKIM*"      										skims
+copy "%SKIM_DIR%\skims\trnskm*"           										skims
+copy "%SKIM_DIR%\skims\nonmotskm.tpp"     										skims
+copy "%SKIM_DIR%\skims\accessibility.csv" 										skims
 
 :: done.  
 

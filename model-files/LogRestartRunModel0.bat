@@ -8,6 +8,9 @@ SET SCENARIONAME=2015_TM152_STR_S0
 :: The path to the project folder
 SET PROJECTPATH=F:\23791501\
 
+:: The commpath
+SET COMMPATH=F:\23791501\%SCENARIONAME%\
+
 :: The path for storing outputs
 SET OUTPUTSPATH=%PROJECTPATH%outputs\
 
