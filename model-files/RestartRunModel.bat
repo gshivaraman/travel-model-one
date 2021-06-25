@@ -239,7 +239,7 @@ if not exist hwy\iter%ITER%\avgload5period_vehclasses.csv (
 )
 
 :: Run Prepare EMFAC
-call RunPrepareEmfac.bat SB375 WithFreight
+:: call RunPrepareEmfac.bat SB375 WithFreight
 
 :: ------------------------------------------------------------------------------------------------------
 ::
@@ -253,7 +253,7 @@ call RunPrepareEmfac.bat SB375 WithFreight
 :: if ERRORLEVEL 2 goto done
 :: LMZ - "You should also comment out RunLogsums since that uses the model core"
 :: call RunLogsums
-if ERRORLEVEL 2 goto done
+:: if ERRORLEVEL 2 goto done
 
 :: LMZ - "you could comment out other summarization processes like CoreSummaries, Metrics, ScenarioMetrics"
 
@@ -274,8 +274,8 @@ if ERRORLEVEL 2 goto done
 :: ------------------------------------------------------------------------------------------------------
 
 :: Kept the parts of RunMetrics that ran successfully. Commented out lines from vmt_vht_metrics onwards in RunMetrics, but kept RunMetrics as part of the main process.  
-call RunMetrics
-if ERRORLEVEL 2 goto done
+:: call RunMetrics
+:: if ERRORLEVEL 2 goto done
 
 :: ------------------------------------------------------------------------------------------------------
 ::
@@ -285,7 +285,7 @@ if ERRORLEVEL 2 goto done
 
 :: Commenting out RunScenarioMetrics for now.  
 :: call RunScenarioMetrics
-if ERRORLEVEL 2 goto done
+:: if ERRORLEVEL 2 goto done
 
 :: ------------------------------------------------------------------------------------------------------
 ::
