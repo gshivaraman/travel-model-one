@@ -2,6 +2,10 @@ cd ..
 cd ..
 mkdir logs
 
+:: to check the current directory
+echo on
+echo %CD%
+
 rem ############  PARAMETERS  ############
 :: Set the path
 call CTRAMP\runtime\SetPath.bat
