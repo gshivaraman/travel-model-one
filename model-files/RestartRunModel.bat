@@ -207,7 +207,6 @@ call CTRAMP\RunIteration.bat
 if ERRORLEVEL 2 goto done
 
 :: Shut down java
-:: The following line has been commented out to enable restart runs.  
 C:\Windows\SysWOW64\taskkill /f /im "java.exe"
 
 :: update telecommute constants one more time just to evaluate the situation
