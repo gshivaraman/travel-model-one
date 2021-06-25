@@ -31,7 +31,7 @@ copy /Y %GITHUB_DIR%\model-files\RunCoreSummaries.bat                    .
 copy /Y %GITHUB_DIR%\model-files\RunPrepareEmfac.bat                     .
 copy /Y %GITHUB_DIR%\utilities\RTP\RunMetrics.bat                        .
 copy /Y %GITHUB_DIR%\utilities\RTP\RunScenarioMetrics.bat                .
-copy /Y %GITHUB_DIR%\utilities\RTP\ExtractKeyFiles.bat                   .
+copy /Y %GITHUB_DIR%\utilities\RTP\RestartExtractKeyFiles.bat                   .
 copy /Y %GITHUB_DIR%\utilities\RTP\QAQC\Run_QAQC.bat                     .
 copy /Y %GITHUB_DIR%\utilities\check-setupmodel\Check_SetupModelLog.py   .
 
