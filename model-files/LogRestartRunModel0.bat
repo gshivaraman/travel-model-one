@@ -41,7 +41,6 @@ copy /Y %INPUTFARESPATH%\overrideTransitSkimMatrix%SCENARIOINDEX%.job         	%
 copy /Y %INPUTFARESPATH%\RestartRunIteration%SCENARIOINDEX%.bat 				%PROJECTPATH%%SCENARIONAME%\CTRAMP\RestartRunIteration.bat
 copy /Y %INPUTFARESPATH%\RestartExtractKeyFiles.bat								%PROJECTPATH%%SCENARIONAME%\RestartExtractKeyFiles.bat
 
-copy /Y INPUT\trn\                 trn\
 copy /Y INPUT\skims\               skims\
 
 @echo off
