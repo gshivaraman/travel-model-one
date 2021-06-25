@@ -77,10 +77,6 @@ copy core_summaries\*.*                              extractor\core_summaries
 mkdir extractor\updated_output
 copy updated_output\*.*                              extractor\updated_output
 
-:: metrics
-mkdir extractor\metrics
-copy metrics extractor\metrics
-
 :success
 echo ExtractKeyFiles into extractor for STR Complete
 echo ENDED EXTRACTOR RUN  %DATE% %TIME% >> logs\feedback.rpt

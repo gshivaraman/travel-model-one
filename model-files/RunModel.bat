@@ -351,16 +351,16 @@ if ERRORLEVEL 2 goto done
 ::
 :: ------------------------------------------------------------------------------------------------------
 
-if not exist hwy\iter%ITER%\avgload5period_vehclasses.csv (
+:: if not exist hwy\iter%ITER%\avgload5period_vehclasses.csv (
   rem Export network to csv version (with vehicle class volumn columns intact)
   rem Input : hwy\iter%ITER%\avgload5period.net
   rem Output: hwy\iter%ITER%\avgload5period_vehclasses.csv
-  runtpp "CTRAMP\scripts\metrics\net2csv_avgload5period.job"
-  IF ERRORLEVEL 2 goto error
-)
+::  runtpp "CTRAMP\scripts\metrics\net2csv_avgload5period.job"
+::  IF ERRORLEVEL 2 goto error
+::)
 
 :: Run Prepare EMFAC
-call RunPrepareEmfac.bat SB375 WithFreight
+:: call RunPrepareEmfac.bat SB375 WithFreight
 
 :: ------------------------------------------------------------------------------------------------------
 ::
@@ -396,8 +396,8 @@ if ERRORLEVEL 2 goto done
 :: ------------------------------------------------------------------------------------------------------
 
 :: Kept the parts of RunMetrics that ran successfully. Commented out lines from vmt_vht_metrics onwards in RunMetrics, but kept RunMetrics as part of the main process.  
-call RunMetrics
-if ERRORLEVEL 2 goto done
+:: call RunMetrics
+:: if ERRORLEVEL 2 goto done
 
 :: ------------------------------------------------------------------------------------------------------
 ::
@@ -407,7 +407,7 @@ if ERRORLEVEL 2 goto done
 
 :: Commenting out RunScenarioMetrics for now.  
 :: call RunScenarioMetrics
-if ERRORLEVEL 2 goto done
+:: if ERRORLEVEL 2 goto done
 
 :: ------------------------------------------------------------------------------------------------------
 ::
@@ -417,7 +417,7 @@ if ERRORLEVEL 2 goto done
 
 
 :: Extract key files
-call extractkeyfiles
+call RestartExtractKeyFiles.bat
 c:\windows\system32\Robocopy.exe /E extractor "%M_DIR%OUTPUT"
 
 :: skims are copied to INPUT/skims so that there will be a safe set of skims for use as an input to the restart runs.
@@ -434,7 +434,6 @@ copy *.prn logs\*.prn
 Cluster "%COMMPATH%\CTRAMP" 1-40 Close Exit
 
 :: Delete all the temporary TP+ printouts and cluster files
-del *.prn
 del *.script.*
 del *.script
 
