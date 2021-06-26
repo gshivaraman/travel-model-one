@@ -13,6 +13,7 @@
         <File name="model-files\runtime\mtcTourBased.properties" />
         <File name="model-files\RunIteration.bat" />
         <File name="model-files\LogRestartRunModel0.bat" />
+        <File name="model-files\LogRestartRunModel1.bat" />
         <File name="model-files\RestartRunModel.bat" />
         <File name="model-files\runtime\mtcTourBasedRestartRun.properties" />
         <File name="model-files\RestartRunIteration0.bat" />
