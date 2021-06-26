@@ -3,10 +3,13 @@
 SET SCENARIOINDEX=1
 
 :: The name of the scenario and the name of the scenario folder in which the model will be run.
-SET SCENARIONAME=2015_TM152_STR_BA
+SET SCENARIONAME=2015_TM152_STR_S1
 
 :: The path to the project folder
 SET PROJECTPATH=F:\23791501\
+
+:: The commpath
+SET COMMPATH=F:\23791501\%SCENARIONAME%\
 
 :: The path for storing outputs
 SET OUTPUTSPATH=%PROJECTPATH%outputs\
@@ -38,7 +41,6 @@ copy /Y %INPUTFARESPATH%\overrideTransitSkimMatrix%SCENARIOINDEX%.job         	%
 copy /Y %INPUTFARESPATH%\RestartRunIteration%SCENARIOINDEX%.bat 				%PROJECTPATH%%SCENARIONAME%\CTRAMP\RestartRunIteration.bat
 copy /Y %INPUTFARESPATH%\RestartExtractKeyFiles.bat								%PROJECTPATH%%SCENARIONAME%\RestartExtractKeyFiles.bat
 
-copy /Y INPUT\trn\                 trn\
 copy /Y INPUT\skims\               skims\
 
 @echo off
