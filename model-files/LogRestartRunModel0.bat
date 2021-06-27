@@ -3,7 +3,7 @@
 SET SCENARIOINDEX=0
 
 :: The name of the scenario and the name of the scenario folder in which the model will be run.
-SET SCENARIONAME=2015_TM152_STR_S0
+SET SCENARIONAME=2015_TM152_STR_S%SCENARIOINDEX%
 
 :: The path to the project folder
 SET PROJECTPATH=F:\23791501\
