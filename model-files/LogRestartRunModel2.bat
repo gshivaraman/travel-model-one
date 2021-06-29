@@ -1,6 +1,6 @@
 
 :: The index number of the scenario
-SET SCENARIOINDEX=0
+SET SCENARIOINDEX=2
 
 :: The name of the scenario and the name of the scenario folder in which the model will be run.
 SET SCENARIONAME=2015_TM152_STR_S%SCENARIOINDEX%
