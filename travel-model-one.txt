@@ -26,6 +26,7 @@
         <File name="model-files\scripts\skims\TransitSkims_fbd_example.job" />
         <File name="model-files\scripts\skims\overrideTransitSkimMatrix0.job" />
         <File name="model-files\scripts\skims\overrideTransitSkimMatrix_LL.job" />
+        <File name="model-files\scripts\database\SkimsDatabase.JOB" />
         <File name="model-files\RunCoreSummaries.bat" />
         <File name="model-files\scripts\core_summaries\CoreSummaries.R" />
         <File name="model-files\scripts\core_summaries\TelecommuteByIncome.py" />
