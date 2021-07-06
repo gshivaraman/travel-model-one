@@ -51,15 +51,14 @@ if ERRORLEVEL 2 goto done
 
 :core
 
-::  :: if %ITER%==1 (
-::    rem run matrix manager, household manager and jppf driver
-::    cd CTRAMP\runtime
-::    call javaOnly_runMain.cmd 
-::  
-::    rem run jppf node
-::    cd CTRAMP\runtime
-::    call javaOnly_runNode0.cmd
-::  ::)
+:: if %ITER%==1 (
+  rem run matrix manager, household manager and jppf driver
+  cd CTRAMP\runtime
+  call javaOnly_runMain.cmd 
+
+  rem run jppf node
+  cd CTRAMP\runtime
+  call javaOnly_runNode0.cmd
 ::)
 
 ::  Call the MtcTourBasedModel class
