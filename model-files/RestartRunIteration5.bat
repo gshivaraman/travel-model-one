@@ -32,7 +32,7 @@ if ERRORLEVEL 2 goto done
 
 :: TransitSkims5.job is the same as TransitSkims_T3.job provided by LL 20210705
 set SKIMS_SOURCE_DIR=%PROJECTPATH%%SCENARIONAME%\skims
-runtpp CTRAMP\scripts\skims\TransitSkims5.job
+runtpp CTRAMP\scripts\skims\TransitSkims.job
 
 :: Create accessibility measures for use by the automobile ownership sub-model
 runtpp CTRAMP\scripts\skims\Accessibility.job
