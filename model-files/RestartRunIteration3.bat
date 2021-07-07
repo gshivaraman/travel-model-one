@@ -34,7 +34,7 @@ if ERRORLEVEL 2 goto done
 :: Added by LL, 7/1/21
 :trnAssignSkim
 :: copy a local version for easier restarting
-copy CTRAMP\scripts\skims\trnAssign.bat trnAssign.bat
+copy /y CTRAMP\scripts\skims\trnAssign.bat trnAssign.bat
 call trnAssign.bat
 if ERRORLEVEL 2 goto done
 
