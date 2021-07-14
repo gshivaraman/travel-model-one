@@ -35,5 +35,7 @@
         <File name="utilities\RTP\metrics\prepAssignIncome.job" />
         <File name="utilities\RTP\metrics\sumTransitTimes.job" />
         <File name="utilities\RTP\RestartExtractKeyFiles.bat" />
+        <File name="model-files\RestartRunIteration3.bat" />
+        <File name="model-files\scripts\skims\trnAssign3.bat" />
     </Project>
 </NotepadPlus>

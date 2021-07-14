@@ -103,7 +103,7 @@ echo turn echo back on
 
 :: "E:\Program Files\Python27\python.exe" "CTRAMP\scripts\notify_slack.py" "Starting *%MODEL_DIR%*"
 
-set MAXITERATIONS=4
+set MAXITERATIONS=5
 :: --------TrnAssignment Setup -- Standard Configuration
 :: CHAMP has dwell  configured for buses (local and premium)
 :: CHAMP has access configured for for everything
