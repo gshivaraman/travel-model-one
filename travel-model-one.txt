@@ -39,5 +39,6 @@
         <File name="model-files\scripts\skims\trnAssign3.bat" />
         <File name="utilities\outputs\tripsummary.R" />
         <File name="utilities\outputs\CoreSummariesStr.R" />
+        <File name="model-files\scripts\skims\TransitSkims_T1.job" />
     </Project>
 </NotepadPlus>
