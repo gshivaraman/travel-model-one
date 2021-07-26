@@ -1,3 +1,11 @@
+;
+; Specify FCIS modes, LL, 7/22/21
+;
+FCIS_Local='15,20,21,24,27,28,30,33,38,42,44,46,49,52,55,56,60,63,66,68,70,110,111'
+FCIS_Regional='80,81,82,84,86,87,88,90,91,92,93,95,100,101,102,103,104,120,121,130'
+FCIS_Intercity='131,132,133'
+FCIS_Free_SHTL='10,11,12,13,14,16,19'
+
 ; ----------------------------------------------------------------------------------------------------------------
 ;
 ; TransitSkims.job
@@ -408,7 +416,16 @@ loop period = 1,5
             ; matrices for all modes
             mw[28] = modefare,
             ; boarding fare types for all transit modes
-            mw[29] = faremat(1001)
+            mw[29] = faremat(1001),
+            ; *** for FCIS Fare Calculation, LL 7/22/21
+            ; FCIS Local Services
+            mw[31] = dist(@FCIS_Local@),
+            ; FCIS Reginal Services
+            mw[32] = dist(@FCIS_Regional@),
+            ; FCIS Intercity Services
+            mw[33] = dist(@FCIS_Intercity@),
+            ; FCIS Free Shuttle Services
+            mw[34] = dist(@FCIS_Free_SHTL@)
 
           ; trace a selection of o/d pairs for debugging
 ;          select trace=(i=@token_debug_origin@ && j=@token_debug_destination@)            
@@ -429,50 +446,21 @@ loop period = 1,5
               ivtCOM  ivtFerry  ivtMUNILoc  ivtMUNIMet  distLOC  distLRF  distEXP  distHVY  distCOM,
               distFerry  firstMode xfare modefare faremat
               
-          FILLMW MW[1]=MI.1.1(29) ; read in original transit skims
+          FILLMW MW[1]=MI.1.1(34) ; read in original transit skims
           ;
           ; Calculate FARE -- Test 2
           ;          
           JLOOP    ; for each I-J pair
-              MW[100]=MW[10]      ; Save original FARE to MW[100]
               MW[101]=MW[11]-1    ; number of transfers
               
-              IF (MW[101]<2) ; Less than 2 transfers 
-                  IF (MW[26]=1-99)      ; first mode is bus (modes = 1-99)
-                      IF ((MW[13]+MW[15]+MW[16])=0) ; total rail mode time =0
-                          ; Bus to Bus  -- pay first fare only
-                          MW[10]=MW[100]-mw[27] ; Total fare - transfer fare
-                          
-                          ; Bus to Rail -- pay rail fare only
-                          MW[10]=mw[27]         ; transfer fare
-                      ENDIF
-                  ELSE                  ; first mode is rail 
-                          ; Rail + Rail 
-                          IF (MW[15]>0)    ; include BART 
-                              MW[10]=MW[100]-195        ; minus BART fare 195
-                          ELSE
-                              MW[10]=MW[100]            ; Same total fare
-                          ENDIF
-                  ENDIF
+              IF (MW[101]>0) ; Only if there are transfers, LL 7/20/21 
+                  IF (MW[26]=@FCIS_Local@ && MW[33]+MW[34]=0)  ; first mode is Local Services and no Intercity, Free Shuttle Services used
+                      MW[10]=MAX(mw[27],mw[28])   ; if xfare > base fare, base = 0; if base fare > xfare, xfare = 0
+                  ENDIF                  
+              ENDIF   
               
-              ELSE           ; 2+ transfers
-                  IF (MW[26]=1-99)  ; first mode is bus (modes = 1-99)
-                      IF ((MW[13]+MW[15]+MW[16])=0) ; total rail mode time =0
-                          ; Bus to Bus to Bus -- pay first fare only
-                          MW[10]=MW[100]-mw[27] ; Total fare - transfer fare
-                      ELSE    
-                          ; Bus to Rail To Bus -- pay rail fare only
-                          MW[10]=mw[27]-140 ; transfer fare - one bus boarding fare (140 cents ($2000))
-                      ENDIF
-                  ELSE                ; first mode is rail 
-                      ; Rail + Rail + Rail 
-                      IF (MW[15]>0)    ; include BART 
-                          MW[10]=MW[100]-195        ; minus BART fare 195
-                      ELSE
-                          MW[10]=MW[100]            ; Same total fare
-                      ENDIF
-                  ENDIF
-              ENDIF                  
+; Print debug info for negative fares, by LL, 7/20/21
+IF (MW[10]<0) LIST=I(6),',', J(6),',','@token_period@_@token_access@_@token_path@_@token_egress@' ,',',MW[10], FILE="Debug_Neg_Fares.CSV", APPEND=T                           
           ENDJLOOP
         ENDRUN
 
@@ -486,13 +474,19 @@ loop period = 1,5
             FILEI MATI[2]=trnskm@token_period@_@token_access@_@token_path@_@token_egress@.iter@token_trnassigniter@.tpp  ; current travel times +
             FILEI MATI[3]=trnskm@token_period@_@token_access@_@token_path@_@token_egress@.avg.iter@token_prevtrnassigniter@.tpp ; bring in averaged travel times
         
-            FILEO MATO[1]=trnskm@token_period@_@token_access@_@token_path@_@token_egress@.avg.iter@token_trnassigniter@.tpp, MO=1-26,
+;            FILEO MATO[1]=trnskm@token_period@_@token_access@_@token_path@_@token_egress@.avg.iter@token_trnassigniter@.tpp, MO=1-26,
+            FILEO MATO[1]=trnskm@token_period@_@token_access@_@token_path@_@token_egress@.avg.iter@token_trnassigniter@.tpp, MO=1-29, ; by LL, 7/18/21
                           NAME=ivt, iwait, xwait, wait, wacc, waux, wegr, dtime, ddist, fare, boards,
                                ivtLOC,  ivtLRF,  ivtEXP,  ivtHVY,  ivtCOM,  ivtFerry,  ivtMUNILoc, ivtMUNIMet,
-                               distLOC, distLRF, distEXP, distHVY, distCOM, distFerry, firstMode
-        
+                               ; distLOC, distLRF, distEXP, distHVY, distCOM, distFerry, firstMode
+                               distLOC, distLRF, distEXP, distHVY, distCOM, distFerry, firstMode, xfare, modefare, faremat  ; by LL, 7/18/21
+
             FILEO PRINTO[1]=PHT_total_trnskm@token_period@_@token_access@_@token_path@_@token_egress@.csv, APPEND=T
 
+            ; Write out the same skim file from Iteration 4, by LL, 7/18/21
+            FILLMW MW[1]=MI.2.1(29)
+            
+/* commented out by LL, 7/18/21
             ; this is the relevant trips matrix
             ; This is the reason for the @token_real_path@ -- using @token_path@ here would error when
             ; @token_path@ is 'trn', even though the else block isn't executing
@@ -623,6 +617,7 @@ loop period = 1,5
                   _RMSE_IVTT(12.3LRS), _RMSE_TOTT(12.3LRS), _AVGPATHS(12.0LRS), _CURRPATHS(12.0LRS), _CURRBOARDS(12.3LRS),
                   _BOTH(12.0LRS), _ITERONLY(12.0LRS), _AVGONLY(12.0LRS)
             ENDIF
+*/
         ENDRUN
         
         ; print out some debugging information
