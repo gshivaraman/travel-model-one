@@ -209,49 +209,49 @@ if (i>5000) exit
                ENDIF
        
               
-                 wComW_walktime=mi.3.wacc+mi.3.waux+mi.3.wegr
-                 wHvyW_walktime=mi.4.wacc+mi.4.waux+mi.4.wegr
-                 wExpW_walktime=mi.5.wacc+mi.5.waux+mi.5.wegr
-                 wLrfW_walktime=mi.6.wacc+mi.6.waux+mi.6.wegr
-                 wLocW_walktime=mi.7.wacc+mi.7.waux+mi.7.wegr
-                 wTrnW_walktime=mi.8.wacc+mi.8.waux+mi.8.wegr
+                 wComW_walktime=(mi.3.wacc+mi.3.waux+mi.3.wegr)/100
+                 wHvyW_walktime=(mi.4.wacc+mi.4.waux+mi.4.wegr)/100
+                 wExpW_walktime=(mi.5.wacc+mi.5.waux+mi.5.wegr)/100
+                 wLrfW_walktime=(mi.6.wacc+mi.6.waux+mi.6.wegr)/100
+                 wLocW_walktime=(mi.7.wacc+mi.7.waux+mi.7.wegr)/100
+                 wTrnW_walktime=(mi.8.wacc+mi.8.waux+mi.8.wegr)/100
     
-                 dComW_walktime=mi.9.wacc+mi.9.waux+mi.9.wegr
-                 dHvyW_walktime=mi.10.wacc+mi.10.waux+mi.10.wegr
-                 dExpW_walktime=mi.11.wacc+mi.11.waux+mi.11.wegr
-                 dLrfW_walktime=mi.12.wacc+mi.12.waux+mi.12.wegr
-                 dLocW_walktime=mi.13.wacc+mi.13.waux+mi.13.wegr
-                 dTrnW_walktime=mi.14.wacc+mi.14.waux+mi.14.wegr
+                 dComW_walktime=(mi.9.wacc+mi.9.waux+mi.9.wegr)/100
+                 dHvyW_walktime=(mi.10.wacc+mi.10.waux+mi.10.wegr)/100
+                 dExpW_walktime=(mi.11.wacc+mi.11.waux+mi.11.wegr)/100
+                 dLrfW_walktime=(mi.12.wacc+mi.12.waux+mi.12.wegr)/100
+                 dLocW_walktime=(mi.13.wacc+mi.13.waux+mi.13.wegr)/100
+                 dTrnW_walktime=(mi.14.wacc+mi.14.waux+mi.14.wegr)/100
        
-                 wComD_walktime=mi.15.wacc+mi.15.waux+mi.15.wegr            
-                 wHvyD_walktime=mi.16.wacc+mi.16.waux+mi.16.wegr              
-                 wExpD_walktime=mi.17.wacc+mi.17.waux+mi.17.wegr                
-                 wLrfD_walktime=mi.18.wacc+mi.18.waux+mi.18.wegr 
-                 wLocD_walktime=mi.19.wacc+mi.19.waux+mi.19.wegr 
-                 wTrnD_walktime=mi.20.wacc+mi.20.waux+mi.20.wegr      
+                 wComD_walktime=(mi.15.wacc+mi.15.waux+mi.15.wegr)/100            
+                 wHvyD_walktime=(mi.16.wacc+mi.16.waux+mi.16.wegr)/100              
+                 wExpD_walktime=(mi.17.wacc+mi.17.waux+mi.17.wegr)/100                
+                 wLrfD_walktime=(mi.18.wacc+mi.18.waux+mi.18.wegr)/100 
+                 wLocD_walktime=(mi.19.wacc+mi.19.waux+mi.19.wegr)/100 
+                 wTrnD_walktime=(mi.20.wacc+mi.20.waux+mi.20.wegr)/100      
  
        
        ; read total wait times
-                 wComW_wait=mi.3.wait
-                 wHvyW_wait=mi.4.wait
-                 wExpW_wait=mi.5.wait
-                 wLrfW_wait=mi.6.wait
-                 wLocW_wait=mi.7.wait
-                 wTrnW_wait=mi.8.wait
+                 wComW_wait=mi.3.wait/100
+                 wHvyW_wait=mi.4.wait/100
+                 wExpW_wait=mi.5.wait/100
+                 wLrfW_wait=mi.6.wait/100
+                 wLocW_wait=mi.7.wait/100
+                 wTrnW_wait=mi.8.wait/100
     
-                 dComW_wait=mi.9.wait
-                 dHvyW_wait=mi.10.wait
-                 dExpW_wait=mi.11.wait
-                 dLrfW_wait=mi.12.wait
-                 dLocW_wait=mi.13.wait
-                 dTrnW_wait=mi.14.wait
+                 dComW_wait=mi.9.wait/100
+                 dHvyW_wait=mi.10.wait/100
+                 dExpW_wait=mi.11.wait/100
+                 dLrfW_wait=mi.12.wait/100
+                 dLocW_wait=mi.13.wait/100
+                 dTrnW_wait=mi.14.wait/100
        
-                 wComD_wait=mi.15.wait            
-                 wHvyD_wait=mi.16.wait              
-                 wExpD_wait=mi.17.wait                
-                 wLrfD_wait=mi.18.wait 
-                 wLocD_wait=mi.19.wait 
-                 wTrnD_wait=mi.20.wait             
+                 wComD_wait=mi.15.wait/100            
+                 wHvyD_wait=mi.16.wait/100              
+                 wExpD_wait=mi.17.wait/100                
+                 wLrfD_wait=mi.18.wait/100 
+                 wLocD_wait=mi.19.wait/100 
+                 wTrnD_wait=mi.20.wait/100             
        
        ; read IVT by primary modes
        
@@ -280,26 +280,26 @@ if (i>5000) exit
        
        
        
-                 wComW_IVT=mi.3.ivtCOM
-                 wHvyW_IVT=mi.4.ivtHVY
-                 wExpW_IVT=mi.5.ivtEXP
-                 wLrfW_IVT=mi.6.ivtLRF
-                 wLocW_IVT=mi.7.ivtLOC
-                 wTrnW_IVT=mi.8.ivtFerry   ; need to confirm this
+                 wComW_IVT=mi.3.ivtCOM/100
+                 wHvyW_IVT=mi.4.ivtHVY/100
+                 wExpW_IVT=mi.5.ivtEXP/100
+                 wLrfW_IVT=mi.6.ivtLRF/100
+                 wLocW_IVT=mi.7.ivtLOC/100
+                 wTrnW_IVT=mi.8.ivtFerry/100   ; need to confirm this
     
-                 dComW_IVT=mi.9.ivtCOM
-                 dHvyW_IVT=mi.10.ivtHVY
-                 dExpW_IVT=mi.11.ivtEXP
-                 dLrfW_IVT=mi.12.ivtLRF
-                 dLocW_IVT=mi.13.ivtLOC
-                 dTrnW_IVT=mi.14.ivtFerry  ; need to confirm this
+                 dComW_IVT=mi.9.ivtCOM/100
+                 dHvyW_IVT=mi.10.ivtHVY/100
+                 dExpW_IVT=mi.11.ivtEXP/100
+                 dLrfW_IVT=mi.12.ivtLRF/100
+                 dLocW_IVT=mi.13.ivtLOC/100
+                 dTrnW_IVT=mi.14.ivtFerry/100  ; need to confirm this
        
-                 wComD_IVT=mi.15.ivtCOM            
-                 wHvyD_IVT=mi.16.ivtHVY              
-                 wExpD_IVT=mi.17.ivtEXP                
-                 wLrfD_IVT=mi.18.ivtLRF 
-                 wLocD_IVT=mi.19.ivtLOC 
-                 wTrnD_IVT=mi.20.ivtFerry  ; need to confirm this          
+                 wComD_IVT=mi.15.ivtCOM/100            
+                 wHvyD_IVT=mi.16.ivtHVY/100              
+                 wExpD_IVT=mi.17.ivtEXP/100                
+                 wLrfD_IVT=mi.18.ivtLRF/100 
+                 wLocD_IVT=mi.19.ivtLOC/100 
+                 wTrnD_IVT=mi.20.ivtFerry/100  ; need to confirm this          
        
        
        ; read # transfers
@@ -521,26 +521,26 @@ if (i>5000) exit
                ENDIF          
            
            
-                 wComW_Dist=mi.3.distCOM
-                 wHvyW_Dist=mi.4.distHVY
-                 wExpW_Dist=mi.5.distEXP
-                 wLrfW_Dist=mi.6.distLRF
-                 wLocW_Dist=mi.7.distLOC
-                 wTrnW_Dist=mi.8.distFerry   ; need to confirm this
+                 wComW_Dist=mi.3.distCOM/100
+                 wHvyW_Dist=mi.4.distHVY/100
+                 wExpW_Dist=mi.5.distEXP/100
+                 wLrfW_Dist=mi.6.distLRF/100
+                 wLocW_Dist=mi.7.distLOC/100
+                 wTrnW_Dist=mi.8.distFerry/100   ; need to confirm this
     
-                 dComW_Dist=mi.9.distCOM
-                 dHvyW_Dist=mi.10.distHVY
-                 dExpW_Dist=mi.11.distEXP
-                 dLrfW_Dist=mi.12.distLRF
-                 dLocW_Dist=mi.13.distLOC
-                 dTrnW_Dist=mi.14.distFerry  ; need to confirm this
+                 dComW_Dist=mi.9.distCOM/100
+                 dHvyW_Dist=mi.10.distHVY/100
+                 dExpW_Dist=mi.11.distEXP/100
+                 dLrfW_Dist=mi.12.distLRF/100
+                 dLocW_Dist=mi.13.distLOC/100
+                 dTrnW_Dist=mi.14.distFerry/100  ; need to confirm this
        
-                 wComD_Dist=mi.15.distCOM            
-                 wHvyD_Dist=mi.16.distHVY              
-                 wExpD_Dist=mi.17.distEXP                
-                 wLrfD_Dist=mi.18.distLRF 
-                 wLocD_Dist=mi.19.distLOC 
-                 wTrnD_Dist=mi.20.distFerry  ; need to confirm this          
+                 wComD_Dist=mi.15.distCOM/100            
+                 wHvyD_Dist=mi.16.distHVY/100              
+                 wExpD_Dist=mi.17.distEXP/100                
+                 wLrfD_Dist=mi.18.distLRF/100 
+                 wLocD_Dist=mi.19.distLOC/100 
+                 wTrnD_Dist=mi.20.distFerry/100  ; need to confirm this          
            
  
                
