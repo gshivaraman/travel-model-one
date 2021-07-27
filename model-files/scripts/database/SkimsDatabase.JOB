@@ -1,35 +1,20 @@
 
 ; Start the cube cluster
-*Cluster CTRAMP 1-40 Starthide Exit ; by LL, 7/6/21
+*Cluster CTRAMP 1-40 Starthide Exit 
 
 
-Test_Folder='F:\23791501\2015_TM152_STR_T3' ; by LL, 7/6/21
+Work_Folder='F:\23791501\2015_TM152_STR_T7' 
 
 /*; ----------------------------------------------------------------------------------------------------------------
 ;
-; SkimsDatabase.job
+; SkimsDatabase_rev.job  
 ;
-; TP+ script to dump skims into CSV databases that can be read into and used by SAS procedures.  Four databases are
+; Cube/Voyager script to dump skims into CSV databases that can be read into and used by SAS procedures.  Nine databases are
 ; written for each of the five times of day, which are (a) early AM, 3 am to 6 am; (b) AM peak period, 6 am to 10 am; 
 ; (c) midday, 10 am to 3 pm; (d) PM peak period, 3 pm to 7 pm; and, (e) evening, 7 pm to 3 am the next day.
 ;
-; The time database contains the skimmed plus terminal time for automobile travel; the walk and bicycle time is based
-; on an assumed travel speed (the same as is used in the mode choice model) and the distance is based on the roadway
-; network minus freeways and bridges (as appropriate); the transit time uses the best transit path for each of the
-; three access/egress combinations (i.e. walk-transit-walk, drive-transit-walk, and walk-transit-drive).  Note that
-; using the best transit path, rather than building a separate time for each of the five (for each of the access/egress
-; combinations) paths, will introduce a bit of inconsistency to analyses using this data.  This inconsistency is deemed
-; worth avoiding carrying around an additional fifteen (for each time period) time values.
-;
-; The distance database does not include values for transit, as distance is not skimmed.
-;
-; The cost database includes, for automobile travel, bridge tolls, value (HOT-lane) tolls, and an assumed per distance
-; automobile cost; two- and three-plus-occupancy automobile travel cost is scaled to distribute the costs to each
-; traveler.  For transit travel, the cost database includes only the fare; bicycle and walk travel are assumed to be
-; free.  All prices are in year 2000 cents. 
-;
-; The active time database does not include values for automobile travel; is the same as the time database for walk
-; and bicycle travel; and includes the walk access, auxiliary, and walk egress time for transit travel. 
+; The databases contains the following nine variables: walk time, total wait time, in-vehicle time, # transfers, boarding fare, transfer fare, fare matrices, other costs, distance
+
 ;
 ;
 ; Input:  (1)  Time-period-specific highway skims (see HwySkims.job)
@@ -39,35 +24,22 @@ Test_Folder='F:\23791501\2015_TM152_STR_T3' ; by LL, 7/6/21
 ;         (5)  Highway parameters block, which contains SR2COSTSHARE (translates
 ;              carpool costs to individual costs), and SR3COSTSHARE. 
 ;
-; Output: (1)  Time-period-specific time database, containing the origin-to-destination travel time for the following
+; Output: (1)  Time-period-specific databases, containing the above nine variables for the following
 ;              travel modes: drive alone no value toll, drive alone value toll, shared ride 2 no value toll, share
 ;              ride 2 value toll, shared ride 3+ no value toll, shared ride 3+ value toll, walk, bicycle, walk to
-;              best transit to walk, drive to best transit to walk, walk to best transit to drive.  Data are
-;              in minutes.
-;         (2)  Time-period-specific distance database, containing the origin-to-destination travel distance for the
-;              following travel modes: drive alone no value toll, drive alone value toll, shared ride 2 no value toll, share
-;              ride 2 value toll, shared ride 3+ no value toll, shared ride 3+ value toll, walk, bicycle.  Distance
-;              for transit travel is not included. Data values are in miles. 
-;         (3)  Time-period-specific cost database, containing the origin-to-destination out-of-pocket travel cost for the following
-;              travel modes: drive alone no value toll, drive alone value toll, shared ride 2 no value toll, share
-;              ride 2 value toll, shared ride 3+ no value toll, shared ride 3+ value toll, walk to
-;              best transit to walk, drive to best transit to walk, walk to best transit to drive.  Walk and bicycle
-;              are assumed to be free. Data are in year 2000 cents.
-;         (4)  Time-period-specific active time database, containing the origin-to-destination active travel time 
-;              for the following travel modes: walk, bicycle, walk to best transit to walk, drive to best transit 
-;              to walk, walk to best transit to drive.  Automobile travel is assumed to be entirely passive.  
-;              Data are in minutes.
-;
+;              best transit to walk, drive to best transit to walk, walk to best transit to drive.  
+
 ; Notes:  (1)  Output matrices are in miles, minutes, and cents ($2000) and are stored as real values;
 ;	  (2)  Intrazonal distance/time is one half the distance/time to the nearest neighbor;
 ;	  (3)  Intrazonal bridge and value tolls are assumed to be zero
 ;
 ; See also: (1) HwySkims.job, which does the highway skimming
-;	    (2) TransitSkims.job, which does the transit skimming
+;	          (2) TransitSkims.job, which does the transit skimming
 ;           (3) NonMotorizedSkims.job, which does the non-motorized (walk and bike) skimming
 ;
 ; version:  Travel Model One
-; authors:  dto (2010 12 14)
+; authors:  ; LL, updated by JVK to write out separate csv files for each of the nine variables, each file containing info for all modes as applicable, 7/26/21
+
 ;
 ;
 ; ----------------------------------------------------------------------------------------------------------------
@@ -116,92 +88,108 @@ loop period = 1, 5
       token_period = 'EV'
       
    endif
-  ; access/egress loop (walk/walk, auto/walk, walk/auto)
-  loop accegg = 1,3
    
-    if (accegg = 1)         
-      token_access = 'wlk'
-      token_egress = 'wlk'
-    elseif (accegg = 2)        
-      token_access = 'drv'
-      token_egress = 'wlk'
-    elseif (accegg = 3)       
-      token_access = 'wlk'
-      token_egress = 'drv'
-    endif
-      
-    counter = 3 * (period - 1) + accegg
-
-    ; distribute the tasks
-;    DistributeMultistep processid = "ctramp", processnum = counter,  commpath = 'F:\23791501\2015_TM152_STR_S2'
-    DistributeMultistep processid = "ctramp", processnum = counter ; by LL, 6/30/21
-
    
-      ; line haul loop
-      loop path = 1,6
-
-        ; commuter rail or long-haul premium
-        if (path = 1)
-          token_path      = 'com'
-        
-        ; heavy rail or medium-haul premium
-        elseif (path = 2)
-          token_path      = 'hvy'
-
-        ; express bus or medium-haul basic
-        elseif (path = 3)
-          token_path      = 'exp'
-
-        ; light rail (or ferry) or short-haul premium
-        elseif (path = 4)
-          token_path      = 'lrf'
-
-        ; local bus or short-haul basic
-        elseif (path = 5)
-          token_path      = 'loc'
-        
-        ; all transit treated equally
-        elseif (path = 6)
-          token_path      = 'trn'
-        endif   
-   
-   ; do each time of day as a separate process
-;   DistributeMultistep processid = 'ctramp', processNum = period, commpath = '%COMMPATH%'
-     
+    counter = period
+    
+    DistributeMultistep processid = "ctramp", processnum = counter
+    
+  
    ; total travel time by mode
    run pgm = matrix
       
       ; highway skim
-      filei mati[1] = @Test_Folder@\skims\hwyskm@token_period@.tpp
+      filei mati[1] = @Work_Folder@\skims\hwyskm@token_period@.tpp
       
       ; non-motorized skim
-      filei mati[2] = @Test_Folder@\skims\nonmotskm.tpp
+      filei mati[2] = @Work_Folder@\skims\nonmotskm.tpp
       
-      ; walk, generic transit, walk skim
-      filei mati[3] = @Test_Folder@\skims\trnskm@token_period@_@token_access@_@token_path@_@token_egress@.tpp    
+      ;walk-walk
+      ; com skim
+      filei mati[3] = @Work_Folder@\skims\trnskm@token_period@_wlk_com_wlk.tpp    
       
-      ; drive, generic transit, walk skim
-      filei mati[4] = @Test_Folder@\skims\trnskm@token_period@_@token_access@_@token_path@_@token_egress@.tpp	
+      ; Hvy skim
+      filei mati[4] = @Work_Folder@\skims\trnskm@token_period@_wlk_Hvy_wlk.tpp	
       
-      ; walk, generic transit, drive skim
-      filei mati[5] = @Test_Folder@\skims\trnskm@token_period@_@token_access@_@token_path@_@token_egress@.tpp	
+      ; Exp skim
+      filei mati[5] = @Work_Folder@\skims\trnskm@token_period@_wlk_Exp_wlk.tpp	
+      
+      ; Lrf skim
+      filei mati[6] = @Work_Folder@\skims\trnskm@token_period@_wlk_Lrf_wlk.tpp	
+      
+      ; Loc skim
+      filei mati[7] = @Work_Folder@\skims\trnskm@token_period@_wlk_Loc_wlk.tpp	
+      
+      ; Trn skim
+      filei mati[8] = @Work_Folder@\skims\trnskm@token_period@_wlk_Trn_wlk.tpp	
 
+      ;drv-walk
+      ; com skim
+      filei mati[9] = @Work_Folder@\skims\trnskm@token_period@_drv_com_wlk.tpp    
+      
+      ; Hvy skim
+      filei mati[10] = @Work_Folder@\skims\trnskm@token_period@_drv_Hvy_wlk.tpp	
+      
+      ; Exp skim
+      filei mati[11] = @Work_Folder@\skims\trnskm@token_period@_drv_Exp_wlk.tpp	
+      
+      ; Lrf skim
+      filei mati[12] = @Work_Folder@\skims\trnskm@token_period@_drv_Lrf_wlk.tpp	
+      
+      ; Loc skim
+      filei mati[13] = @Work_Folder@\skims\trnskm@token_period@_drv_Loc_wlk.tpp	
+      
+      ; Trn skim
+      filei mati[14] = @Work_Folder@\skims\trnskm@token_period@_drv_Trn_wlk.tpp      
+      
+     ;walk-drv
+      ; com skim
+      filei mati[15] = @Work_Folder@\skims\trnskm@token_period@_wlk_com_drv.tpp    
+      
+      ; Hvy skim
+      filei mati[16] = @Work_Folder@\skims\trnskm@token_period@_wlk_Hvy_drv.tpp	
+      
+      ; Exp skim
+      filei mati[17] = @Work_Folder@\skims\trnskm@token_period@_wlk_Exp_drv.tpp	
+      
+      ; Lrf skim
+      filei mati[18] = @Work_Folder@\skims\trnskm@token_period@_wlk_Lrf_drv.tpp	
+      
+      ; Loc skim
+      filei mati[19] = @Work_Folder@\skims\trnskm@token_period@_wlk_Loc_drv.tpp	
+      
+      ; Trn skim
+      filei mati[20] = @Work_Folder@\skims\trnskm@token_period@_wlk_Trn_drv.tpp	
+      
       ; zonal data in DBF format (allows to use header rows)		
-      filei zdati[1] = @Test_Folder@\landuse\tazdata.dbf
+      filei zdati[1] = @Work_Folder@\landuse\tazdata.dbf
       
       ; block file containing highway parameters (see note above)
-      read file = @Test_Folder@\ctramp\scripts\block\hwyparam.block
+      read file = @Work_Folder@\ctramp\scripts\block\hwyparam.block
 
-if (i>5000) exit ; 
+if (i>5000) exit 
       
-      ; print header for time by mode for each of the three files 
+      ; print header for each of the files 
       if (i==1) 
       
-         list = "orig,dest,da,daToll,s2,s2Toll,s3,s3Toll,walk,bike,wTrnW,dTrnW,wTrnD", file = database\TimeSkimsDatabase@token_period@_@token_access@_@token_path@_@token_egress@.csv
-         list = "orig,dest,da,daToll,s2,s2Toll,s3,s3Toll,walk,bike",                   file = database\DistanceSkimsDatabase@token_period@_@token_access@_@token_path@_@token_egress@.csv
-         list = "orig,dest,da,daToll,s2,s2Toll,s3,s3Toll,wTrnW,dTrnW,wTrnD",           file = database\CostSkimsDatabase@token_period@_@token_access@_@token_path@_@token_egress@.csv
-         list = "orig,dest,walk,bike,wTrnW,dTrnW,wTrnD",                               file = database\ActiveTimeSkimsDatabase@token_period@_@token_access@_@token_path@_@token_egress@.csv
+      
+         list = "orig,dest,walk,wComW,wHvyW,wExpW,wLrfW,wLocW,wTrnW,dComW,dHvyW,dExpW,dLrfW,dLocW,dTrnW,wComD,wHvyD,wExpD,wLrfD,wLocD,wTrnD",file = database\SkimsDatabase@token_period@_walktime.csv  
+      
+         list = "orig,dest,wComW,wHvyW,wExpW,wLrfW,wLocW,wTrnW,dComW,dHvyW,dExpW,dLrfW,dLocW,dTrnW,wComD,wHvyD,wExpD,wLrfD,wLocD,wTrnD",file = database\SkimsDatabase@token_period@_wait.csv    
+                 
+         list = "orig,dest,da,daToll,s2,s2Toll,s3,s3Toll,walk,bike,wComW,wHvyW,wExpW,wLrfW,wLocW,wTrnW,dComW,dHvyW,dExpW,dLrfW,dLocW,dTrnW,wComD,wHvyD,wExpD,wLrfD,wLocD,wTrnD",file = database\SkimsDatabase@token_period@_IVT.csv                      
+         list = "orig,dest,wComW,wHvyW,wExpW,wLrfW,wLocW,wTrnW,dComW,dHvyW,dExpW,dLrfW,dLocW,dTrnW,wComD,wHvyD,wExpD,wLrfD,wLocD,wTrnD",file = database\SkimsDatabase@token_period@_transfers.csv 
          
+         list = "orig,dest,wComW,wHvyW,wExpW,wLrfW,wLocW,wTrnW,dComW,dHvyW,dExpW,dLrfW,dLocW,dTrnW,wComD,wHvyD,wExpD,wLrfD,wLocD,wTrnD",file = database\SkimsDatabase@token_period@_boardfare.csv      
+         
+         list = "orig,dest,wComW,wHvyW,wExpW,wLrfW,wLocW,wTrnW,dComW,dHvyW,dExpW,dLrfW,dLocW,dTrnW,wComD,wHvyD,wExpD,wLrfD,wLocD,wTrnD",file = database\SkimsDatabase@token_period@_xfare.csv
+                           
+         list = "orig,dest,wComW,wHvyW,wExpW,wLrfW,wLocW,wTrnW,dComW,dHvyW,dExpW,dLrfW,dLocW,dTrnW,wComD,wHvyD,wExpD,wLrfD,wLocD,wTrnD",file = database\SkimsDatabase@token_period@_faremat.csv 
+         
+         list = "orig,dest,da,daToll,s2,s2Toll,s3,s3Toll",file = database\SkimsDatabase@token_period@_othercost.csv  
+         
+         list = "orig,dest,da,daToll,s2,s2Toll,s3,s3Toll,walk,bike,wComW,wHvyW,wExpW,wLrfW,wLocW,wTrnW,dComW,dHvyW,dExpW,dLrfW,dLocW,dTrnW,wComD,wHvyD,wExpD,wLrfD,wLocD,wTrnD",file =  
+                 database\SkimsDatabase@token_period@_distance.csv          
       
       endif
       
@@ -211,7 +199,62 @@ if (i>5000) exit ;
          
             if (j<=@token_internal_zones@)
       
-               ; time calculations ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+               
+       ; read walk times
+       
+               if (mi.2.DISTWALK>@token_max_walk_distance@)
+                  walk_Time = -999.0
+               else
+                  walk_Time = mi.2.DISTWALK * 60.0 / @token_walk_speed@
+               ENDIF
+       
+              
+                 wComW_walktime=mi.3.wacc+mi.3.waux+mi.3.wegr
+                 wHvyW_walktime=mi.4.wacc+mi.4.waux+mi.4.wegr
+                 wExpW_walktime=mi.5.wacc+mi.5.waux+mi.5.wegr
+                 wLrfW_walktime=mi.6.wacc+mi.6.waux+mi.6.wegr
+                 wLocW_walktime=mi.7.wacc+mi.7.waux+mi.7.wegr
+                 wTrnW_walktime=mi.8.wacc+mi.8.waux+mi.8.wegr
+    
+                 dComW_walktime=mi.9.wacc+mi.9.waux+mi.9.wegr
+                 dHvyW_walktime=mi.10.wacc+mi.10.waux+mi.10.wegr
+                 dExpW_walktime=mi.11.wacc+mi.11.waux+mi.11.wegr
+                 dLrfW_walktime=mi.12.wacc+mi.12.waux+mi.12.wegr
+                 dLocW_walktime=mi.13.wacc+mi.13.waux+mi.13.wegr
+                 dTrnW_walktime=mi.14.wacc+mi.14.waux+mi.14.wegr
+       
+                 wComD_walktime=mi.15.wacc+mi.15.waux+mi.15.wegr            
+                 wHvyD_walktime=mi.16.wacc+mi.16.waux+mi.16.wegr              
+                 wExpD_walktime=mi.17.wacc+mi.17.waux+mi.17.wegr                
+                 wLrfD_walktime=mi.18.wacc+mi.18.waux+mi.18.wegr 
+                 wLocD_walktime=mi.19.wacc+mi.19.waux+mi.19.wegr 
+                 wTrnD_walktime=mi.20.wacc+mi.20.waux+mi.20.wegr      
+ 
+       
+       ; read total wait times
+                 wComW_wait=mi.3.wait
+                 wHvyW_wait=mi.4.wait
+                 wExpW_wait=mi.5.wait
+                 wLrfW_wait=mi.6.wait
+                 wLocW_wait=mi.7.wait
+                 wTrnW_wait=mi.8.wait
+    
+                 dComW_wait=mi.9.wait
+                 dHvyW_wait=mi.10.wait
+                 dExpW_wait=mi.11.wait
+                 dLrfW_wait=mi.12.wait
+                 dLocW_wait=mi.13.wait
+                 dTrnW_wait=mi.14.wait
+       
+                 wComD_wait=mi.15.wait            
+                 wHvyD_wait=mi.16.wait              
+                 wExpD_wait=mi.17.wait                
+                 wLrfD_wait=mi.18.wait 
+                 wLocD_wait=mi.19.wait 
+                 wTrnD_wait=mi.20.wait             
+       
+       ; read IVT by primary modes
+       
                da_Time     = mi.1.TIMEDA     + zi.1.TERMINAL[j]
                daToll_Time = mi.1.TOLLTIMEDA + zi.1.TERMINAL[j]
                
@@ -221,11 +264,6 @@ if (i>5000) exit ;
                s3_Time     = mi.1.TIMES3     + zi.1.TERMINAL[j]
                s3Toll_Time = mi.1.TOLLTIMES3 + zi.1.TERMINAL[j]
                
-               if (mi.2.DISTWALK>@token_max_walk_distance@)
-                  walk_Time = -999.0
-               else
-                  walk_Time = mi.2.DISTWALK * 60.0 / @token_walk_speed@
-               endif
                
                if (mi.2.DISTBIKE>@token_max_bike_distance@)
                   bike_Time = -999.0
@@ -233,26 +271,234 @@ if (i>5000) exit ;
                   bike_Time = mi.2.DISTBIKE * 60.0 / @token_bike_speed@
                endif
                
-               if (mi.3.IVT > 0 )
-                  wTrnW_Time  = (mi.3.IVT + mi.3.IWAIT + mi.3.XWAIT + mi.3.WACC + mi.3.WAUX + mi.3.WEGR)/100.0
+               
+               if (mi.2.DISTWALK>@token_max_walk_distance@)
+                  walk_Time = -999.0
                else
-                  wTrnW_Time = -999.0
-               endif
+                  walk_Time = mi.2.DISTWALK * 60.0 / @token_walk_speed@
+               ENDIF
+       
+       
+       
+                 wComW_IVT=mi.3.ivtCOM
+                 wHvyW_IVT=mi.4.ivtHVY
+                 wExpW_IVT=mi.5.ivtEXP
+                 wLrfW_IVT=mi.6.ivtLRF
+                 wLocW_IVT=mi.7.ivtLOC
+                 wTrnW_IVT=mi.8.ivtFerry   ; need to confirm this
+    
+                 dComW_IVT=mi.9.ivtCOM
+                 dHvyW_IVT=mi.10.ivtHVY
+                 dExpW_IVT=mi.11.ivtEXP
+                 dLrfW_IVT=mi.12.ivtLRF
+                 dLocW_IVT=mi.13.ivtLOC
+                 dTrnW_IVT=mi.14.ivtFerry  ; need to confirm this
+       
+                 wComD_IVT=mi.15.ivtCOM            
+                 wHvyD_IVT=mi.16.ivtHVY              
+                 wExpD_IVT=mi.17.ivtEXP                
+                 wLrfD_IVT=mi.18.ivtLRF 
+                 wLocD_IVT=mi.19.ivtLOC 
+                 wTrnD_IVT=mi.20.ivtFerry  ; need to confirm this          
+       
+       
+       ; read # transfers
+       
+                IF (mi.3.boards>0)
+                 wComW_transfers=mi.3.boards - 1
+                ELSE 
+                 wComW_transfers=0
+                ENDIF
+                
+                IF (mi.4.boards>0)
+                 wHvyW_transfers=mi.4.boards - 1
+                ELSE
+                 wHvyW_transfers=0
+                ENDIF
+                
+                IF (mi.5.boards>0)
+                 wExpW_transfers=mi.5.boards - 1
+                ELSE
+                 wExpW_transfers=0
+                ENDIF
+                
+                IF (mi.6.boards>0)                 
+                 wLrfW_transfers=mi.6.boards - 1
+                ELSE
+                 wLrfW_transfers=0
+                ENDIF
+                 
+                IF (mi.7.boards>0) 
+                 wLocW_transfers=mi.7.boards - 1
+                ELSE
+                 wLocW_transfers=0
+                ENDIF
+                 
+                IF (mi.8.boards>0)  
+                 wTrnW_transfers=mi.8.boards - 1
+                ELSE
+                 wTrnW_transfers=0
+                ENDIF
+                 
+                IF (mi.9.boards>0)
+                 dComW_transfers=mi.9.boards - 1
+                ELSE
+                 dComW_transfers=0
+                ENDIF
+                
+                IF (mi.10.boards>0) 
+                 dHvyW_transfers=mi.10.boards - 1
+                ELSE
+                 dHvyW_transfers=0
+                ENDIF
+                
+                IF (mi.11.boards>0) 
+                 dExpW_transfers=mi.11.boards - 1
+                ELSE
+                 dExpW_transfers=0
+                ENDIF
+                
+                IF (mi.12.boards>0) 
+                 dLrfW_transfers=mi.12.boards - 1
+                ELSE
+                 dLrfW_transfers=0
+                ENDIF
+                
+                IF (mi.13.boards>0) 
+                 dLocW_transfers=mi.13.boards - 1
+                ELSE
+                 dLocW_transfers=0
+                ENDIF
+                
+                IF (mi.14.boards>0)
+                 dTrnW_transfers=mi.14.boards - 1
+                ELSE
+                 dTrnW_transfers=0
+                ENDIF
+                
+                IF (mi.15.boards>0) 
+                 wComD_transfers=mi.15.boards - 1 
+                ELSE
+                 wComD_transfers=0
+                ENDIF
+                
+                IF (mi.16.boards>0) 
+                 wHvyD_transfers=mi.16.boards - 1 
+                ELSE
+                 wHvyD_transfers=0
+                ENDIF
+                
+                IF (mi.17.boards>0) 
+                 wExpD_transfers=mi.17.boards - 1
+                ELSE
+                 wExpD_transfers=0
+                ENDIF
+                
+                IF (mi.18.boards>0) 
+                 wLrfD_transfers=mi.18.boards - 1
+                ELSE
+                 wLrfD_transfers=0
+                ENDIF
+                 
+                IF (mi.19.boards>0)  
+                 wLocD_transfers=mi.19.boards - 1 
+                ELSE
+                 wLocD_transfers=0
+                ENDIF
+                
+                IF (mi.20.boards>0) 
+                 wTrnD_transfers=mi.20.boards - 1      
+                ELSE
+                 wTrnD_transfers=0
+                ENDIF
+           
+              
+       ; read boarding fares
+                 wComW_boardfare=mi.3.modefare
+                 wHvyW_boardfare=mi.4.modefare
+                 wExpW_boardfare=mi.5.modefare
+                 wLrfW_boardfare=mi.6.modefare
+                 wLocW_boardfare=mi.7.modefare
+                 wTrnW_boardfare=mi.8.modefare
+    
+                 dComW_boardfare=mi.9.modefare
+                 dHvyW_boardfare=mi.10.modefare
+                 dExpW_boardfare=mi.11.modefare
+                 dLrfW_boardfare=mi.12.modefare
+                 dLocW_boardfare=mi.13.modefare
+                 dTrnW_boardfare=mi.14.modefare
+       
+                 wComD_boardfare=mi.15.modefare            
+                 wHvyD_boardfare=mi.16.modefare              
+                 wExpD_boardfare=mi.17.modefare                
+                 wLrfD_boardfare=mi.18.modefare 
+                 wLocD_boardfare=mi.19.modefare 
+                 wTrnD_boardfare=mi.20.modefare      
+       
+              
+       ; read xfares
+                 wComW_xfare=mi.3.xfare
+                 wHvyW_xfare=mi.4.xfare
+                 wExpW_xfare=mi.5.xfare
+                 wLrfW_xfare=mi.6.xfare
+                 wLocW_xfare=mi.7.xfare
+                 wTrnW_xfare=mi.8.xfare
+    
+                 dComW_xfare=mi.9.xfare
+                 dHvyW_xfare=mi.10.xfare
+                 dExpW_xfare=mi.11.xfare
+                 dLrfW_xfare=mi.12.xfare
+                 dLocW_xfare=mi.13.xfare
+                 dTrnW_xfare=mi.14.xfare
+       
+                 wComD_xfare=mi.15.xfare            
+                 wHvyD_xfare=mi.16.xfare              
+                 wExpD_xfare=mi.17.xfare                
+                 wLrfD_xfare=mi.18.xfare 
+                 wLocD_xfare=mi.19.xfare 
+                 wTrnD_xfare=mi.20.xfare 
+         
+           ; read fare matrices
+                 wComW_faremat=mi.3.faremat
+                 wHvyW_faremat=mi.4.faremat
+                 wExpW_faremat=mi.5.faremat
+                 wLrfW_faremat=mi.6.faremat
+                 wLocW_faremat=mi.7.faremat
+                 wTrnW_faremat=mi.8.faremat
+    
+                 dComW_faremat=mi.9.faremat
+                 dHvyW_faremat=mi.10.faremat
+                 dExpW_faremat=mi.11.faremat
+                 dLrfW_faremat=mi.12.faremat
+                 dLocW_faremat=mi.13.faremat
+                 dTrnW_faremat=mi.14.faremat
+       
+                 wComD_faremat=mi.15.faremat            
+                 wHvyD_faremat=mi.16.faremat              
+                 wExpD_faremat=mi.17.faremat                
+                 wLrfD_faremat=mi.18.faremat 
+                 wLocD_faremat=mi.19.faremat 
+                 wTrnD_faremat=mi.20.faremat          
+           
+           
+           ; read other costs 
+            ; note the BTOLL variable includes additional cost from imperfect pavement (for both Repair & Maintenance and fuel)
                
-               if (mi.4.IVT > 0 )
-                  dTrnW_Time  = (mi.4.IVT + mi.4.IWAIT + mi.4.XWAIT +             mi.4.WAUX + mi.4.WEGR + mi.4.DTIME)/100.0
-               else
-                  dTrnW_Time  = -999.0
-               endif
+               da_Cost     = mi.1.BTOLLDA                        + mi.1.DISTDA     *AUTOOPC
+               daToll_Cost = mi.1.TOLLBTOLLDA + mi.1.TOLLVTOLLDA + mi.1.TOLLDISTDA *AUTOOPC
                
-               if (mi.5.IVT > 0 )
-                  wTrnD_Time  = (mi.5.IVT + mi.5.IWAIT + mi.5.XWAIT + mi.5.WACC + mi.5.WAUX +             mi.5.DTIME)/100.0
-               else
-                  wTrnD_Time = -999.0
-               endif
+               s2_Cost     = (mi.1.BTOLLS2                        + mi.1.DISTS2     *AUTOOPC)/SR2COSTSHARE
+               s2Toll_Cost = (mi.1.TOLLBTOLLS2 + mi.1.TOLLVTOLLS2 + mi.1.TOLLDISTS2 *AUTOOPC)/SR2COSTSHARE
                
+               s3_Cost     = (mi.1.BTOLLS3                        + mi.1.DISTS3     *AUTOOPC)/SR3COSTSHARE
+               s3Toll_Cost = (mi.1.TOLLBTOLLS3 + mi.1.TOLLVTOLLS3 + mi.1.TOLLDISTS3 *AUTOOPC)/SR3COSTSHARE
                
-               ; distance calculations ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+               ; bike is free
+               ; walk is free          
+                      
+           
+           ; read distance (highway and transit)
+              
                da_Dist     = mi.1.DISTDA
                daToll_Dist = mi.1.TOLLDISTDA
                
@@ -272,117 +518,88 @@ if (i>5000) exit ;
                   bike_Dist   = -999.0
                else
                   bike_Dist   = mi.2.DISTBIKE
-               endif
-               
-               
-               ; transit distance is not skimmed
-               
-               ; cost calculations (prices in year 2000 cents) ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-               ; note the BTOLL variable includes additional cost from imperfect pavement (for both Repair & Maintenance and fuel)
-               
-               da_Cost     = mi.1.BTOLLDA                        + mi.1.DISTDA     *AUTOOPC
-               daToll_Cost = mi.1.TOLLBTOLLDA + mi.1.TOLLVTOLLDA + mi.1.TOLLDISTDA *AUTOOPC
-               
-               s2_Cost     = (mi.1.BTOLLS2                        + mi.1.DISTS2     *AUTOOPC)/SR2COSTSHARE
-               s2Toll_Cost = (mi.1.TOLLBTOLLS2 + mi.1.TOLLVTOLLS2 + mi.1.TOLLDISTS2 *AUTOOPC)/SR2COSTSHARE
-               
-               s3_Cost     = (mi.1.BTOLLS3                        + mi.1.DISTS3     *AUTOOPC)/SR3COSTSHARE
-               s3Toll_Cost = (mi.1.TOLLBTOLLS3 + mi.1.TOLLVTOLLS3 + mi.1.TOLLDISTS3 *AUTOOPC)/SR3COSTSHARE
-               
-               ; bike is free
-               ; walk is free
-               
-               if (mi.3.IVT > 0 )
-                  wTrnW_Cost  = mi.3.FARE
-               else
-                  wTrnW_Cost  = -999.0
-               endif
-               
-               if (mi.4.IVT > 0 )
-                  dTrnW_Cost  = mi.4.FARE
-               else
-                  dTrnW_Cost  = -999.0
-               endif
-               
-               if (mi.5.IVT > 0 )
-                  wTrnD_Cost  = mi.5.FARE
-               else
-                  wTrnD_Cost  = -999.0
-               endif
-               
-               
-               ; active time calculations ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-               walk_Active = walk_Time
-               bike_Active = bike_Time
-               
-               if (mi.3.IVT > 0 )
-                  wTrnW_Active  = (mi.3.WACC + mi.3.WAUX + mi.3.WEGR)/100.0
-               else
-                  wTrnW_Active  = -999.0
-               endif
-               
-               if (mi.4.IVT > 0 )
-                  dTrnW_Active  = (            mi.4.WAUX + mi.4.WEGR)/100.0
-               else
-                  dTrnW_Active  = -999.0
-               endif
-               
-               if (mi.5.IVT > 0 )
-                  wTrnD_Active  = (mi.5.WACC + mi.5.WAUX            )/100.0
-               else
-                  wTrnD_Active  = -999.0
-               endif
+               ENDIF          
+           
+           
+                 wComW_Dist=mi.3.distCOM
+                 wHvyW_Dist=mi.4.distHVY
+                 wExpW_Dist=mi.5.distEXP
+                 wLrfW_Dist=mi.6.distLRF
+                 wLocW_Dist=mi.7.distLOC
+                 wTrnW_Dist=mi.8.distFerry   ; need to confirm this
+    
+                 dComW_Dist=mi.9.distCOM
+                 dHvyW_Dist=mi.10.distHVY
+                 dExpW_Dist=mi.11.distEXP
+                 dLrfW_Dist=mi.12.distLRF
+                 dLocW_Dist=mi.13.distLOC
+                 dTrnW_Dist=mi.14.distFerry  ; need to confirm this
+       
+                 wComD_Dist=mi.15.distCOM            
+                 wHvyD_Dist=mi.16.distHVY              
+                 wExpD_Dist=mi.17.distEXP                
+                 wLrfD_Dist=mi.18.distLRF 
+                 wLocD_Dist=mi.19.distLOC 
+                 wTrnD_Dist=mi.20.distFerry  ; need to confirm this          
+           
+ 
                
                ; write the output ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-               list = i(8.0),",",j(8.0),",",da_Time(10.2),",",daToll_Time(10.2),",",s2_Time(10.2),",",s2Toll_Time(10.2),",",s3_Time(10.2),",",s3Toll_Time(10.2),",",
-                          walk_Time(10.2),",",bike_Time(10.2),",",wTrnW_Time(10.2),",",dTrnW_Time(10.2),",",wTrnD_Time(10.2), 
-                      file = database\TimeSkimsDatabase@token_period@_@token_access@_@token_path@_@token_egress@.csv
-                      
-               list = i(8.0),",",j(8.0),",",da_Dist(10.2),",",daToll_Dist(10.2),",",s2_Dist(10.2),",",s2Toll_Dist(10.2),",",s3_Dist(10.2),",",s3Toll_Dist(10.2),",",
-      	            walk_Dist(10.2),",",bike_Dist(10.2), 
-                      file = database\DistanceSkimsDatabase@token_period@_@token_access@_@token_path@_@token_egress@.csv
-            
-               list = i(8.0),",",j(8.0),",",da_Cost(10.2),",",daToll_Cost(10.2),",",s2_Cost(10.2),",",s2Toll_Cost(10.2),",",s3_Cost(10.2),",",s3Toll_Cost(10.2),",",
-                          wTrnW_Cost(10.2),",",dTrnW_Cost(10.2),",",wTrnD_Cost(10.2), 
-                      file = database\CostSkimsDatabase@token_period@_@token_access@_@token_path@_@token_egress@.csv
-                      
-               list = i(8.0),",",j(8.0),",",walk_Active(10.2),",",bike_Active(10.2),",",wTrnW_Active(10.2),",",dTrnW_Active(10.2),",",wTrnD_Active(10.2), 
-                      file = database\ActiveTimeSkimsDatabase@token_period@_@token_access@_@token_path@_@token_egress@.csv
-                      
-                      
-;               ; debug print ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-;               if (i = @token_debug_origin@ & j = @token_debug_destination@) 
-;               
-;                  ; one header
-;                  if (@period@ = 1)
-;                  
-;                     list = 'Debug for origin zone ',@token_debug_origin@(5.0),'  and destination zone ',@token_debug_destination@(5.0),'.', file = @token_debug_filename@.@token_period@_@token_access@_@token_path@_@token_egress@.debug
-;                     list = ' ', file = @token_debug_filename@.@token_period@_@token_access@_@token_path@_@token_egress@.debug
-;                  
-;                     list = ' time period              mode           path           time       distance           cost    active time', file = @token_debug_filename@.@token_period@_@token_access@_@token_path@_@token_egress@.debug
-;                     list = ' ----------- ----------------- -------------- -------------- -------------- -------------- --------------', file = @token_debug_filename@.@token_period@_@token_access@_@token_path@_@token_egress@.debug
-;                  
-;                  ; break for everyone else
-;                  else
-;                  
-;                     list = ' ----------- ----------------- -------------- -------------- -------------- -------------- --------------', file = @token_debug_filename@.@token_period@_@token_access@_@token_path@_@token_egress@.debug 
-;                  
-;                  endif
-;                  
-;                  list = '          @token_period@       drive alone           free', da_Time(15.2),     da_Dist(15.2),     da_Cost(15.2),     '           ----',  file = @token_debug_filename@.@token_period@_@token_access@_@token_path@_@token_egress@.debug 
-;                  list = '          @token_period@       drive alone           toll', daToll_Time(15.2), daToll_Dist(15.2), daToll_Cost(15.2), '           ----',  file = @token_debug_filename@.@token_period@_@token_access@_@token_path@_@token_egress@.debug
-;                  list = '          @token_period@     shared ride 2           free', s2_Time(15.2),     s2_Dist(15.2),     s2_Cost(15.2),     '           ----',  file = @token_debug_filename@.@token_period@_@token_access@_@token_path@_@token_egress@.debug 
-;                  list = '          @token_period@     shared ride 2           toll', s2Toll_Time(15.2), s2Toll_Dist(15.2), s2Toll_Cost(15.2), '           ----',  file = @token_debug_filename@.@token_period@_@token_access@_@token_path@_@token_egress@.debug
-;                  list = '          @token_period@    shared ride 3+           free', s3_Time(15.2),     s3_Dist(15.2),     s3_Cost(15.2),     '           ----',  file = @token_debug_filename@.@token_period@_@token_access@_@token_path@_@token_egress@.debug 
-;                  list = '          @token_period@    shared ride 3+           toll', s3Toll_Time(15.2), s3Toll_Dist(15.2), s3Toll_Cost(15.2), '           ----',  file = @token_debug_filename@.@token_period@_@token_access@_@token_path@_@token_egress@.debug
-;                  list = '          @token_period@              walk           ----', walk_Time(15.2),   walk_Dist(15.2),   '           ----', walk_Active(15.2),  file = @token_debug_filename@.@token_period@_@token_access@_@token_path@_@token_egress@.debug 
-;      	          list = '          @token_period@           bicycle           ----', bike_Time(15.2),   bike_Dist(15.2),   '           ----', bike_Active(15.2),  file = @token_debug_filename@.@token_period@_@token_access@_@token_path@_@token_egress@.debug
-;                  list = '          @token_period@           transit      walk,walk', wTrnW_Time(15.2),  '           ----', wTrnW_Cost(15.2),  wTrnW_Active(15.2), file = @token_debug_filename@.@token_period@_@token_access@_@token_path@_@token_egress@.debug 
-;      	          list = '          @token_period@           transit     drive,walk', dTrnW_Time(15.2),  '           ----', dTrnW_Cost(15.2),  dTrnW_Active(15.2), file = @token_debug_filename@.@token_period@_@token_access@_@token_path@_@token_egress@.debug
-;                  list = '          @token_period@           transit     walk,drive', wTrnD_Time(15.2),  '           ----', wTrnD_Cost(15.2),  wTrnD_Active(15.2), file = @token_debug_filename@.@token_period@_@token_access@_@token_path@_@token_egress@.debug 
-;      	
-;               
-;               endif  ; debug
+ 
+                list = i(8.0),",",j(8.0),",",walk_Time(10.2),",",wComW_walktime(10.2),",",wHvyW_walktime(10.2),",",wExpW_walktime(10.2),",",wLrfW_walktime(10.2),",",wLocW_walktime(10.2),",",  
+                       wTrnW_walktime(10.2),",",dComW_walktime(10.2),",",dHvyW_walktime(10.2),",",dExpW_walktime(10.2),",",dLrfW_walktime(10.2),",",dLocW_walktime(10.2),",",dTrnW_walktime(10.2),",",  
+                       wComD_walktime(10.2),",",wHvyD_walktime(10.2),",",wExpD_walktime(10.2),",",wLrfD_walktime(10.2),",",wLocD_walktime(10.2),",",wTrnD_walktime(10.2),",",
+                       file = database\SkimsDatabase@token_period@_walktime.csv
+               
+                       
+                list = i(8.0),",",j(8.0),",",wComW_wait(10.2),",",wHvyW_wait(10.2),",",wExpW_wait(10.2),",",wLrfW_wait(10.2),",",wLocW_wait(10.2),",",wTrnW_wait(10.2),",",
+                       dComW_wait(10.2),",",dHvyW_wait(10.2),",",dExpW_wait(10.2),",",dLrfW_wait(10.2),",",dLocW_wait(10.2),",",dTrnW_wait(10.2),",", wComD_wait(10.2),",",wHvyD_wait(10.2),",",
+                       wExpD_wait(10.2),",",wLrfD_wait(10.2),",",wLocD_wait(10.2),",",wTrnD_wait(10.2),",",
+                       file = database\SkimsDatabase@token_period@_wait.csv                      
+                       
+                       
+                list = i(8.0),",",j(8.0),",",da_Time(10.2),",",daToll_Time(10.2),",",s2_Time(10.2),",",s2Toll_Time(10.2),",",s3_Time(10.2),",",s3Toll_Time(10.2),",",
+                       walk_Time(10.2),",",bike_Time(10.2),",",wComW_IVT(10.2),",",wHvyW_IVT(10.2),",",wExpW_IVT(10.2),",",wLrfW_IVT(10.2),",",wLocW_IVT(10.2),",",wTrnW_IVT(10.2),",",
+                       dComW_IVT(10.2),",",dHvyW_IVT(10.2),",",dExpW_IVT(10.2),",",dLrfW_IVT(10.2),",",dLocW_IVT(10.2),",",dTrnW_IVT(10.2),",",  
+                       wComD_IVT(10.2),",",wHvyD_IVT(10.2),",",wExpD_IVT(10.2),",",wLrfD_IVT(10.2),",",wLocD_IVT(10.2),",",wTrnD_IVT(10.2),",",
+                       file = database\SkimsDatabase@token_period@_IVT.csv                      
+                       
+                       
+                list = i(8.0),",",j(8.0),",",wComW_transfers(10.2),",",wHvyW_transfers(10.2),",",wExpW_transfers(10.2),",",wLrfW_transfers(10.2),",",wLocW_transfers(10.2),",",wTrnW_transfers(10.2),",",
+                       dComW_transfers(10.2),",",dHvyW_transfers(10.2),",",dExpW_transfers(10.2),",",dLrfW_transfers(10.2),",",dLocW_transfers(10.2),",",dTrnW_transfers(10.2),",",  
+                       wComD_transfers(10.2),",",wHvyD_transfers(10.2),",",wExpD_transfers(10.2),",",wLrfD_transfers(10.2),",",wLocD_transfers(10.2),",",wTrnD_transfers(10.2),",",
+                       file = database\SkimsDatabase@token_period@_transfers.csv                      
+                       
+                       
+                list = i(8.0),",",j(8.0),",",wComW_boardfare(10.2),",",wHvyW_boardfare(10.2),",",wExpW_boardfare(10.2),",",wLrfW_boardfare(10.2),",",wLocW_boardfare(10.2),",",wTrnW_boardfare(10.2),",",
+                       dComW_boardfare(10.2),",",dHvyW_boardfare(10.2),",",dExpW_boardfare(10.2),",",dLrfW_boardfare(10.2),",",dLocW_boardfare(10.2),",",dTrnW_boardfare(10.2),",",  
+                       wComD_boardfare(10.2),",",wHvyD_boardfare(10.2),",",wExpD_boardfare(10.2),",",wLrfD_boardfare(10.2),",",wLocD_boardfare(10.2),",",wTrnD_boardfare(10.2),",",
+                       file = database\SkimsDatabase@token_period@_boardfare.csv                      
+                       
+  
+                list = i(8.0),",",j(8.0),",",wComW_xfare(10.2),",",wHvyW_xfare(10.2),",",wExpW_xfare(10.2),",",wLrfW_xfare(10.2),",",wLocW_xfare(10.2),",",wTrnW_xfare(10.2),",",
+                       dComW_xfare(10.2),",",dHvyW_xfare(10.2),",",dExpW_xfare(10.2),",",dLrfW_xfare(10.2),",",dLocW_xfare(10.2),",",dTrnW_xfare(10.2),",",  
+                       wComD_xfare(10.2),",",wHvyD_xfare(10.2),",",wExpD_xfare(10.2),",",wLrfD_xfare(10.2),",",wLocD_xfare(10.2),",",wTrnD_xfare(10.2),",",
+                       file = database\SkimsDatabase@token_period@_xfare.csv
+                       
+                       
+                list = i(8.0),",",j(8.0),",",wComW_faremat(10.2),",",wHvyW_faremat(10.2),",",wExpW_faremat(10.2),",",wLrfW_faremat(10.2),",",wLocW_faremat(10.2),",",wTrnW_faremat(10.2),",",
+                       dComW_faremat(10.2),",",dHvyW_faremat(10.2),",",dExpW_faremat(10.2),",",dLrfW_faremat(10.2),",",dLocW_faremat(10.2),",",dTrnW_faremat(10.2),",",  
+                       wComD_faremat(10.2),",",wHvyD_faremat(10.2),",",wExpD_faremat(10.2),",",wLrfD_faremat(10.2),",",wLocD_faremat(10.2),",",wTrnD_faremat(10.2),",",
+                       file = database\SkimsDatabase@token_period@_faremat.csv        
+                       
+                       
+                list = i(8.0),",",j(8.0),",",da_Cost(10.2),",",daToll_Cost(10.2),",",s2_Cost(10.2),",",s2Toll_Cost(10.2),",",s3_Cost(10.2),",",s3Toll_Cost(10.2),
+                       file = database\SkimsDatabase@token_period@_othercost.csv 
+                       
+                       
+                list = i(8.0),",",j(8.0),",",da_Dist(10.2),",",daToll_Dist(10.2),",",s2_Dist(10.2),",",s2Toll_Dist(10.2),",",s3_Dist(10.2),",",s3Toll_Dist(10.2),",",
+                       walk_Dist(10.2),",",bike_Dist(10.2),",",wComW_Dist(10.2),",",wHvyW_Dist(10.2),",",wExpW_Dist(10.2),",",wLrfW_Dist(10.2),",",wLocW_Dist(10.2),",",wTrnW_Dist(10.2),",",
+                       dComW_Dist(10.2),",",dHvyW_Dist(10.2),",",dExpW_Dist(10.2),",",dLrfW_Dist(10.2),",",dLocW_Dist(10.2),",",dTrnW_Dist(10.2),",",  
+                       wComD_Dist(10.2),",",wHvyD_Dist(10.2),",",wExpD_Dist(10.2),",",wLrfD_Dist(10.2),",",wLocD_Dist(10.2),",",wTrnD_Dist(10.2),",",
+                       file = database\SkimsDatabase@token_period@_distance.csv                     
+                       
+                       
                
             endif ; internal j zones only
          
@@ -392,27 +609,15 @@ if (i>5000) exit ;
       
    endrun
 
-endloop ; token_path
-   
-   EndDistributeMultistep
-   
-  endloop ; access/egress loop 
+    EndDistributeMultistep
+    
+endloop ; time period
 
-endloop ; token_period
-
+ 
 Wait4Files files = CTRAMP1.script.end, CTRAMP2.script.end, CTRAMP3.script.end, CTRAMP4.script.end, CTRAMP5.script.end, 
           printfiles = merge, deldistribfiles = t, CheckReturnCode = t
-           
-;; combine and delete the debug files
-;* copy @token_debug_filename@.EA.debug+@token_debug_filename@.AM.debug+@token_debug_filename@.MD.debug+@token_debug_filename@.PM.debug+@token_debug_filename@.EV.debug @token_debug_filename@.debug
-;* del @token_debug_filename@.EA.debug
-;* del @token_debug_filename@.AM.debug
-;* del @token_debug_filename@.MD.debug
-;* del @token_debug_filename@.PM.debug
-;* del @token_debug_filename@.EV.debug
-
-                   
-; Start the cube cluster
+          
+          
 *Cluster CTRAMP 1-40 Close Exit
 
 
