@@ -20,6 +20,7 @@
 	library(tidyverse)
 	library(readxl)
 	library(openxlsx)
+  library(reshape2)
 	
 	mywd <- getwd()
 
@@ -269,18 +270,20 @@
 		browser()
 
 		# Add income from household table
-		indiv_tours     <- left_join(indiv_tours, select(households, hh_id, income, incQ, incQ_label), by=c("hh_id"))
+		# indiv_tours     <- left_join(indiv_tours, select(households, hh_id, income, incQ, incQ_label), by=c("hh_id"))
+		indiv_tours     <- left_join(indiv_tours, select(households, hh_id, income, incQ, incQ_label))
 		indiv_tours     <- mutate(indiv_tours, num_participants=1)
 
 		# Add in County, Superdistrict, Parking Cost from TAZ Data for the tour destination
 		indiv_tours     <- left_join(indiv_tours,
 									 mutate(tazData, dest_taz=taz, dest_COUNTY=COUNTY, dest_county_name=county_name,
 											dest_SD=SD, PRKCST, OPRKCST) %>%
-									   select(dest_taz, dest_COUNTY, dest_county_name, dest_SD, PRKCST, OPRKCST),
-									 by=c("dest_taz"))
+									   select(dest_taz, dest_COUNTY, dest_county_name, dest_SD, PRKCST, OPRKCST))
+		# 							 by=c("dest_taz"))
 
 		# Add free-parking choice from persons table
-		indiv_tours   <- left_join(indiv_tours, select(persons, person_id, fp_choice), by=c("person_id"))
+		# indiv_tours   <- left_join(indiv_tours, select(persons, person_id, fp_choice), by=c("person_id"))
+		indiv_tours   <- left_join(indiv_tours, select(persons, person_id, fp_choice))
 
 		# Compute the tour parking rate
 		indiv_tours   <- mutate(indiv_tours, parking_rate=ifelse(tour_category=='MANDATORY',PRKCST,OPRKCST))
@@ -297,14 +300,15 @@
 		joint_tours     <- mutate(joint_tours, tour_id=paste0("j",substr(tour_purpose,1,4),tour_id))
 
 		# Add Income from household table
-		joint_tours    <- left_join(joint_tours, select(households, hh_id, income, incQ, incQ_label), by=c("hh_id"))
+		# joint_tours    <- left_join(joint_tours, select(households, hh_id, income, incQ, incQ_label), by=c("hh_id"))
+		joint_tours    <- left_join(joint_tours, select(households, hh_id, income, incQ, incQ_label))
 
 		# Add in County, Superdistrict, Parking Cost from TAZ Data for the tour destination
 		joint_tours     <- left_join(joint_tours,
 									 mutate(tazData, dest_taz=taz, dest_COUNTY=COUNTY, dest_county_name=county_name,
 											dest_SD=SD, PRKCST, OPRKCST) %>%
-									   select(dest_taz, dest_COUNTY, dest_county_name, dest_SD, PRKCST, OPRKCST),
-									 by=c("dest_taz"))
+									   select(dest_taz, dest_COUNTY, dest_county_name, dest_SD, PRKCST, OPRKCST))
+									 # by=c("dest_taz"))
 
 		# Add parking rate
 		joint_tours    <- mutate(joint_tours, parking_rate=OPRKCST)
@@ -324,20 +328,17 @@
 		## Data Reads: Joint Trips and recode a few variables
 
 		# The fields are documented here: https://github.com/BayAreaMetro/modeling-website/wiki/JointTrip
-		joint_trips     <- tbl_df(read.table(file=file.path(MAIN_DIR, paste0("jointTripData_",ITER,".csv")),
-											 header=TRUE, sep=","))
-		joint_trips     <- select(joint_trips, hh_id, tour_id, orig_taz, orig_walk_segment, dest_taz, dest_walk_segment, trip_mode,
-								  num_participants, tour_purpose, orig_purpose, dest_purpose, depart_hour, stop_id, tour_category, avAvailable, sampleRate, inbound) %>%
-						   mutate(tour_id = paste0("j",substr(tour_purpose,1,4),tour_id))
+		joint_trips     <- tbl_df(read.table(file=file.path(MAIN_DIR, paste0("jointTripData_",ITER,".csv")), header=TRUE, sep=","))
+		joint_trips     <- select(joint_trips, hh_id, tour_id, orig_taz, orig_walk_segment, dest_taz, dest_walk_segment, trip_mode, num_participants, tour_purpose, orig_purpose, dest_purpose, depart_hour, stop_id, tour_category, avAvailable, sampleRate, inbound) %>%
+						            mutate(tour_id = paste0("j",substr(tour_purpose,1,4),tour_id))
 
 		print(paste("Read",prettyNum(nrow(joint_trips),big.mark=","),
 					"joint trips or ",prettyNum(sum(joint_trips$num_participants),big.mark=","),
 					"joint person trips"))
 
 		## Add `num_participants` to joint_tours
-		joint_tours     <- left_join(joint_tours,
-									 unique(select(joint_trips, hh_id, tour_id, num_participants)),
-									 by=c("hh_id","tour_id"))
+		joint_tours     <- left_join(joint_tours, unique(select(joint_trips, hh_id, tour_id, num_participants)))
+# 									 by=c("hh_id","tour_id"))
 
 		## Combine individual tours and joint tours together, keeping person_id, person_num, tour_participants for both
 		tours <- rbind(select(mutate(indiv_tours, tour_participants=as.character(person_num)), -person_type, -atWork_freq),
@@ -354,8 +355,8 @@
 		}
 
 		# add residence TAZ info
-		tours <- left_join(tours, select(households, hh_id, taz, SD, COUNTY, county_name),
-						   by=c("hh_id"))
+		tours <- left_join(tours, select(households, hh_id, taz, SD, COUNTY, county_name))
+						   # by=c("hh_id"))
 
 		# add simple_purpose, duration, parking cost to tours table
 		add_tour_attrs <- function(ftours) {
@@ -447,7 +448,8 @@
 		}
 
 		# attach persons to the joint_trips
-		joint_person_trips <- inner_join(joint_trips, joint_tour_persons, by=c("hh_id", "tour_id"))
+		# joint_person_trips <- inner_join(joint_trips, joint_tour_persons, by=c("hh_id", "tour_id"))
+		joint_person_trips <- inner_join(joint_trips, joint_tour_persons)
 		# select out person_num and the person table columns
 		#joint_person_trips <- select(joint_person_trips, hh_id, person_id, tour_id, tour_participants, orig_taz, dest_taz, trip_mode,
 		#                             num_participants, tour_purpose, orig_purpose, dest_purpose, depart_hour, stop_id, avAvailable, sampleRate, inbound)
@@ -487,16 +489,17 @@
 									4*((depart_hour>14)&(depart_hour<19)) +                   # PM
 									5*((depart_hour>18))                                      # EV
 						)
-		trips <- left_join(trips, LOOKUP_TIMEPERIOD, by=c("timeCodeNum"))
+		# trips <- left_join(trips, LOOKUP_TIMEPERIOD, by=c("timeCodeNum"))
+		trips <- left_join(trips, LOOKUP_TIMEPERIOD)
 		trips <- select(mutate(trips, timeCode=timeperiod_abbrev), -timeperiod_abbrev)
 		trips <- left_join(trips,
 						   mutate(households, home_taz=taz) %>%
 							 select(hh_id, incQ, incQ_label, autoSuff, autoSuff_label,
-									home_taz, walk_subzone, walk_subzone_label),
-						   by=c("hh_id"))
+									home_taz, walk_subzone, walk_subzone_label))
+						   # by=c("hh_id"))
 		trips <- left_join(trips,
-						   select(persons, hh_id, person_id, ptype, ptype_label, fp_choice),
-						   by=c("hh_id","person_id"))
+						   select(persons, hh_id, person_id, ptype, ptype_label, fp_choice))
+						   # by=c("hh_id","person_id"))
 		
 			
 	# } else {
