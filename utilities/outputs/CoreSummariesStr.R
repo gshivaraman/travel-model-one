@@ -1,4 +1,10 @@
-CoreSummariesStr <- function(fullrun=FALSE, iter=4, sampleshare=0.5, just_mes=0) {
+# CoreSummariesStr <- function(fullrun=FALSE, iter=4, sampleshare=0.5, just_mes=0) {
+
+  fullrun <- TRUE
+  iter <- 4
+  sampleshare <- 0.5
+  just_mes <- 0
+  
 
   # Version 1 01 by Alex Mitrani, based on CoreSummaries.R by MTC staff, updated on 21 July 2021.  This function takes time and cost variables from the CSV files corresponding to the detailed skims and joins them on to the trips .rdata file.  
   
@@ -10,34 +16,16 @@ CoreSummariesStr <- function(fullrun=FALSE, iter=4, sampleshare=0.5, just_mes=0)
 	# Core Summaries
 
 	# Overhead
-	## Initialization: Set the workspace and load needed libraries
-	.libPaths(Sys.getenv("R_LIB"))
 
 	library(tidyverse)
 	library(readxl)
 	library(openxlsx)
 	
 	mywd <- getwd()
-	
-	
-	# Overhead
-	## Lookups
-
-	# For time periods, see https://github.com/BayAreaMetro/modeling-website/wiki/TimePeriods
-	# For counties, see https://github.com/BayAreaMetro/modeling-website/wiki/TazData
-	# For walk_subzones, see https://github.com/BayAreaMetro/modeling-website/wiki/Household
-
-	######### time periods
-	LOOKUP_TIMEPERIOD    <- data.frame(timeCodeNum=c(1,2,3,4,5),
-									   timeperiod_label=c("Early AM","AM Peak","Midday","PM Peak","Evening"),
-									   timeperiod_abbrev=c("EA","AM","MD","PM","EV"))
-	# no factors -- joins don't work
-	LOOKUP_TIMEPERIOD$timeCodeNum       <- as.integer(LOOKUP_TIMEPERIOD$timeCodeNum)
-	LOOKUP_TIMEPERIOD$timeperiod_label  <- as.character(LOOKUP_TIMEPERIOD$timeperiod_label)
-	LOOKUP_TIMEPERIOD$timeperiod_abbrev <- as.character(LOOKUP_TIMEPERIOD$timeperiod_abbrev)
 
 	
-	if (fullrun==TRUE) {
+	
+#	if (fullrun==TRUE) {
 	
 		# For RStudio, these can be set in the .Rprofile
 		TARGET_DIR   <- mywd  		# The location of the input files
@@ -131,7 +119,7 @@ CoreSummariesStr <- function(fullrun=FALSE, iter=4, sampleshare=0.5, just_mes=0)
 														 "Retired","Driving-age student","Non-driving-age student",
 														 "Child too young for school"))
 		LOOKUP_PTYPE$ptype   <- as.integer(LOOKUP_PTYPE$ptype)
-
+		
 		# Data Reads: Land Use
 
 		# The land use file: https://github.com/BayAreaMetro/modeling-website/wiki/TazData
@@ -173,8 +161,8 @@ CoreSummariesStr <- function(fullrun=FALSE, iter=4, sampleshare=0.5, just_mes=0)
 		# rename
 		names(input.pop.households)[names(input.pop.households)=="HHID"] <- "hh_id"
 
-		households <- inner_join(input.pop.households, input.ct.households, "hh_id")
-		households <- inner_join(households, tazData, "taz")
+		households <- inner_join(input.pop.households, input.ct.households)
+		households <- inner_join(households, tazData)
 		# wrap as a d data frame tbl so it's nicer for printing
 		households <- tbl_df(households)
 		# clean up
@@ -199,7 +187,8 @@ CoreSummariesStr <- function(fullrun=FALSE, iter=4, sampleshare=0.5, just_mes=0)
 												 2*((income>=30000)&(income<60000)) +
 												 3*((income>=60000)&(income<100000)) +
 												 4*(income>=100000))
-		households    <- left_join(households, LOOKUP_INCQ, by=c("incQ"))
+		# households    <- left_join(households, LOOKUP_INCQ, by=c("incQ"))
+		households    <- left_join(households, LOOKUP_INCQ)
 
 		# workers are hworkers capped at 4
 		households    <- mutate(households, workers=4*(hworkers>=4) + hworkers*(hworkers<4))
@@ -212,10 +201,12 @@ CoreSummariesStr <- function(fullrun=FALSE, iter=4, sampleshare=0.5, just_mes=0)
 
 		households    <- mutate(households, autoSuff=1*((autos>0)&(autos<hworkers)) +
 													 2*((autos>0)&(autos>=hworkers)))
-		households    <- left_join(households, LOOKUP_AUTOSUFF, by=c("autoSuff"))
+		# households    <- left_join(households, LOOKUP_AUTOSUFF, by=c("autoSuff"))
+		households    <- left_join(households, LOOKUP_AUTOSUFF)
 
 		# walk subzone label
-		households    <- left_join(households, LOOKUP_WALK_SUBZONE, by=c("walk_subzone"))
+		# households    <- left_join(households, LOOKUP_WALK_SUBZONE, by=c("walk_subzone"))
+		households    <- left_join(households, LOOKUP_WALK_SUBZONE)
 
 		# Data Reads: Person files
 
@@ -241,12 +232,15 @@ CoreSummariesStr <- function(fullrun=FALSE, iter=4, sampleshare=0.5, just_mes=0)
 		}
 
 		# Inner join so persons must be present in both.  So only simulated persons stay.
-		persons              <- inner_join(input.pop.persons, input.ct.persons, by=c("hh_id", "person_id"))
+		# persons              <- inner_join(input.pop.persons, input.ct.persons, by=c("hh_id", "person_id"))
+		persons              <- inner_join(input.pop.persons, input.ct.persons)
 		# Get incQ from Households
-		persons              <- left_join(persons, select(households, hh_id, incQ, incQ_label), by=c("hh_id"))
+		# persons              <- left_join(persons, select(households, hh_id, incQ, incQ_label), by=c("hh_id"))
+		persons              <- left_join(persons, select(households, hh_id, incQ, incQ_label))
 
 		# Person type label
-		persons              <- left_join(persons, LOOKUP_PTYPE, by=c("ptype"))
+		# persons              <- left_join(persons, LOOKUP_PTYPE, by=c("ptype"))
+		persons              <- left_join(persons, LOOKUP_PTYPE)
 
 		# wrap as a d data frame tbl so it's nicer for printing
 		persons              <- tbl_df(persons)
@@ -271,6 +265,8 @@ CoreSummariesStr <- function(fullrun=FALSE, iter=4, sampleshare=0.5, just_mes=0)
 		indiv_tours     <- tbl_df(read.table(file=file.path(MAIN_DIR, paste0("indivTourData_",ITER,".csv")),
 											 header=TRUE, sep=","))
 		indiv_tours     <- mutate(indiv_tours, tour_id=paste0("i",substr(tour_purpose,1,4),tour_id))
+		
+		browser()
 
 		# Add income from household table
 		indiv_tours     <- left_join(indiv_tours, select(households, hh_id, income, incQ, incQ_label), by=c("hh_id"))
@@ -503,13 +499,28 @@ CoreSummariesStr <- function(fullrun=FALSE, iter=4, sampleshare=0.5, just_mes=0)
 						   by=c("hh_id","person_id"))
 		
 			
-	}
-	
-	else {
+	# } else {
+	  
+	  # Overhead
+	  ## Lookups
+	  
+	  # For time periods, see https://github.com/BayAreaMetro/modeling-website/wiki/TimePeriods
+	  # For counties, see https://github.com/BayAreaMetro/modeling-website/wiki/TazData
+	  # For walk_subzones, see https://github.com/BayAreaMetro/modeling-website/wiki/Household
+	  
+	  ######### time periods
+	  LOOKUP_TIMEPERIOD    <- data.frame(timeCodeNum=c(1,2,3,4,5),
+	                                     timeperiod_label=c("Early AM","AM Peak","Midday","PM Peak","Evening"),
+	                                     timeperiod_abbrev=c("EA","AM","MD","PM","EV"))
+	  # no factors -- joins don't work
+	  LOOKUP_TIMEPERIOD$timeCodeNum       <- as.integer(LOOKUP_TIMEPERIOD$timeCodeNum)
+	  LOOKUP_TIMEPERIOD$timeperiod_label  <- as.character(LOOKUP_TIMEPERIOD$timeperiod_label)
+	  LOOKUP_TIMEPERIOD$timeperiod_abbrev <- as.character(LOOKUP_TIMEPERIOD$timeperiod_abbrev)
+	  
 	
 		
 	
-	}
+	#  }
 	
 	
 
@@ -905,4 +916,4 @@ CoreSummariesStr <- function(fullrun=FALSE, iter=4, sampleshare=0.5, just_mes=0)
 	}
 	trips <- tbl_df(trips)
 	
-}
+# }
