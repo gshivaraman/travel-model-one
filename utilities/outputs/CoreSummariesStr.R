@@ -501,6 +501,8 @@
 						   select(persons, hh_id, person_id, ptype, ptype_label, fp_choice))
 						   # by=c("hh_id","person_id"))
 		
+		saveRDS(trips, "trips.rds")
+		
 			
 	# } else {
 	  
@@ -520,26 +522,103 @@
 	  LOOKUP_TIMEPERIOD$timeperiod_label  <- as.character(LOOKUP_TIMEPERIOD$timeperiod_label)
 	  LOOKUP_TIMEPERIOD$timeperiod_abbrev <- as.character(LOOKUP_TIMEPERIOD$timeperiod_abbrev)
 	  
-	
+	  mypathfile <- paste0(mywd, "/", myscenarioid, "/OUTPUT/updated_output/trips.rdata")
+	  
+	  ## Load main data file
+	  
+	  load(mypathfile)
+	  
+	  names(trips)
+	  
+	  ## Set means-based cost factors
+	  MBT_Q1_factor <- 1.0
+	  MBT_Q2_factor <- 1.0
+	  MBF_Q1_factor <- 1.0
+	  MBF_Q2_factor <- 1.0	
 		
 	
 	#  }
+	  
+	  # need to reconcile this...
+	  
+	  # trip_mode	trip_mode_name
+	  # 1	Drive alone (single-occupant vehicles), not eligibile to use value toll facilities
+	  # 2	Drive alone (single-occupant), eligible to use value toll facilities
+	  # 3	Shared ride 2 (two-occupant vehicles), not eligibile to use value toll facilities
+	  # 4	Shared ride 2 (two-occupant vehicles), eligible to use value toll facilities
+	  # 5	Shared ride 3+ (three-or-more-occupant vehicles), not eligibile to use value toll facilities
+	  # 6	Shared ride 3+ (three-of-more occupant vehicles), eligible to use value toll facilities
+	  # 7	Walk the entire way (no transit, no bicycle)
+	  # 8	Bicycle the entire way (no transit)
+	  # 9	Walk to local bus
+	  # 10	Walk to light rail or ferry
+	  # 11	Walk to express bus
+	  # 12	Walk to heavy rail
+	  # 13	Walk to commuter rail
+	  # 14	Drive to local bus
+	  # 15	Drive to light rail or ferry
+	  # 16	Drive to express bus
+	  # 17	Drive to heavy rail
+	  # 18	Drive to commuter rail
+	  # 19	Taxi (added in Travel Model 1.5)
+	  # 20	TNC (Transportation Network Company, or ride-hailing services) - Single party (added in Travel Model 1.5)
+	  # 21	TNC - Shared e.g. sharing with strangers (added in Travel Model 1.5)
+	  
+	  # to this: 
+	  # da
+	  # daToll
+	  # s2
+	  # s2Toll
+	  # s3
+	  # s3Toll
+	  # walk
+	  # bike
+	  # wComW
+	  # wHvyW
+	  # wExpW
+	  # wLrfW
+	  # wLocW
+	  # wTrnW
+	  # dComW
+	  # dHvyW
+	  # dExpW
+	  # dLrfW
+	  # dLocW
+	  # dTrnW
+	  # wComD
+	  # wHvyD
+	  # wExpD
+	  # wLrfD
+	  # wLocD
+	  # wTrnD
+	  
+	  
 	
-	
+	  trips <- trips %>%
+	    mutate(
+	      
+	      skims_mode = case_when(
+	        
+	        trip_mode = 1 ~ "da",
+	        trip_mode = 2 ~ "daToll",
+	        trip_mode = 3 ~ "s2",
+	        trip_mode = 4 ~ "s2Toll",	 
+	        trip_mode = 5 ~ "s3",
+	        trip_mode = 6 ~ "s3Toll",	
+	        trip_mode = 7 ~ "walk",
+	        trip_mode = 8 ~ "bike",		        
+	        trip_mode = 9 ~ "wLocW",	
+	        trip_mode = 10 ~ "wLrfW",	
+	        trip_mode = 11 ~ "wExpW",	
+	        trip_mode = 12 ~ "wHvyW",	
+	        trip_mode = 13 ~ "wComW",	
 
-	mypathfile <- paste0(mywd, "/", myscenarioid, "/OUTPUT/updated_output/trips.rdata")
-	
-	## Load main data file
-  
-	load(mypathfile)
-  
-	names(trips)
-	
-	## Set means-based cost factors
-	MBT_Q1_factor <- 1.0
-	MBT_Q2_factor <- 1.0
-	MBF_Q1_factor <- 1.0
-	MBF_Q2_factor <- 1.0
+	        
+	      )
+	      
+	    )
+
+
 	
 	
 
