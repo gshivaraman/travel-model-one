@@ -592,27 +592,38 @@
 	  # wLocD
 	  # wTrnD
 	  
-	  
-	
 	  trips <- trips %>%
 	    mutate(
 	      
 	      skims_mode = case_when(
 	        
-	        trip_mode = 1 ~ "da",
-	        trip_mode = 2 ~ "daToll",
-	        trip_mode = 3 ~ "s2",
-	        trip_mode = 4 ~ "s2Toll",	 
-	        trip_mode = 5 ~ "s3",
-	        trip_mode = 6 ~ "s3Toll",	
-	        trip_mode = 7 ~ "walk",
-	        trip_mode = 8 ~ "bike",		        
-	        trip_mode = 9 ~ "wLocW",	
-	        trip_mode = 10 ~ "wLrfW",	
-	        trip_mode = 11 ~ "wExpW",	
-	        trip_mode = 12 ~ "wHvyW",	
-	        trip_mode = 13 ~ "wComW",	
-
+	        trip_mode == 1 ~ "da",
+	        trip_mode == 2 ~ "daToll",
+	        trip_mode == 3 ~ "s2",
+	        trip_mode == 4 ~ "s2Toll",	 
+	        trip_mode == 5 ~ "s3",
+	        trip_mode == 6 ~ "s3Toll",	
+	        trip_mode == 7 ~ "walk",
+	        trip_mode == 8 ~ "bike",		        
+	        trip_mode == 9 ~ "wLocW",	
+	        trip_mode == 10 ~ "wLrfW",	
+	        trip_mode == 11 ~ "wExpW",	
+	        trip_mode == 12 ~ "wHvyW",	
+	        trip_mode == 13 ~ "wComW",	
+	        trip_mode == 14 & (orig_purpose == 'Home') ~ "dLocW",	
+	        trip_mode == 15 & (orig_purpose == 'Home') ~ "dLrfW",	
+	        trip_mode == 16 & (orig_purpose == 'Home') ~ "dExpW",	
+	        trip_mode == 17 & (orig_purpose == 'Home') ~ "dHvyW",	
+	        trip_mode == 18 & (orig_purpose == 'Home') ~ "dComW",
+	        trip_mode == 14 & (dest_purpose == 'Home') ~ "wLocD",	
+	        trip_mode == 15 & (dest_purpose == 'Home') ~ "wLrfD",	
+	        trip_mode == 16 & (dest_purpose == 'Home') ~ "wExpD",	
+	        trip_mode == 17 & (dest_purpose == 'Home') ~ "wHvyD",	
+	        trip_mode == 18 & (dest_purpose == 'Home') ~ "wComD",	        
+	        trip_mode == 19 ~ "Taxi",
+	        trip_mode == 20 ~ "TNCa",
+	        trip_mode == 21 ~ "TNCs",
+	        TRUE ~ "Other"
 	        
 	      )
 	      
