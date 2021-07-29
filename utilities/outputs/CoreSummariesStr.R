@@ -809,4 +809,6 @@ myvarlist <- c("walktime", "wait", "IVT", "transfers", "boardfare", "faremat", "
 	saveRDS(trips, file=file.path(UPDATED_DIR, "trips.rds"))
 	remove(trips)
 	
+	print(gc())
+	
 }
