@@ -20,7 +20,7 @@
 	library(tidyverse)
 	library(readxl)
 	library(openxlsx)
-  library(reshape2)
+	library(reshape2)
 	
 	mywd <- getwd()
 
@@ -501,7 +501,7 @@
 						   select(persons, hh_id, person_id, ptype, ptype_label, fp_choice))
 						   # by=c("hh_id","person_id"))
 		
-		saveRDS(trips, "trips.rds")
+		# saveRDS(trips, "trips.rds")
 		
 			
 	# } else {
@@ -656,15 +656,17 @@
 	
 	add_myvariable <- function(mydf, mytp, myvar) {
 	  
-	  myvar <- "walktime"
-	  mytp <- "AM"
-	  mydf <- trips
+	  # The following commented-out lines are for testing only!
+	  
+	  # myvar <- "walktime"
+	  # mytp <- "AM"
+	  # mydf <- trips
 	  
 	  # The variable may or may not already exist
 	  
 	  if (myvar %in% names(mydf)) {
 	    
-	    cat(paste0("The variable ", myvar, " already exists."))
+	    cat(paste0("The variable ", myvar, " already exists.", "\n \n"))
 	    
 	  } else {
 	    
@@ -708,7 +710,7 @@
 	    
 	    if (checkvar %in% names(relevant)) {
 	      
-	      cat(paste0("The variable ", checkvar, " already exists."))
+	      cat(paste0("The variable ", checkvar, " already exists.", "\n \n"))
 	      
 	    } else {
 	      
@@ -778,12 +780,14 @@
 	  
 	}
 	
-	saveRDS(trips, "trips.rds")
+	# saveRDS(trips, "trips.rds")
 	
-	myvar <- "walktime"
-	timeperiod <- "AM"
+	# The following commented-out lines are for testing only!
 	
-	trips <- add_myvariable(mydf = trips, mytp = timeperiod, myvar = myvar)
+	# myvar <- "walktime"
+	# timeperiod <- "AM"
+	
+	# trips <- add_myvariable(mydf = trips, mytp = timeperiod, myvar = myvar)
 	
 	
 myvarlist <- c("walktime", "wait", "IVT", "transfers", "boardfare", "faremat", "xfare", "othercost", "distance")	
@@ -813,5 +817,50 @@ myvarlist <- c("walktime", "wait", "IVT", "transfers", "boardfare", "faremat", "
 	print(paste("After adding tour duration to trips -- have",prettyNum(nrow(trips),big.mark=","),"rows"))
 
 	trips <- tbl_df(trips)
+
+	## Cleanup and save tours, trips and households
+	print(paste("Saving trips.rdata with",prettyNum(nrow(trips),big.mark=","),"rows and",ncol(trips),"columns"))
+	save(trips, file=file.path(UPDATED_DIR, "trips.rdata"))
+	if (JUST_MES=="1") {
+	  write.table(trips, file=file.path(UPDATED_DIR, "trips.csv"), sep=",", row.names=FALSE)
+	  ## Need a version for mapping.  These are links, so we need to split into points.
+	  ## No intermediate stop: rows with stop_id == -1
+	  trips_dest_noint <- trips[ which(trips$stop_id==-1), ] %>%
+		mutate(stop_id=0) %>%
+		select(-orig_taz, -orig_purpose) %>%
+		rename(taz = dest_taz, purpose = dest_purpose)
+	  trips_orig_noint <- trips[ which(trips$stop_id==-1), ] %>%
+		select(-dest_taz, -dest_purpose) %>%
+		rename(taz = orig_taz, purpose = orig_purpose)
+	  ## Intermediate stops: rows with stop_id > 0
+	  trips_orig_int <- trips[ which(trips$stop_id==0), ] %>%
+		mutate(stop_id=-1) %>%
+		select(-dest_taz, -dest_purpose) %>%
+		rename(taz= orig_taz, purpose = orig_purpose)
+	  trips_dest_int <- trips[ which(trips$stop_id>=0), ] %>%
+		select(-orig_taz, -orig_purpose) %>%
+		rename(taz = dest_taz, purpose = dest_purpose)
+	  # put them together and sort
+	  trip_points <- rbind(trips_dest_noint, trips_orig_noint, trips_orig_int, trips_dest_int) %>%
+		select(-incQ,-incQ_label,-autoSuff,-autoSuff_label,-home_taz,-walk_subzone,-walk_subzone_label,
+			   -ptype,-ptype_label,-amode,-wlk_trip,-bik_trip,-wtr_trip,-dtr_trip)
+	  trip_points <- trip_points[order(trip_points$hh_id,
+									   trip_points$person_id,
+									   trip_points$tour_id,
+									   trip_points$depart_hour,
+									   trip_points$stop_id),]
+	  write.table(trip_points, file=file.path(UPDATED_DIR, "trip_points.csv"), sep=",", row.names=FALSE)
+	}
+	remove(trips)
+
+	print(paste("Saving tours.rdata with",prettyNum(nrow(tours),big.mark=","),"rows and",ncol(tours),"columns"))
+	save(tours, file=file.path(UPDATED_DIR, "tours.rdata"))
+	if (JUST_MES=="1") { write.table(tours, file=file.path(UPDATED_DIR, "tours.csv"), sep=",", row.names=FALSE) }
+	remove(tours)
+
+	print(paste("Saving households.rdata with",prettyNum(nrow(households),big.mark=","),"rows and",ncol(households),"columns"))
+	save(households, file=file.path(UPDATED_DIR, "households.rdata"))
+	if (JUST_MES=="1") { write.table(households, file=file.path(UPDATED_DIR, "households.csv"), sep=",", row.names=FALSE) }
+	remove(households)	
 	
 # }
