@@ -499,7 +499,7 @@
 						   select(persons, hh_id, person_id, ptype, ptype_label, fp_choice))
 						   # by=c("hh_id","person_id"))
 		
-		saveRDS(trips, "trips.rds")
+
 		
 			
 	# } else {
@@ -626,6 +626,8 @@
 	      )
 	      
 	    )
+	  
+	  saveRDS(trips, "trips.rds")	  
 
 
 ## Add variables from skims to data
@@ -656,9 +658,9 @@
 	  
 	  # the following lines should only be used for testing and should be commented out of the final code
 	  	  
-	  myvar <- "walktime"
-	  mytp <- "AM"
-	  mydf <- trips
+	  # myvar <- "walktime"
+	  # mytp <- "AM"
+	  # mydf <- trips
 	  
 	  # the preceding lines should only be used for testing and should be commented out of the final code	  
 	  
@@ -687,7 +689,7 @@
 	  
 	  # Read the relevant skim table
 	  # sample filename: SkimsDatabaseEV_transfers.csv
-	  skim_file <- file.path(TARGET_DIR,"database",paste0("SkimsDatabasetest",mytp, "_", myvar,".csv"))
+	  skim_file <- file.path(TARGET_DIR,"database",paste0("SkimsDatabase",mytp, "_", myvar,".csv"))
 	  myskimdf <- read.table(file = skim_file, header=TRUE, sep=",")
 	  
 	  # rename columns for join
@@ -784,12 +786,12 @@
 	
 	# the following lines should only be used for testing and should be commented out of the final code
 	
-	myvar <- "walktime"
-	timeperiod <- "AM"
+	# myvar <- "walktime"
+	# timeperiod <- "AM"
 	
 	# the preceding lines should only be used for testing and should be commented out of the final code
 	
-	trips <- add_myvariable(mydf = trips, mytp = timeperiod, myvar = myvar)
+	# trips <- add_myvariable(mydf = trips, mytp = timeperiod, myvar = myvar)
 	
 	
 myvarlist <- c("walktime", "wait", "IVT", "transfers", "boardfare", "faremat", "xfare", "othercost", "distance")	
