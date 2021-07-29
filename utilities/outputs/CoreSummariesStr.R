@@ -17,26 +17,26 @@ CoreSummariesStr <- function(fullrun=FALSE, iter=4, sampleshare=0.5) {
   library(reshape2)
 	
 	mywd <- getwd()
-
 	
+	# For RStudio, these can be set in the .Rprofile
+	TARGET_DIR   <- mywd  		# The location of the input files
+	ITER         <- iter        # The iteration of model outputs to read
+	SAMPLESHARE  <- sampleshare # Sampling
+	
+	TARGET_DIR   <- gsub("\\\\","/",TARGET_DIR) # switch slashes around
+	
+	stopifnot(nchar(TARGET_DIR  )>0)
+	stopifnot(nchar(ITER        )>0)
+	stopifnot(nchar(SAMPLESHARE )>0)
+	
+	
+	MAIN_DIR    <- file.path(TARGET_DIR,"main"           )
+	RESULTS_DIR <- file.path(TARGET_DIR,"core_summaries")
+	UPDATED_DIR <- file.path(TARGET_DIR,"updated_output")
+
 	
 if (fullrun==TRUE) {
 	
-		# For RStudio, these can be set in the .Rprofile
-		TARGET_DIR   <- mywd  		# The location of the input files
-		ITER         <- iter        # The iteration of model outputs to read
-		SAMPLESHARE  <- sampleshare # Sampling
-		
-		TARGET_DIR   <- gsub("\\\\","/",TARGET_DIR) # switch slashes around
-
-		stopifnot(nchar(TARGET_DIR  )>0)
-		stopifnot(nchar(ITER        )>0)
-		stopifnot(nchar(SAMPLESHARE )>0)
-		
-
-	  MAIN_DIR    <- file.path(TARGET_DIR,"main"           )
-	  RESULTS_DIR <- file.path(TARGET_DIR,"core_summaries")
-	  UPDATED_DIR <- file.path(TARGET_DIR,"updated_output")
 
 
 		# read means-based cost factors
