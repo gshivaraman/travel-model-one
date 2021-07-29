@@ -1,10 +1,4 @@
-# CoreSummariesStr <- function(fullrun=FALSE, iter=4, sampleshare=0.5, just_mes=0) {
-
-  fullrun <- TRUE
-  iter <- 4
-  sampleshare <- 0.5
-  just_mes <- 0
-  
+CoreSummariesStr <- function(fullrun=FALSE, iter=4, sampleshare=0.5, just_mes=0) {
 
   # Version 1 01 by Alex Mitrani, based on CoreSummaries.R by MTC staff, updated on 21 July 2021.  This function takes time and cost variables from the CSV files corresponding to the detailed skims and joins them on to the trips .rdata file.  
   
@@ -26,7 +20,7 @@
 
 	
 	
-#	if (fullrun==TRUE) {
+if (fullrun==TRUE) {
 	
 		# For RStudio, these can be set in the .Rprofile
 		TARGET_DIR   <- mywd  		# The location of the input files
@@ -499,10 +493,110 @@
 						   select(persons, hh_id, person_id, ptype, ptype_label, fp_choice))
 						   # by=c("hh_id","person_id"))
 		
-
+		# need to reconcile this...
 		
+		# trip_mode	trip_mode_name
+		# 1	Drive alone (single-occupant vehicles), not eligibile to use value toll facilities
+		# 2	Drive alone (single-occupant), eligible to use value toll facilities
+		# 3	Shared ride 2 (two-occupant vehicles), not eligibile to use value toll facilities
+		# 4	Shared ride 2 (two-occupant vehicles), eligible to use value toll facilities
+		# 5	Shared ride 3+ (three-or-more-occupant vehicles), not eligibile to use value toll facilities
+		# 6	Shared ride 3+ (three-of-more occupant vehicles), eligible to use value toll facilities
+		# 7	Walk the entire way (no transit, no bicycle)
+		# 8	Bicycle the entire way (no transit)
+		# 9	Walk to local bus
+		# 10	Walk to light rail or ferry
+		# 11	Walk to express bus
+		# 12	Walk to heavy rail
+		# 13	Walk to commuter rail
+		# 14	Drive to local bus
+		# 15	Drive to light rail or ferry
+		# 16	Drive to express bus
+		# 17	Drive to heavy rail
+		# 18	Drive to commuter rail
+		# 19	Taxi (added in Travel Model 1.5)
+		# 20	TNC (Transportation Network Company, or ride-hailing services) - Single party (added in Travel Model 1.5)
+		# 21	TNC - Shared e.g. sharing with strangers (added in Travel Model 1.5)
+		
+		# to this: 
+		# da
+		# daToll
+		# s2
+		# s2Toll
+		# s3
+		# s3Toll
+		# walk
+		# bike
+		# wComW
+		# wHvyW
+		# wExpW
+		# wLrfW
+		# wLocW
+		# wTrnW
+		# dComW
+		# dHvyW
+		# dExpW
+		# dLrfW
+		# dLocW
+		# dTrnW
+		# wComD
+		# wHvyD
+		# wExpD
+		# wLrfD
+		# wLocD
+		# wTrnD
+		
+		trips <- trips %>%
+		  mutate(
+		    
+		    skims_mode = case_when(
+		      
+		      trip_mode == 1 ~ "da",
+		      trip_mode == 2 ~ "daToll",
+		      trip_mode == 3 ~ "s2",
+		      trip_mode == 4 ~ "s2Toll",	 
+		      trip_mode == 5 ~ "s3",
+		      trip_mode == 6 ~ "s3Toll",	
+		      trip_mode == 7 ~ "walk",
+		      trip_mode == 8 ~ "bike",		        
+		      trip_mode == 9 ~ "wLocW",	
+		      trip_mode == 10 ~ "wLrfW",	
+		      trip_mode == 11 ~ "wExpW",	
+		      trip_mode == 12 ~ "wHvyW",	
+		      trip_mode == 13 ~ "wComW",	
+		      trip_mode == 14 & (orig_purpose == 'Home') ~ "dLocW",	
+		      trip_mode == 15 & (orig_purpose == 'Home') ~ "dLrfW",	
+		      trip_mode == 16 & (orig_purpose == 'Home') ~ "dExpW",	
+		      trip_mode == 17 & (orig_purpose == 'Home') ~ "dHvyW",	
+		      trip_mode == 18 & (orig_purpose == 'Home') ~ "dComW",
+		      trip_mode == 14 & (dest_purpose == 'Home') ~ "wLocD",	
+		      trip_mode == 15 & (dest_purpose == 'Home') ~ "wLrfD",	
+		      trip_mode == 16 & (dest_purpose == 'Home') ~ "wExpD",	
+		      trip_mode == 17 & (dest_purpose == 'Home') ~ "wHvyD",	
+		      trip_mode == 18 & (dest_purpose == 'Home') ~ "wComD",	        
+		      trip_mode == 19 ~ "Taxi",
+		      trip_mode == 20 ~ "TNCa",
+		      trip_mode == 21 ~ "TNCs",
+		      TRUE ~ "Other"
+		      
+		    )
+		    
+		  )
+		
+		## Cleanup and save tours, trips and households
+		print(paste("Saving trips.rds with",prettyNum(nrow(trips),big.mark=","),"rows and",ncol(trips),"columns"))
+		saveRDS(trips, file=file.path(UPDATED_DIR, "trips.rds"))
+		remove(trips)
+		
+		print(paste("Saving tours.rds with",prettyNum(nrow(tours),big.mark=","),"rows and",ncol(tours),"columns"))
+		saveRDS(tours, file=file.path(UPDATED_DIR, "tours.rds"))
+		remove(tours)
+		
+		print(paste("Saving households.rds with",prettyNum(nrow(households),big.mark=","),"rows and",ncol(households),"columns"))
+		save(households, file=file.path(UPDATED_DIR, "households.rds"))
+		remove(households)
 			
-	# } else {
+	} else {
 	  
 	  # Overhead
 	  ## Lookups
@@ -526,6 +620,8 @@
 	  
 	  # load(mypathfile)
 	  
+	  trips <- readRDS(file=file.path(UPDATED_DIR, "trips.rds"))
+	  
 	  names(trips)
 	  
 	  ## Set means-based cost factors
@@ -535,100 +631,8 @@
 	  MBF_Q2_factor <- 1.0	
 		
 	
-	#  }
+	}
 	  
-	  # need to reconcile this...
-	  
-	  # trip_mode	trip_mode_name
-	  # 1	Drive alone (single-occupant vehicles), not eligibile to use value toll facilities
-	  # 2	Drive alone (single-occupant), eligible to use value toll facilities
-	  # 3	Shared ride 2 (two-occupant vehicles), not eligibile to use value toll facilities
-	  # 4	Shared ride 2 (two-occupant vehicles), eligible to use value toll facilities
-	  # 5	Shared ride 3+ (three-or-more-occupant vehicles), not eligibile to use value toll facilities
-	  # 6	Shared ride 3+ (three-of-more occupant vehicles), eligible to use value toll facilities
-	  # 7	Walk the entire way (no transit, no bicycle)
-	  # 8	Bicycle the entire way (no transit)
-	  # 9	Walk to local bus
-	  # 10	Walk to light rail or ferry
-	  # 11	Walk to express bus
-	  # 12	Walk to heavy rail
-	  # 13	Walk to commuter rail
-	  # 14	Drive to local bus
-	  # 15	Drive to light rail or ferry
-	  # 16	Drive to express bus
-	  # 17	Drive to heavy rail
-	  # 18	Drive to commuter rail
-	  # 19	Taxi (added in Travel Model 1.5)
-	  # 20	TNC (Transportation Network Company, or ride-hailing services) - Single party (added in Travel Model 1.5)
-	  # 21	TNC - Shared e.g. sharing with strangers (added in Travel Model 1.5)
-	  
-	  # to this: 
-	  # da
-	  # daToll
-	  # s2
-	  # s2Toll
-	  # s3
-	  # s3Toll
-	  # walk
-	  # bike
-	  # wComW
-	  # wHvyW
-	  # wExpW
-	  # wLrfW
-	  # wLocW
-	  # wTrnW
-	  # dComW
-	  # dHvyW
-	  # dExpW
-	  # dLrfW
-	  # dLocW
-	  # dTrnW
-	  # wComD
-	  # wHvyD
-	  # wExpD
-	  # wLrfD
-	  # wLocD
-	  # wTrnD
-	  
-	  trips <- trips %>%
-	    mutate(
-	      
-	      skims_mode = case_when(
-	        
-	        trip_mode == 1 ~ "da",
-	        trip_mode == 2 ~ "daToll",
-	        trip_mode == 3 ~ "s2",
-	        trip_mode == 4 ~ "s2Toll",	 
-	        trip_mode == 5 ~ "s3",
-	        trip_mode == 6 ~ "s3Toll",	
-	        trip_mode == 7 ~ "walk",
-	        trip_mode == 8 ~ "bike",		        
-	        trip_mode == 9 ~ "wLocW",	
-	        trip_mode == 10 ~ "wLrfW",	
-	        trip_mode == 11 ~ "wExpW",	
-	        trip_mode == 12 ~ "wHvyW",	
-	        trip_mode == 13 ~ "wComW",	
-	        trip_mode == 14 & (orig_purpose == 'Home') ~ "dLocW",	
-	        trip_mode == 15 & (orig_purpose == 'Home') ~ "dLrfW",	
-	        trip_mode == 16 & (orig_purpose == 'Home') ~ "dExpW",	
-	        trip_mode == 17 & (orig_purpose == 'Home') ~ "dHvyW",	
-	        trip_mode == 18 & (orig_purpose == 'Home') ~ "dComW",
-	        trip_mode == 14 & (dest_purpose == 'Home') ~ "wLocD",	
-	        trip_mode == 15 & (dest_purpose == 'Home') ~ "wLrfD",	
-	        trip_mode == 16 & (dest_purpose == 'Home') ~ "wExpD",	
-	        trip_mode == 17 & (dest_purpose == 'Home') ~ "wHvyD",	
-	        trip_mode == 18 & (dest_purpose == 'Home') ~ "wComD",	        
-	        trip_mode == 19 ~ "Taxi",
-	        trip_mode == 20 ~ "TNCa",
-	        trip_mode == 21 ~ "TNCs",
-	        TRUE ~ "Other"
-	        
-	      )
-	      
-	    )
-	  
-	  saveRDS(trips, "trips.rds")	  
-
 
 ## Add variables from skims to data
 	
@@ -822,4 +826,8 @@ myvarlist <- c("walktime", "wait", "IVT", "transfers", "boardfare", "faremat", "
 
 	trips <- tbl_df(trips)
 	
-# }
+	print(paste("Saving trips.rds with",prettyNum(nrow(trips),big.mark=","),"rows and",ncol(trips),"columns"))
+	saveRDS(trips, file=file.path(UPDATED_DIR, "trips.rds"))
+	remove(trips)
+	
+}
