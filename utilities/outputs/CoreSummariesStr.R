@@ -1,4 +1,4 @@
-CoreSummariesStr <- function(fullrun=FALSE, iter=4, sampleshare=0.5, just_mes=0) {
+CoreSummariesStr <- function(fullrun=FALSE, iter=4, sampleshare=0.5) {
 
   # Version 1 01 by Alex Mitrani, based on CoreSummaries.R by MTC staff, updated on 21 July 2021.  This function takes time and cost variables from the CSV files corresponding to the detailed skims and joins them on to the trips .rdata file.  
   
@@ -26,7 +26,6 @@ if (fullrun==TRUE) {
 		TARGET_DIR   <- mywd  		# The location of the input files
 		ITER         <- iter        # The iteration of model outputs to read
 		SAMPLESHARE  <- sampleshare # Sampling
-		JUST_MES <- just_mes    	# Run for just-mes only?
 		
 		TARGET_DIR   <- gsub("\\\\","/",TARGET_DIR) # switch slashes around
 
@@ -34,15 +33,11 @@ if (fullrun==TRUE) {
 		stopifnot(nchar(ITER        )>0)
 		stopifnot(nchar(SAMPLESHARE )>0)
 		
-		if (JUST_MES=="1") {
-		  MAIN_DIR    <- file.path(TARGET_DIR,"main",          "just_mes")
-		  RESULTS_DIR <- file.path(TARGET_DIR,"core_summaries","just_mes")
-		  UPDATED_DIR <- file.path(TARGET_DIR,"updated_output","just_mes")
-		} else {
-		  MAIN_DIR    <- file.path(TARGET_DIR,"main"           )
-		  RESULTS_DIR <- file.path(TARGET_DIR,"core_summaries")
-		  UPDATED_DIR <- file.path(TARGET_DIR,"updated_output")
-		}	
+
+	  MAIN_DIR    <- file.path(TARGET_DIR,"main"           )
+	  RESULTS_DIR <- file.path(TARGET_DIR,"core_summaries")
+	  UPDATED_DIR <- file.path(TARGET_DIR,"updated_output")
+
 
 		# read means-based cost factors
 		MBT_factors <- readLines(file.path(TARGET_DIR,"ctramp/scripts/block/hwyParam.block"))
@@ -76,7 +71,6 @@ if (fullrun==TRUE) {
 		cat("TARGET_DIR  = ",TARGET_DIR, "\n")
 		cat("ITER        = ",ITER,       "\n")
 		cat("SAMPLESHARE = ",SAMPLESHARE,"\n")
-		cat("JUST_MES    = ",JUST_MES,   "\n")
 
 		# Overhead
 		## Lookups
@@ -341,10 +335,6 @@ if (fullrun==TRUE) {
 		print(head(select(tours,hh_id,person_id,person_num,tour_id,num_participants,tour_participants),10))
 		print(tail(select(tours,hh_id,person_id,person_num,tour_id,num_participants,tour_participants),10))
 
-		# done with this -- joint_tours will be used for unwinding joint trips and then released
-		if (JUST_MES!="1") {
-		  remove(indiv_tours)
-		}
 
 		# add residence TAZ info
 		tours <- left_join(tours, select(households, hh_id, taz, SD, COUNTY, county_name))
@@ -425,19 +415,6 @@ if (fullrun==TRUE) {
 		}
 
 		joint_tour_persons <- get_joint_tour_persons(joint_tours, persons)
-
-		# create and write person-tours for just-mes
-		if (JUST_MES=="1") {
-		  joint_tours <- left_join(joint_tour_persons, joint_tours)
-		  indiv_tours$tour_participants <- as.character(indiv_tours$person_num)
-		  person_tours <- rbind(select(indiv_tours, -person_type, -atWork_freq, -fp_choice),
-								select(joint_tours, -tour_composition))
-		  person_tours <- add_tour_attrs(person_tours)
-
-		  save(person_tours, file=file.path(UPDATED_DIR, "person_tours.rdata"))
-		  write.table(person_tours, file=file.path(UPDATED_DIR, "person_tours.csv"), sep=",", row.names=FALSE)
-		  remove(indiv_tours, person_tours)
-		}
 
 		# attach persons to the joint_trips
 		# joint_person_trips <- inner_join(joint_trips, joint_tour_persons, by=c("hh_id", "tour_id"))
@@ -781,6 +758,8 @@ if (fullrun==TRUE) {
 	  relevant <- dropr(relevant, "da",  "daToll",  "s2",  "s2Toll",  "s3",  "s3Toll",  "walk",  "bike",  "wComW",  "wHvyW",  "wExpW",  "wLrfW",  "wLocW",  "wTrnW",  "dComW",  "dHvyW",  "dExpW",  "dLrfW",  "dLocW",  "dTrnW",  "wComD",  "wHvyD",  "wExpD",  "wLrfD",  "wLocD",  "wTrnD", "mynumvalues", "mynonzerovalues")
 	  
 	  return_list <- rbind(relevant, irrelevant)
+	  
+	  print(gc())
 	  
 	  return(return_list)
 	  
