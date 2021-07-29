@@ -548,44 +548,44 @@ if (i>5000) exit
  
                 list = i(8.0),",",j(8.0),",",walk_Time(10.2),",",wComW_walktime(10.2),",",wHvyW_walktime(10.2),",",wExpW_walktime(10.2),",",wLrfW_walktime(10.2),",",wLocW_walktime(10.2),",",  
                        wTrnW_walktime(10.2),",",dComW_walktime(10.2),",",dHvyW_walktime(10.2),",",dExpW_walktime(10.2),",",dLrfW_walktime(10.2),",",dLocW_walktime(10.2),",",dTrnW_walktime(10.2),",",  
-                       wComD_walktime(10.2),",",wHvyD_walktime(10.2),",",wExpD_walktime(10.2),",",wLrfD_walktime(10.2),",",wLocD_walktime(10.2),",",wTrnD_walktime(10.2),",",
+                       wComD_walktime(10.2),",",wHvyD_walktime(10.2),",",wExpD_walktime(10.2),",",wLrfD_walktime(10.2),",",wLocD_walktime(10.2),",",wTrnD_walktime(10.2),
                        file = database\SkimsDatabase@token_period@_walktime.csv
                
                        
                 list = i(8.0),",",j(8.0),",",wComW_wait(10.2),",",wHvyW_wait(10.2),",",wExpW_wait(10.2),",",wLrfW_wait(10.2),",",wLocW_wait(10.2),",",wTrnW_wait(10.2),",",
                        dComW_wait(10.2),",",dHvyW_wait(10.2),",",dExpW_wait(10.2),",",dLrfW_wait(10.2),",",dLocW_wait(10.2),",",dTrnW_wait(10.2),",", wComD_wait(10.2),",",wHvyD_wait(10.2),",",
-                       wExpD_wait(10.2),",",wLrfD_wait(10.2),",",wLocD_wait(10.2),",",wTrnD_wait(10.2),",",
+                       wExpD_wait(10.2),",",wLrfD_wait(10.2),",",wLocD_wait(10.2),",",wTrnD_wait(10.2),
                        file = database\SkimsDatabase@token_period@_wait.csv                      
                        
                        
                 list = i(8.0),",",j(8.0),",",da_Time(10.2),",",daToll_Time(10.2),",",s2_Time(10.2),",",s2Toll_Time(10.2),",",s3_Time(10.2),",",s3Toll_Time(10.2),",",
                        walk_Time(10.2),",",bike_Time(10.2),",",wComW_IVT(10.2),",",wHvyW_IVT(10.2),",",wExpW_IVT(10.2),",",wLrfW_IVT(10.2),",",wLocW_IVT(10.2),",",wTrnW_IVT(10.2),",",
                        dComW_IVT(10.2),",",dHvyW_IVT(10.2),",",dExpW_IVT(10.2),",",dLrfW_IVT(10.2),",",dLocW_IVT(10.2),",",dTrnW_IVT(10.2),",",  
-                       wComD_IVT(10.2),",",wHvyD_IVT(10.2),",",wExpD_IVT(10.2),",",wLrfD_IVT(10.2),",",wLocD_IVT(10.2),",",wTrnD_IVT(10.2),",",
+                       wComD_IVT(10.2),",",wHvyD_IVT(10.2),",",wExpD_IVT(10.2),",",wLrfD_IVT(10.2),",",wLocD_IVT(10.2),",",wTrnD_IVT(10.2),
                        file = database\SkimsDatabase@token_period@_IVT.csv                      
                        
                        
                 list = i(8.0),",",j(8.0),",",wComW_transfers(10.2),",",wHvyW_transfers(10.2),",",wExpW_transfers(10.2),",",wLrfW_transfers(10.2),",",wLocW_transfers(10.2),",",wTrnW_transfers(10.2),",",
                        dComW_transfers(10.2),",",dHvyW_transfers(10.2),",",dExpW_transfers(10.2),",",dLrfW_transfers(10.2),",",dLocW_transfers(10.2),",",dTrnW_transfers(10.2),",",  
-                       wComD_transfers(10.2),",",wHvyD_transfers(10.2),",",wExpD_transfers(10.2),",",wLrfD_transfers(10.2),",",wLocD_transfers(10.2),",",wTrnD_transfers(10.2),",",
+                       wComD_transfers(10.2),",",wHvyD_transfers(10.2),",",wExpD_transfers(10.2),",",wLrfD_transfers(10.2),",",wLocD_transfers(10.2),",",wTrnD_transfers(10.2),
                        file = database\SkimsDatabase@token_period@_transfers.csv                      
                        
                        
                 list = i(8.0),",",j(8.0),",",wComW_boardfare(10.2),",",wHvyW_boardfare(10.2),",",wExpW_boardfare(10.2),",",wLrfW_boardfare(10.2),",",wLocW_boardfare(10.2),",",wTrnW_boardfare(10.2),",",
                        dComW_boardfare(10.2),",",dHvyW_boardfare(10.2),",",dExpW_boardfare(10.2),",",dLrfW_boardfare(10.2),",",dLocW_boardfare(10.2),",",dTrnW_boardfare(10.2),",",  
-                       wComD_boardfare(10.2),",",wHvyD_boardfare(10.2),",",wExpD_boardfare(10.2),",",wLrfD_boardfare(10.2),",",wLocD_boardfare(10.2),",",wTrnD_boardfare(10.2),",",
+                       wComD_boardfare(10.2),",",wHvyD_boardfare(10.2),",",wExpD_boardfare(10.2),",",wLrfD_boardfare(10.2),",",wLocD_boardfare(10.2),",",wTrnD_boardfare(10.2),
                        file = database\SkimsDatabase@token_period@_boardfare.csv                      
                        
   
                 list = i(8.0),",",j(8.0),",",wComW_xfare(10.2),",",wHvyW_xfare(10.2),",",wExpW_xfare(10.2),",",wLrfW_xfare(10.2),",",wLocW_xfare(10.2),",",wTrnW_xfare(10.2),",",
                        dComW_xfare(10.2),",",dHvyW_xfare(10.2),",",dExpW_xfare(10.2),",",dLrfW_xfare(10.2),",",dLocW_xfare(10.2),",",dTrnW_xfare(10.2),",",  
-                       wComD_xfare(10.2),",",wHvyD_xfare(10.2),",",wExpD_xfare(10.2),",",wLrfD_xfare(10.2),",",wLocD_xfare(10.2),",",wTrnD_xfare(10.2),",",
+                       wComD_xfare(10.2),",",wHvyD_xfare(10.2),",",wExpD_xfare(10.2),",",wLrfD_xfare(10.2),",",wLocD_xfare(10.2),",",wTrnD_xfare(10.2),
                        file = database\SkimsDatabase@token_period@_xfare.csv
                        
                        
                 list = i(8.0),",",j(8.0),",",wComW_faremat(10.2),",",wHvyW_faremat(10.2),",",wExpW_faremat(10.2),",",wLrfW_faremat(10.2),",",wLocW_faremat(10.2),",",wTrnW_faremat(10.2),",",
                        dComW_faremat(10.2),",",dHvyW_faremat(10.2),",",dExpW_faremat(10.2),",",dLrfW_faremat(10.2),",",dLocW_faremat(10.2),",",dTrnW_faremat(10.2),",",  
-                       wComD_faremat(10.2),",",wHvyD_faremat(10.2),",",wExpD_faremat(10.2),",",wLrfD_faremat(10.2),",",wLocD_faremat(10.2),",",wTrnD_faremat(10.2),",",
+                       wComD_faremat(10.2),",",wHvyD_faremat(10.2),",",wExpD_faremat(10.2),",",wLrfD_faremat(10.2),",",wLocD_faremat(10.2),",",wTrnD_faremat(10.2),
                        file = database\SkimsDatabase@token_period@_faremat.csv        
                        
                        
@@ -596,7 +596,7 @@ if (i>5000) exit
                 list = i(8.0),",",j(8.0),",",da_Dist(10.2),",",daToll_Dist(10.2),",",s2_Dist(10.2),",",s2Toll_Dist(10.2),",",s3_Dist(10.2),",",s3Toll_Dist(10.2),",",
                        walk_Dist(10.2),",",bike_Dist(10.2),",",wComW_Dist(10.2),",",wHvyW_Dist(10.2),",",wExpW_Dist(10.2),",",wLrfW_Dist(10.2),",",wLocW_Dist(10.2),",",wTrnW_Dist(10.2),",",
                        dComW_Dist(10.2),",",dHvyW_Dist(10.2),",",dExpW_Dist(10.2),",",dLrfW_Dist(10.2),",",dLocW_Dist(10.2),",",dTrnW_Dist(10.2),",",  
-                       wComD_Dist(10.2),",",wHvyD_Dist(10.2),",",wExpD_Dist(10.2),",",wLrfD_Dist(10.2),",",wLocD_Dist(10.2),",",wTrnD_Dist(10.2),",",
+                       wComD_Dist(10.2),",",wHvyD_Dist(10.2),",",wExpD_Dist(10.2),",",wLrfD_Dist(10.2),",",wLocD_Dist(10.2),",",wTrnD_Dist(10.2),
                        file = database\SkimsDatabase@token_period@_distance.csv                     
                        
                        
