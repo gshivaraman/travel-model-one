@@ -660,6 +660,22 @@
 	  mytp <- "AM"
 	  mydf <- trips
 	  
+	  # The variable may or may not already exist
+	  
+	  if (myvar %in% names(mydf)) {
+	    
+	    cat(paste0("The variable ", myvar, " already exists."))
+	    
+	  } else {
+	    
+	    myvar <- rlang::sym(paste0(myvar))
+	    
+	    # Assign value
+	    mydf <- mydf %>%
+	      mutate(!!myvar := 0.0)
+	    
+	  }
+	  
 	  # separate the relevant and irrelevant tours/trips
 	  relevant <- mydf %>%
 	    filter(timeCode == mytp)
@@ -682,9 +698,28 @@
 	  
 	  myvar <- rlang::sym(paste0(myvar))
 	  
-	  # Assign distance value
+	  # Assign value
 	  relevant <- relevant %>%
 	    mutate(!!myvar := 0.0)
+	  
+	  # define any missing variables as zero
+	  
+	  for (checkvar in c("da",  "daToll",  "s2",  "s2Toll",  "s3",  "s3Toll",  "walk",  "bike",  "wComW",  "wHvyW",  "wExpW",  "wLrfW",  "wLocW",  "wTrnW",  "dComW",  "dHvyW",  "dExpW",  "dLrfW",  "dLocW",  "dTrnW",  "wComD",  "wHvyD",  "wExpD",  "wLrfD",  "wLocD",  "wTrnD")) {
+	    
+	    if (checkvar %in% names(relevant)) {
+	      
+	      cat(paste0("The variable ", checkvar, " already exists."))
+	      
+	    } else {
+	      
+	      checkvar <- rlang::sym(paste0(checkvar))
+	      
+	      relevant <- relevant %>%
+	        mutate(!!checkvar :=0)
+	      
+	    }
+	    
+	  }
 	  
 	  relevant <- relevant %>%
 	    mutate(!!myvar := (skims_mode == "da") * da +
@@ -714,14 +749,18 @@
 	  relevant <- relevant %>%
 	    mutate(!!myvar := ifelse(myvar < -990.0, 0, !!myvar))
 	  
-	  mynumvalues <- relevant %>%
-	    sum(!is.na(!!myvar))
+	  relevant <- relevant %>%
+	    mutate(mynumvalues = !is.na(!!myvar))
+	  
+	  mynumvalues <- sum(relevant$mynumvalues)
 
-	  mynonzerovalues <- relevant %>%
-	    sum(!is.na(!!myvar)&(!!myvar>0))	  
+	  relevant <- relevant %>%
+	    mutate(mynonzerovalues = !is.na(!!myvar)&(!!myvar>0))	  
+	  
+	  mynonzerovalues <- sum(relevant$mynonzerovalues)
 	  
 	  print(paste("For",
-	              this_timeperiod,
+	              mytp,
 	              "assigned",
 	              prettyNum(mynumvalues,big.mark=","),
 	              "values, with",
@@ -729,9 +768,9 @@
 	              "nonzero values"))
 	  
 	  relevant <- relevant %>%
-	    mutate(!!myvar := ifelse(is.na(myvar)==TRUE, 0, !!myvar))
+	    mutate(!!myvar := ifelse(is.na(!!myvar)==TRUE, 0, !!myvar))
 	  
-	  relevant <- dropr(relevant, "da",  "daToll",  "s2",  "s2Toll",  "s3",  "s3Toll",  "walk",  "bike",  "wComW",  "wHvyW",  "wExpW",  "wLrfW",  "wLocW",  "wTrnW",  "dComW",  "dHvyW",  "dExpW",  "dLrfW",  "dLocW",  "dTrnW",  "wComD",  "wHvyD",  "wExpD",  "wLrfD",  "wLocD",  "wTrnD")
+	  relevant <- dropr(relevant, "da",  "daToll",  "s2",  "s2Toll",  "s3",  "s3Toll",  "walk",  "bike",  "wComW",  "wHvyW",  "wExpW",  "wLrfW",  "wLocW",  "wTrnW",  "dComW",  "dHvyW",  "dExpW",  "dLrfW",  "dLocW",  "dTrnW",  "wComD",  "wHvyD",  "wExpD",  "wLrfD",  "wLocD",  "wTrnD", "mynumvalues", "mynonzerovalues")
 	  
 	  return_list <- rbind(relevant, irrelevant)
 	  
