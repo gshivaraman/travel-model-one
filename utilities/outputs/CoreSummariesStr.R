@@ -939,6 +939,98 @@
 
 	  return(return_list)
 	}
+	
+## Add variables from skims to data
+	
+	add_myvariable <- function(mydf, mytp, myvar) {
+	  
+	  # separate the relevant and irrelevant tours/trips
+	  relevant <- mydf %>%
+	    filter(timeCode == mytp)
+	  
+	  irrelevant <- input_trips_or_tours %>%
+	    filter(timeCode != mytp)
+	  
+	  # Read the relevant skim table
+	  # sample filename: SkimsDatabaseEV_transfers.csv
+	  skim_file <- file.path(TARGET_DIR,"database",paste0("SkimsDatabase",mytp, "_", myvar,".csv"))
+	  myskimdf <- read.table(file = skim_file, header=TRUE, sep=",")
+	  
+	  # rename columns for join
+	  myskimdf <- myskimdf %>%
+	    rename(orig_taz = orig, dest_taz = dest)
+	  
+	  # Left join tours to the skims
+	  # relevant <- left_join(relevant, distSkims, by=c("orig_taz","dest_taz"))
+	  relevant <- left_join(relevant, myskimdf)
+	  
+	  # Assign distance value
+	  relevant <- relevant %>%
+	    mutate(myvar = 0.0)
+	  
+	  relevant <- relevant %>%
+	    mutate(myvar = (skims_mode == "da") * da +
+	             (skims_mode == "daToll") * daToll +
+	             (skims_mode == "s2") * s2     +
+	             (skims_mode == "s2Toll") * s2Toll +
+	             (skims_mode == "s3") * s3     +
+	             (skims_mode == "s3Toll") * s3Toll +
+	             (skims_mode == "walk") * walk   +
+	             (skims_mode == "bike") * bike   +
+	             (skims_mode == "wLocW") * wLocW   +
+	             (skims_mode == "wLrfW") * wLrfW   +
+	             (skims_mode == "wExpW") * wExpW   +
+	             (skims_mode == "wHvyW") * wHvyW   +
+	             (skims_mode == "wComW") * wComW   +
+	             (skims_mode == "dLocW") * dLocW   +
+	             (skims_mode == "dLrfW") * dLrfW   +
+	             (skims_mode == "dExpW") * dExpW   +
+	             (skims_mode == "dHvyW") * dHvyW   +
+	             (skims_mode == "dComW") * dComW   +	             
+	             (skims_mode == "wLocD") * wLocD   +
+	             (skims_mode == "wLrfD") * wLrfD   +
+	             (skims_mode == "wExpD") * wExpD   +
+	             (skims_mode == "wHvyD") * wHvyD   +
+	             (skims_mode == "wComD") * wComD)
+
+	  relevant <- relevant %>%
+	    mutate(myvar = ifelse(myvar < -990.0, 0, myvar))
+	  
+	  mynumvalues <- relevant %>%
+	    sum(!is.na(myvar))
+
+	  mynonzerovalues <- relevant %>%
+	    sum(!is.na(myvar)&(myvar>0))	  
+	  
+	  print(paste("For",
+	              this_timeperiod,
+	              "assigned",
+	              prettyNum(mynumvalues,big.mark=","),
+	              "values, with",
+	              prettyNum(mynonzerovalues,big.mark=","),
+	              "nonzero values"))
+	  
+	  relevant <- relevant %>%
+	    mutate(myvar = ifelse(is.na(myvar)==TRUE, 0, myvar))
+	  
+	  relevant <- relevant %>%
+	    select(-da, -daToll, -s2, -s2Toll, -s3, -s3Toll, -walk, -bike, -distance2)
+	  
+	  return_list <- rbind(relevant, irrelevant)
+	  
+	  return(return_list)
+	}
+	
+	
+	
+	
+myvarlist <- c("walktime", "wait", "IVT", "transfers", "boardfare", "faremat", "xfare", "othercost", "distance")	
+	
+	for (timeperiod in LOOKUP_TIMEPERIOD$timeperiod_abbrev) {
+	  for (myvar in myvarlist) {
+	    trips <- add_myvariable(mydf = trips, mytp = timeperiod, myvar = myvar)
+	  }
+	}
 
 
 	## Add Trip Distance to Trips
