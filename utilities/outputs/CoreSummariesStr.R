@@ -887,7 +887,7 @@ myvarlist <- c("walktime", "wait", "IVT", "transfers", "boardfare", "faremat", "
 	print(paste("Saving trips.rds with",prettyNum(nrow(trips),big.mark=","),"rows and",ncol(trips),"columns"))
 	saveRDS(trips, file=file.path(UPDATED_DIR, "trips.rds"))
 	
-	tours <- readRDS(tours, file=file.path(UPDATED_DIR, "tours.rds"))
+	tours <- readRDS(file=file.path(UPDATED_DIR, "tours.rds"))
 
 	num_tours       <- nrow(tours)
 	num_tours_dist  <- nrow( distinct(tours, hh_id, tour_participants, tour_id))
