@@ -744,6 +744,8 @@ if (fullrun==TRUE) {
 	  
 	  # The variable may or may not already exist
 	  
+	  browser()
+	  
 	  if (myvar %in% names(mydf)) {
 	    
 	    cat(paste0("The variable ", myvar, " already exists.", "\n \n"))
@@ -765,6 +767,8 @@ if (fullrun==TRUE) {
 	  irrelevant <- mydf %>%
 	    filter(timeCode != mytp)
 	  
+	  remove(mydf)
+	  
 	  # Read the relevant skim table
 	  # sample filename: SkimsDatabaseEV_transfers.csv
 	  skim_file <- file.path(TARGET_DIR,"database",paste0("SkimsDatabase",mytp, "_", myvar,".csv"))
@@ -777,6 +781,8 @@ if (fullrun==TRUE) {
 	  # Left join tours to the skims
 	  # relevant <- left_join(relevant, distSkims, by=c("orig_taz","dest_taz"))
 	  relevant <- left_join(relevant, myskimdf)
+	  
+	  remove(myskimdf)
 	  
 	  myvar <- rlang::sym(paste0(myvar))
 	  
@@ -828,8 +834,10 @@ if (fullrun==TRUE) {
 	             (skims_mode == "wHvyD") * wHvyD   +
 	             (skims_mode == "wComD") * wComD)
 
+	  browser()
+	  
 	  relevant <- relevant %>%
-	    mutate(!!myvar := ifelse(myvar < -990.0, 0, !!myvar))
+	    mutate(!!myvar := ifelse(!!myvar < -990.0, 0, !!myvar))
 	  
 	  relevant <- relevant %>%
 	    mutate(mynumvalues = !is.na(!!myvar))
@@ -851,6 +859,16 @@ if (fullrun==TRUE) {
 	  
 	  relevant <- relevant %>%
 	    mutate(!!myvar := ifelse(is.na(!!myvar)==TRUE, 0, !!myvar))
+	  
+	  cat(paste0("\n \n", "Please check the following summary table of the variable ", !!myvar, " for the time period ", mytp, " by mode.", "\n \n"))
+	  
+	  test <- relevant %>%
+      group_by(skims_mode) %>%
+      summarize(myvar_min := min(!!myvar), myvar_mean := mean(!!myvar), myvar_max := max(!!myvar)) %>%
+      ungroup()
+
+    test %>% print(n = 23)
+
 	  
 	  relevant <- dropr(relevant, "da",  "daToll",  "s2",  "s2Toll",  "s3",  "s3Toll",  "walk",  "bike",  "wComW",  "wHvyW",  "wExpW",  "wLrfW",  "wLocW",  "wTrnW",  "dComW",  "dHvyW",  "dExpW",  "dLrfW",  "dLocW",  "dTrnW",  "wComD",  "wHvyD",  "wExpD",  "wLrfD",  "wLocD",  "wTrnD", "mynumvalues", "mynonzerovalues")
 	  
@@ -880,10 +898,21 @@ trips <- dropr(trips, "da",  "daToll",  "s2",  "s2Toll",  "s3",  "s3Toll",  "wal
 
 browser()
 	
-	for (timeperiod in LOOKUP_TIMEPERIOD$timeperiod_abbrev) {
-	  for (myvar in myvarlist) {
+	for (myvar in myvarlist) {
+
+	  for (timeperiod in LOOKUP_TIMEPERIOD$timeperiod_abbrev) {
 	    trips <- add_myvariable(mydf = trips, mytp = timeperiod, myvar = myvar)
 	  }
+	  
+	  cat(paste0("\n \n", "Please check the following summary table of the variable ", !!myvar, " for all time periods, by mode.", "\n \n"))
+	  
+	  test <- trips %>%
+      group_by(skims_mode) %>%
+      summarize(!!myvar := mean(!!myvar)) %>%
+      ungroup()
+      
+    test %>% print(n = 23)
+
 	}
 
 	trips <- as_tibble(trips)
