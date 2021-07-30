@@ -744,8 +744,6 @@ if (fullrun==TRUE) {
 	  
 	  # The variable may or may not already exist
 	  
-	  # browser()
-	  
 	  if (myvarname %in% names(mydf)) {
 	    
 	    cat(paste0("The variable ", myvarname, " already exists.", "\n \n"))
