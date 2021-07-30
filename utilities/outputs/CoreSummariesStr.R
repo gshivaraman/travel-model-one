@@ -1,11 +1,116 @@
-CoreSummariesStr <- function(fullrun=FALSE, iter=4, sampleshare=0.5) {
+CoreSummariesStr <- function(fullrun=FALSE, iter=4, sampleshare=0.5, logrun=FALSE) {
 
   # Version 1 01 by Alex Mitrani, based on CoreSummaries.R by MTC staff, updated on 21 July 2021.  This function takes time and cost variables from the CSV files corresponding to the detailed skims and joins them on to the trips .rdata file.  
   
   # Example of use:
   # Use fullrun=TRUE if the code will be run in the original model directory and the rdata files do not yet exist in updated_outputs.  
   # CoreSummariesStr(fullrun=TRUE)
-
+  
+  # Utils
+  
+  datestampr <- function(dateonly = FALSE, houronly = FALSE, minuteonly = FALSE, myusername = FALSE) {
+    
+    #General info
+    now <- Sys.time()
+    year <- format(now, "%Y")
+    month <- format(now, "%m")
+    day <- format(now, "%d")
+    hour <- format(now, "%H")
+    minute <- format(now, "%M")
+    second <- format(now, "%S")
+    username <- Sys.getenv("USERNAME")
+    
+    # Work --------------------------------------------------------------------
+    
+    
+    if (nchar(day)==2) {
+      
+      day <- day
+      
+    } else {
+      
+      day <- paste0("0",day)
+      
+    }
+    
+    if (nchar(month)==2) {
+      
+      month <- month
+      
+    } else {
+      
+      month <- paste0("0",month)
+      
+    }
+    
+    if (myusername == TRUE) {
+      
+      if (dateonly == TRUE) {
+        
+        datestampr <- paste0(year,month,day,username)
+        
+      } else if (houronly == TRUE) {
+        
+        datestampr <- paste0(year,month,day,hour,username)
+        
+      } else if (minuteonly == TRUE) {
+        
+        datestampr <- paste0(year,month,day,hour,minute,username)
+        
+      } else {
+        
+        datestampr <- paste0(year,month,day,hour,minute,second,username)
+        
+      }
+      
+    } else {
+      
+      if (dateonly == TRUE) {
+        
+        datestampr <- paste0(year,month,day)
+        
+      } else if (houronly == TRUE) {
+        
+        datestampr <- paste0(year,month,day,hour)
+        
+      } else if (minuteonly == TRUE) {
+        
+        datestampr <- paste0(year,month,day,hour,minute)
+        
+      } else {
+        
+        datestampr <- paste0(year,month,day,hour,minute,second)
+        
+      }
+      
+    }
+    
+    return(datestampr)
+    
+  }
+  
+  dropr <- function(mydf,...) {
+    
+    my_return_name <- deparse(substitute(mydf))
+    
+    myinitialsize <- round(object.size(mydf)/1000000, digits = 3)
+    cat(paste0("Size of ", my_return_name, " before removing variables: ", myinitialsize, " MB. \n"))
+    
+    names_to_drop <- c(...)
+    mytext <- paste("The following variables will be dropped from ", my_return_name, ": ", sep = "")
+    print(mytext)
+    print(names_to_drop)
+    mydf <- mydf[,!names(mydf) %in% names_to_drop]
+    
+    myfinalsize <- round(object.size(mydf)/1000000, digits = 3)
+    cat(paste0("Size of ", my_return_name, " after removing variables: ", myfinalsize, " MB. \n"))
+    ramsaved <- round(myinitialsize - myfinalsize, digits = 3)
+    cat(paste0("RAM saved: ", ramsaved, " MB. \n"))
+    
+    return(mydf)
+    
+  }	
+  
 
 	# Core Summaries
 
@@ -15,6 +120,19 @@ CoreSummariesStr <- function(fullrun=FALSE, iter=4, sampleshare=0.5) {
 	library(readxl)
 	library(openxlsx)
   library(reshape2)
+  
+
+  
+  
+  if (logrun==TRUE) {
+  
+    datestring <- datestampr(myusername=TRUE)
+    mylogfilename <- paste0("Strlog_", datestring,".txt")
+    sink()
+    sink(mylogfilename, split=TRUE)
+    cat(yellow(paste0("A log of the output will be saved to ", mylogfilename, ". \n \n")))
+    
+  }
 	
 	mywd <- getwd()
 	
@@ -153,7 +271,7 @@ if (fullrun==TRUE) {
 		households <- inner_join(input.pop.households, input.ct.households)
 		households <- inner_join(households, tazData)
 		# wrap as a d data frame tbl so it's nicer for printing
-		households <- tbl_df(households)
+		households <- as_tibble(households)
 		# clean up
 		remove(input.pop.households, input.ct.households)
 		print(paste("Read household files; have",prettyNum(nrow(households),big.mark=","),"rows"))
@@ -232,7 +350,7 @@ if (fullrun==TRUE) {
 		persons              <- left_join(persons, LOOKUP_PTYPE)
 
 		# wrap as a d data frame tbl so it's nicer for printing
-		persons              <- tbl_df(persons)
+		persons              <- as_tibble(persons)
 		# clean up
 		remove(input.pop.persons, input.ct.persons)
 		print(paste("Read persons files; have",prettyNum(nrow(persons),big.mark=","), "rows"))
@@ -251,7 +369,7 @@ if (fullrun==TRUE) {
 
 		# The fields are documented here: https://github.com/BayAreaMetro/modeling-website/wiki/IndividualTour
 
-		indiv_tours     <- tbl_df(read.table(file=file.path(MAIN_DIR, paste0("indivTourData_",ITER,".csv")),
+		indiv_tours     <- as_tibble(read.table(file=file.path(MAIN_DIR, paste0("indivTourData_",ITER,".csv")),
 											 header=TRUE, sep=","))
 		indiv_tours     <- mutate(indiv_tours, tour_id=paste0("i",substr(tour_purpose,1,4),tour_id))
 
@@ -281,7 +399,7 @@ if (fullrun==TRUE) {
 
 		# The fields are documented here: https://github.com/BayAreaMetro/modeling-website/wiki/JointTour
 
-		joint_tours    <- tbl_df(read.table(file=file.path(MAIN_DIR, paste0("jointTourData_",ITER,".csv")),
+		joint_tours    <- as_tibble(read.table(file=file.path(MAIN_DIR, paste0("jointTourData_",ITER,".csv")),
 											header=TRUE, sep=","))
 		joint_tours     <- mutate(joint_tours, tour_id=paste0("j",substr(tour_purpose,1,4),tour_id))
 
@@ -314,7 +432,7 @@ if (fullrun==TRUE) {
 		## Data Reads: Joint Trips and recode a few variables
 
 		# The fields are documented here: https://github.com/BayAreaMetro/modeling-website/wiki/JointTrip
-		joint_trips     <- tbl_df(read.table(file=file.path(MAIN_DIR, paste0("jointTripData_",ITER,".csv")), header=TRUE, sep=","))
+		joint_trips     <- as_tibble(read.table(file=file.path(MAIN_DIR, paste0("jointTripData_",ITER,".csv")), header=TRUE, sep=","))
 		joint_trips     <- select(joint_trips, hh_id, tour_id, orig_taz, orig_walk_segment, dest_taz, dest_walk_segment, trip_mode, num_participants, tour_purpose, orig_purpose, dest_purpose, depart_hour, stop_id, tour_category, avAvailable, sampleRate, inbound) %>%
 						            mutate(tour_id = paste0("j",substr(tour_purpose,1,4),tour_id))
 
@@ -434,7 +552,7 @@ if (fullrun==TRUE) {
 		indiv_trips <- mutate(indiv_trips, num_participants=1, tour_participants=as.character(person_num))
 		print(toString(colnames(joint_person_trips)))
 		print(toString(colnames(indiv_trips)))
-		trips <- tbl_df(rbind(indiv_trips, joint_person_trips))
+		trips <- as_tibble(rbind(indiv_trips, joint_person_trips))
 		print(paste("Combined",prettyNum(nrow(indiv_trips),big.mark=","),
 					"individual trips with",prettyNum(nrow(joint_person_trips),big.mark=","),
 					"joint trips to make",prettyNum(nrow(trips),big.mark=",")," total trips with columns",toString(colnames(trips))))
@@ -563,7 +681,6 @@ if (fullrun==TRUE) {
 		## Cleanup and save tours, trips and households
 		print(paste("Saving trips.rds with",prettyNum(nrow(trips),big.mark=","),"rows and",ncol(trips),"columns"))
 		saveRDS(trips, file=file.path(UPDATED_DIR, "trips.rds"))
-		remove(trips)
 		
 		print(paste("Saving tours.rds with",prettyNum(nrow(tours),big.mark=","),"rows and",ncol(tours),"columns"))
 		saveRDS(tours, file=file.path(UPDATED_DIR, "tours.rds"))
@@ -613,27 +730,6 @@ if (fullrun==TRUE) {
 
 ## Add variables from skims to data
 	
-	dropr <- function(mydf,...) {
-	  
-	  my_return_name <- deparse(substitute(mydf))
-	  
-	  myinitialsize <- round(object.size(mydf)/1000000, digits = 3)
-	  cat(paste0("Size of ", my_return_name, " before removing variables: ", myinitialsize, " MB. \n"))
-	  
-	  names_to_drop <- c(...)
-	  mytext <- paste("The following variables will be dropped from ", my_return_name, ": ", sep = "")
-	  print(mytext)
-	  print(names_to_drop)
-	  mydf <- mydf[,!names(mydf) %in% names_to_drop]
-	  
-	  myfinalsize <- round(object.size(mydf)/1000000, digits = 3)
-	  cat(paste0("Size of ", my_return_name, " after removing variables: ", myfinalsize, " MB. \n"))
-	  ramsaved <- round(myinitialsize - myfinalsize, digits = 3)
-	  cat(paste0("RAM saved: ", ramsaved, " MB. \n"))
-	  
-	  return(mydf)
-	  
-	}	
 	
 	add_myvariable <- function(mydf, mytp, myvar) {
 	  
@@ -785,8 +881,12 @@ myvarlist <- c("walktime", "wait", "IVT", "transfers", "boardfare", "faremat", "
 	  }
 	}
 
-	trips <- tbl_df(trips)
-	trips <- select(trips, -distance_mode)
+	trips <- as_tibble(trips)
+	
+	print(paste("Saving trips.rds with",prettyNum(nrow(trips),big.mark=","),"rows and",ncol(trips),"columns"))
+	saveRDS(trips, file=file.path(UPDATED_DIR, "trips.rds"))
+	
+	tours <- readRDS(tours, file=file.path(UPDATED_DIR, "tours.rds"))
 
 	num_tours       <- nrow(tours)
 	num_tours_dist  <- nrow( distinct(tours, hh_id, tour_participants, tour_id))
@@ -802,12 +902,18 @@ myvarlist <- c("walktime", "wait", "IVT", "transfers", "boardfare", "faremat", "
 	trips <- trips %>% 
 	  rename(tour_duration=duration)
 	print(paste("After adding tour duration to trips -- have",prettyNum(nrow(trips),big.mark=","),"rows"))
+	remove(tours)
 
-	trips <- tbl_df(trips)
+	trips <- as_tibble(trips)
 	
 	print(paste("Saving trips.rds with",prettyNum(nrow(trips),big.mark=","),"rows and",ncol(trips),"columns"))
 	saveRDS(trips, file=file.path(UPDATED_DIR, "trips.rds"))
 	remove(trips)
+	
+	if (logrun==TRUE) {
+	  sink()
+	  cat(yellow(paste0("A log of the output has been saved to ", mylogfilename, ". \n \n")))
+	}	
 	
 	print(gc())
 	
