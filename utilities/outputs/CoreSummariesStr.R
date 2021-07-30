@@ -833,8 +833,6 @@ if (fullrun==TRUE) {
 	             (skims_mode == "wExpD") * wExpD   +
 	             (skims_mode == "wHvyD") * wHvyD   +
 	             (skims_mode == "wComD") * wComD)
-
-	  browser()
 	  
 	  relevant <- relevant %>%
 	    mutate(!!myvar := ifelse(!!myvar < -990.0, 0, !!myvar))
@@ -868,7 +866,8 @@ if (fullrun==TRUE) {
       ungroup()
 
     test %>% print(n = 23)
-
+    
+    browser()    
 	  
 	  relevant <- dropr(relevant, "da",  "daToll",  "s2",  "s2Toll",  "s3",  "s3Toll",  "walk",  "bike",  "wComW",  "wHvyW",  "wExpW",  "wLrfW",  "wLocW",  "wTrnW",  "dComW",  "dHvyW",  "dExpW",  "dLrfW",  "dLocW",  "dTrnW",  "wComD",  "wHvyD",  "wExpD",  "wLrfD",  "wLocD",  "wTrnD", "mynumvalues", "mynonzerovalues")
 	  
@@ -895,8 +894,6 @@ if (fullrun==TRUE) {
 myvarlist <- c("walktime", "wait", "IVT", "transfers", "boardfare", "faremat", "xfare", "othercost", "distance")	
 
 trips <- dropr(trips, "da",  "daToll",  "s2",  "s2Toll",  "s3",  "s3Toll",  "walk",  "bike",  "wComW",  "wHvyW",  "wExpW",  "wLrfW",  "wLocW",  "wTrnW",  "dComW",  "dHvyW",  "dExpW",  "dLrfW",  "dLocW",  "dTrnW",  "wComD",  "wHvyD",  "wExpD",  "wLrfD",  "wLocD",  "wTrnD")
-
-browser()
 	
 	for (myvar in myvarlist) {
 
