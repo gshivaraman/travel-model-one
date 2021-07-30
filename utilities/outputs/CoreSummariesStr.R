@@ -120,6 +120,7 @@ CoreSummariesStr <- function(fullrun=FALSE, iter=4, sampleshare=0.5, logrun=FALS
 	library(readxl)
 	library(openxlsx)
   library(reshape2)
+  library(crayon)
   
 
   
