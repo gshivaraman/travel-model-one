@@ -732,7 +732,7 @@ if (fullrun==TRUE) {
 ## Add variables from skims to data
 	
 	
-	add_myvariable <- function(mydf, mytp, myvar) {
+	add_myvariable <- function(mydf, mytp, myvarname) {
 	  
 	  # the following lines should only be used for testing and should be commented out of the final code
 	  	  
@@ -746,15 +746,13 @@ if (fullrun==TRUE) {
 	  
 	  # browser()
 	  
-	  myvarname <- myvar
-	  
-	  if (myvar %in% names(mydf)) {
+	  if (myvarname %in% names(mydf)) {
 	    
-	    cat(paste0("The variable ", myvar, " already exists.", "\n \n"))
+	    cat(paste0("The variable ", myvarname, " already exists.", "\n \n"))
 	    
 	  } else {
 	    
-	    myvar <- rlang::sym(paste0(myvar))
+	    myvar <- rlang::sym(paste0(myvarname))
 	    
 	    # Assign value
 	    mydf <- mydf %>%
@@ -880,8 +878,6 @@ if (fullrun==TRUE) {
 	  
 	  test %>% print(n = 23)
 	  
-	  browser()
-	  
 	  print(gc())
 	  
 	  return(mydf)
@@ -904,13 +900,15 @@ myvarlist <- c("walktime", "wait", "IVT", "transfers", "boardfare", "faremat", "
 
 trips <- dropr(trips, "da",  "daToll",  "s2",  "s2Toll",  "s3",  "s3Toll",  "walk",  "bike",  "wComW",  "wHvyW",  "wExpW",  "wLrfW",  "wLocW",  "wTrnW",  "dComW",  "dHvyW",  "dExpW",  "dLrfW",  "dLocW",  "dTrnW",  "wComD",  "wHvyD",  "wExpD",  "wLrfD",  "wLocD",  "wTrnD")
 	
-	for (myvar in myvarlist) {
+	for (myvarname in myvarlist) {
 
 	  for (timeperiod in LOOKUP_TIMEPERIOD$timeperiod_abbrev) {
-	    trips <- add_myvariable(mydf = trips, mytp = timeperiod, myvar = myvar)
+	    trips <- add_myvariable(mydf = trips, mytp = timeperiod, myvarname = myvarname)
 	  }
 	  
 	  cat(paste0("\n \n", "Please check the following summary table of the variable ", myvar, " for all time periods, by mode.", "\n \n"))
+	  
+	  myvar <- rlang::sym(paste0(myvarname))
 	  
 	  test <- trips %>%
       group_by(skims_mode) %>%
@@ -918,8 +916,6 @@ trips <- dropr(trips, "da",  "daToll",  "s2",  "s2Toll",  "s3",  "s3Toll",  "wal
       ungroup()
       
     test %>% print(n = 23)
-    
-    browser()
 
 	}
 
