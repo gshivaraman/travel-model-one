@@ -744,7 +744,9 @@ if (fullrun==TRUE) {
 	  
 	  # The variable may or may not already exist
 	  
-	  browser()
+	  # browser()
+	  
+	  myvarname <- myvar
 	  
 	  if (myvar %in% names(mydf)) {
 	    
@@ -858,7 +860,7 @@ if (fullrun==TRUE) {
 	  relevant <- relevant %>%
 	    mutate(!!myvar := ifelse(is.na(!!myvar)==TRUE, 0, !!myvar))
 	  
-	  cat(paste0("\n \n", "Please check the following summary table of the variable ", !!myvar, " for the time period ", mytp, " by mode.", "\n \n"))
+	  cat(paste0("\n \n", "Please check the following summary table of the variable ", myvarname, " for the time period ", mytp, " by mode.", "\n \n"))
 	  
 	  test <- relevant %>%
       group_by(skims_mode) %>%
@@ -901,7 +903,7 @@ trips <- dropr(trips, "da",  "daToll",  "s2",  "s2Toll",  "s3",  "s3Toll",  "wal
 	    trips <- add_myvariable(mydf = trips, mytp = timeperiod, myvar = myvar)
 	  }
 	  
-	  cat(paste0("\n \n", "Please check the following summary table of the variable ", !!myvar, " for all time periods, by mode.", "\n \n"))
+	  cat(paste0("\n \n", "Please check the following summary table of the variable ", myvar, " for all time periods, by mode.", "\n \n"))
 	  
 	  test <- trips %>%
       group_by(skims_mode) %>%
