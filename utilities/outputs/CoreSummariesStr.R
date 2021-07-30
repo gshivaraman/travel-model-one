@@ -4,7 +4,7 @@ CoreSummariesStr <- function(fullrun=FALSE, iter=4, sampleshare=0.5, logrun=FALS
   
   # Example of use:
   # Use fullrun=TRUE if the code will be run in the original model directory and the rdata files do not yet exist in updated_outputs.  
-  # CoreSummariesStr(fullrun=TRUE)
+  # trips <- CoreSummariesStr(fullrun=TRUE, iter=4, sampleshare=0.5, logrun=TRUE)
   
   # Utils
   
