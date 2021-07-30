@@ -904,7 +904,7 @@ trips <- dropr(trips, "da",  "daToll",  "s2",  "s2Toll",  "s3",  "s3Toll",  "wal
 	    trips <- add_myvariable(mydf = trips, mytp = timeperiod, myvarname = myvarname)
 	  }
 	  
-	  cat(paste0("\n \n", "Please check the following summary table of the variable ", myvar, " for all time periods, by mode.", "\n \n"))
+	  cat(paste0("\n \n", "Please check the following summary table of the variable ", myvarname, " for all time periods, by mode.", "\n \n"))
 	  
 	  myvar <- rlang::sym(paste0(myvarname))
 	  
