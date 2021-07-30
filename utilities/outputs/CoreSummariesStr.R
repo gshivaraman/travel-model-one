@@ -769,7 +769,7 @@ if (fullrun==TRUE) {
 	  
 	  # Read the relevant skim table
 	  # sample filename: SkimsDatabaseEV_transfers.csv
-	  skim_file <- file.path(TARGET_DIR,"database",paste0("SkimsDatabase",mytp, "_", myvar,".csv"))
+	  skim_file <- file.path(TARGET_DIR,"database",paste0("SkimsDatabase",mytp, "_", myvarname,".csv"))
 	  myskimdf <- read.table(file = skim_file, header=TRUE, sep=",")
 	  
 	  # rename columns for join
@@ -782,7 +782,7 @@ if (fullrun==TRUE) {
 	  
 	  remove(myskimdf)
 	  
-	  myvar <- rlang::sym(paste0(myvar))
+	  myvar <- rlang::sym(paste0(myvarname))
 	  
 	  # Assign value
 	  relevant <- relevant %>%
