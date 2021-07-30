@@ -868,16 +868,23 @@ if (fullrun==TRUE) {
       ungroup()
 
     test %>% print(n = 23)
-    
-    browser()    
 	  
 	  relevant <- dropr(relevant, "da",  "daToll",  "s2",  "s2Toll",  "s3",  "s3Toll",  "walk",  "bike",  "wComW",  "wHvyW",  "wExpW",  "wLrfW",  "wLocW",  "wTrnW",  "dComW",  "dHvyW",  "dExpW",  "dLrfW",  "dLocW",  "dTrnW",  "wComD",  "wHvyD",  "wExpD",  "wLrfD",  "wLocD",  "wTrnD", "mynumvalues", "mynonzerovalues")
 	  
-	  return_list <- rbind(relevant, irrelevant)
+	  mydf <- rbind(relevant, irrelevant)
+	  
+	  test <- mydf %>%
+	    group_by(skims_mode) %>%
+	    summarize(myvar_min := min(!!myvar), myvar_mean := mean(!!myvar), myvar_max := max(!!myvar)) %>%
+	    ungroup()
+	  
+	  test %>% print(n = 23)
+	  
+	  browser()
 	  
 	  print(gc())
 	  
-	  return(return_list)
+	  return(mydf)
 	  
 	}
 	
@@ -907,7 +914,7 @@ trips <- dropr(trips, "da",  "daToll",  "s2",  "s2Toll",  "s3",  "s3Toll",  "wal
 	  
 	  test <- trips %>%
       group_by(skims_mode) %>%
-      summarize(!!myvar := mean(!!myvar)) %>%
+	    summarize(myvar_min := min(!!myvar), myvar_mean := mean(!!myvar), myvar_max := max(!!myvar)) %>%
       ungroup()
       
     test %>% print(n = 23)
