@@ -908,7 +908,6 @@ myvarlist <- c("walktime", "wait", "IVT", "transfers", "boardfare", "faremat", "
 	
 	print(paste("Saving trips.rds with",prettyNum(nrow(trips),big.mark=","),"rows and",ncol(trips),"columns"))
 	saveRDS(trips, file=file.path(UPDATED_DIR, "trips.rds"))
-	remove(trips)
 	
 	if (logrun==TRUE) {
 	  sink()
@@ -916,5 +915,7 @@ myvarlist <- c("walktime", "wait", "IVT", "transfers", "boardfare", "faremat", "
 	}	
 	
 	print(gc())
+	
+	return(trips)
 	
 }
