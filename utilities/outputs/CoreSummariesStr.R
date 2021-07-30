@@ -918,6 +918,8 @@ trips <- dropr(trips, "da",  "daToll",  "s2",  "s2Toll",  "s3",  "s3Toll",  "wal
       ungroup()
       
     test %>% print(n = 23)
+    
+    browser()
 
 	}
 
