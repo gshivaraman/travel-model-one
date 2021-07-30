@@ -3,7 +3,7 @@
 *Cluster CTRAMP 1-40 Starthide Exit 
 
 
-; Work_Folder='F:\23791501\2015_TM152_STR_T7' 
+Work_Folder='F:\23791501\outputs\20210729230749' 
 
 /*; ----------------------------------------------------------------------------------------------------------------
 ;
@@ -38,7 +38,7 @@
 ;           (3) NonMotorizedSkims.job, which does the non-motorized (walk and bike) skimming
 ;
 ; version:  Travel Model One
-; authors:  ; LL, updated by JVK to write out separate csv files for each of the nine variables, each file containing info for all modes as applicable, 7/26/21
+; authors:  ; LL, updated by JVK to write out separate csv files for each of the nine variables, each file containing info for all modes as applicable, 7/26/21,updated by GS to write out separate csv files for access/ eggress  distance and distance by local/regional/ intercity/ free shuttle and regional services using faremat, each file containing info for all modes as applicable, 7/30/21
 
 ;
 ;
@@ -189,7 +189,26 @@ if (i>5000) exit
          list = "orig,dest,da,daToll,s2,s2Toll,s3,s3Toll",file = database\SkimsDatabase@token_period@_othercost.csv  
          
          list = "orig,dest,da,daToll,s2,s2Toll,s3,s3Toll,walk,bike,wComW,wHvyW,wExpW,wLrfW,wLocW,wTrnW,dComW,dHvyW,dExpW,dLrfW,dLocW,dTrnW,wComD,wHvyD,wExpD,wLrfD,wLocD,wTrnD",file =  
-                 database\SkimsDatabase@token_period@_distance.csv          
+                 database\SkimsDatabase@token_period@_distance.csv    
+				 
+		 list = "orig,dest,da,daToll,s2,s2Toll,s3,s3Toll,walk,bike,wComW,wHvyW,wExpW,wLrfW,wLocW,wTrnW,dComW,dHvyW,dExpW,dLrfW,dLocW,dTrnW,wComD,wHvyD,wExpD,wLrfD,wLocD,wTrnD",file =  
+                 database\SkimsDatabase@token_period@_ddist.csv 
+         
+         list = "orig,dest,da,daToll,s2,s2Toll,s3,s3Toll,walk,bike,wComW,wHvyW,wExpW,wLrfW,wLocW,wTrnW,dComW,dHvyW,dExpW,dLrfW,dLocW,dTrnW,wComD,wHvyD,wExpD,wLrfD,wLocD,wTrnD",file =  
+                 database\SkimsDatabase@token_period@_dLocal.csv  	
+
+         list = "orig,dest,da,daToll,s2,s2Toll,s3,s3Toll,walk,bike,wComW,wHvyW,wExpW,wLrfW,wLocW,wTrnW,dComW,dHvyW,dExpW,dLrfW,dLocW,dTrnW,wComD,wHvyD,wExpD,wLrfD,wLocD,wTrnD",file =  
+                 database\SkimsDatabase@token_period@_dRegional.csv  
+				 
+	     list = "orig,dest,da,daToll,s2,s2Toll,s3,s3Toll,walk,bike,wComW,wHvyW,wExpW,wLrfW,wLocW,wTrnW,dComW,dHvyW,dExpW,dLrfW,dLocW,dTrnW,wComD,wHvyD,wExpD,wLrfD,wLocD,wTrnD",file =  
+                 database\SkimsDatabase@token_period@_dInterCity.csv  
+				 
+		 list = "orig,dest,da,daToll,s2,s2Toll,s3,s3Toll,walk,bike,wComW,wHvyW,wExpW,wLrfW,wLocW,wTrnW,dComW,dHvyW,dExpW,dLrfW,dLocW,dTrnW,wComD,wHvyD,wExpD,wLrfD,wLocD,wTrnD",file =  
+                 database\SkimsDatabase@token_period@_dFree.csv 
+				 
+		 list = "orig,dest,da,daToll,s2,s2Toll,s3,s3Toll,walk,bike,wComW,wHvyW,wExpW,wLrfW,wLocW,wTrnW,dComW,dHvyW,dExpW,dLrfW,dLocW,dTrnW,wComD,wHvyD,wExpD,wLrfD,wLocD,wTrnD",file =  
+                 database\SkimsDatabase@token_period@_dFareMat.csv 
+				 
       
       endif
       
@@ -478,9 +497,9 @@ if (i>5000) exit
                  wExpD_faremat=mi.17.faremat                
                  wLrfD_faremat=mi.18.faremat 
                  wLocD_faremat=mi.19.faremat 
-                 wTrnD_faremat=mi.20.faremat          
-           
-           
+                 wTrnD_faremat=mi.20.faremat    
+				 
+				 
            ; read other costs 
             ; note the BTOLL variable includes additional cost from imperfect pavement (for both Repair & Maintenance and fuel)
                
@@ -540,10 +559,141 @@ if (i>5000) exit
                  wExpD_Dist=mi.17.distEXP/100                
                  wLrfD_Dist=mi.18.distLRF/100 
                  wLocD_Dist=mi.19.distLOC/100 
-                 wTrnD_Dist=mi.20.distFerry/100  ; need to confirm this          
+                 wTrnD_Dist=mi.20.distFerry/100  ; need to confirm this         
+		   
+		   ; read drive access or egress Distance
+                 wComW_ddist=mi.3.ddist/100
+                 wHvyW_ddist=mi.4.ddist/100
+                 wExpW_ddist=mi.5.ddist/100
+                 wLrfW_ddist=mi.6.ddist/100
+                 wLocW_ddist=mi.7.ddist/100
+                 wTrnW_ddist=mi.8.ddist/100
+    
+                 dComW_ddist=mi.9.ddist/100
+                 dHvyW_ddist=mi.10.ddist/100
+                 dExpW_ddist=mi.11.ddist/100
+                 dLrfW_ddist=mi.12.ddist/100
+                 dLocW_ddist=mi.13.ddist/100
+                 dTrnW_ddist=mi.14.ddist/100
+       
+                 wComD_ddist=mi.15.ddist/100            
+                 wHvyD_ddist=mi.16.ddist/100          
+                 wExpD_ddist=mi.17.ddist/100                
+                 wLrfD_ddist=mi.18.ddist/100 
+                 wLocD_ddist=mi.19.ddist/100 
+                 wTrnD_ddist=mi.20.ddist/100
+		   
+		   
+		   ; read Local Service Distance
+                 wComW_dLocal=mi.3.dLocal/100
+                 wHvyW_dLocal=mi.4.dLocal/100
+                 wExpW_dLocal=mi.5.dLocal/100
+                 wLrfW_dLocal=mi.6.dLocal/100
+                 wLocW_dLocal=mi.7.dLocal/100
+                 wTrnW_dLocal=mi.8.dLocal/100
+    
+                 dComW_dLocal=mi.9.dLocal/100
+                 dHvyW_dLocal=mi.10.dLocal/100
+                 dExpW_dLocal=mi.11.dLocal/100
+                 dLrfW_dLocal=mi.12.dLocal/100
+                 dLocW_dLocal=mi.13.dLocal/100
+                 dTrnW_dLocal=mi.14.dLocal/100
+       
+                 wComD_dLocal=mi.15.dLocal/100            
+                 wHvyD_dLocal=mi.16.dLocal/100          
+                 wExpD_dLocal=mi.17.dLocal/100                
+                 wLrfD_dLocal=mi.18.dLocal/100 
+                 wLocD_dLocal=mi.19.dLocal/100 
+                 wTrnD_dLocal=mi.20.dLocal/100  
+				 
+		   ; read Regional Service Distance
+                 wComW_dRegional=mi.3.dRegional/100
+                 wHvyW_dRegional=mi.4.dRegional/100
+                 wExpW_dRegional=mi.5.dRegional/100
+                 wLrfW_dRegional=mi.6.dRegional/100
+                 wLocW_dRegional=mi.7.dRegional/100
+                 wTrnW_dRegional=mi.8.dRegional/100
+    
+                 dComW_dRegional=mi.9.dRegional/100
+                 dHvyW_dRegional=mi.10.dRegional/100
+                 dExpW_dRegional=mi.11.dRegional/100
+                 dLrfW_dRegional=mi.12.dRegional/100
+                 dLocW_dRegional=mi.13.dRegional/100
+                 dTrnW_dRegional=mi.14.dRegional/100
+       
+                 wComD_dRegional=mi.15.dRegional/100            
+                 wHvyD_dRegional=mi.16.dRegional/100          
+                 wExpD_dRegional=mi.17.dRegional/100                
+                 wLrfD_dRegional=mi.18.dRegional/100 
+                 wLocD_dRegional=mi.19.dRegional/100 
+                 wTrnD_dRegional=mi.20.dRegional/100 
+				 
+		   ; read Intercity Service Distance
+                 wComW_dInterCity=mi.3.dInterCity/100
+                 wHvyW_dInterCity=mi.4.dInterCity/100
+                 wExpW_dInterCity=mi.5.dInterCity/100
+                 wLrfW_dInterCity=mi.6.dInterCity/100
+                 wLocW_dInterCity=mi.7.dInterCity/100
+                 wTrnW_dInterCity=mi.8.dInterCity/100
+    
+                 dComW_dInterCity=mi.9.dInterCity/100
+                 dHvyW_dInterCity=mi.10.dInterCity/100
+                 dExpW_dInterCity=mi.11.dInterCity/100
+                 dLrfW_dInterCity=mi.12.dInterCity/100
+                 dLocW_dInterCity=mi.13.dInterCity/100
+                 dTrnW_dInterCity=mi.14.dInterCity/100
+       
+                 wComD_dInterCity=mi.15.dInterCity/100            
+                 wHvyD_dInterCity=mi.16.dInterCity/100          
+                 wExpD_dInterCity=mi.17.dInterCity/100                
+                 wLrfD_dInterCity=mi.18.dInterCity/100 
+                 wLocD_dInterCity=mi.19.dInterCity/100 
+                 wTrnD_dInterCity=mi.20.dInterCity/100
+				 
+		   ; read Free Shuttle Service Distance
+                 wComW_dFree=mi.3.dFree/100
+                 wHvyW_dFree=mi.4.dFree/100
+                 wExpW_dFree=mi.5.dFree/100
+                 wLrfW_dFree=mi.6.dFree/100
+                 wLocW_dFree=mi.7.dFree/100
+                 wTrnW_dFree=mi.8.dFree/100
+    
+                 dComW_dFree=mi.9.dFree/100
+                 dHvyW_dFree=mi.10.dFree/100
+                 dExpW_dFree=mi.11.dFree/100
+                 dLrfW_dFree=mi.12.dFree/100
+                 dLocW_dFree=mi.13.dFree/100
+                 dTrnW_dFree=mi.14.dFree/100
+       
+                 wComD_dFree=mi.15.dFree/100            
+                 wHvyD_dFree=mi.16.dFree/100              
+                 wExpD_dFree=mi.17.dFree/100                
+                 wLrfD_dFree=mi.18.dFree/100 
+                 wLocD_dFree=mi.19.dFree/100 
+                 wTrnD_dFree=mi.20.dFree/100
+				 
+		   ; read Regional Service Distance using FareMat
+                 wComW_dFareMat=mi.3.dFareMat/100
+                 wHvyW_dFareMat=mi.4.dFareMat/100
+                 wExpW_dFareMat=mi.5.dFareMat/100
+                 wLrfW_dFareMat=mi.6.dFareMat/100
+                 wLocW_dFareMat=mi.7.dFareMat/100
+                 wTrnW_dFareMat=mi.8.dFareMat/100
+    
+                 dComW_dFareMat=mi.9.dFareMat/100
+                 dHvyW_dFareMat=mi.10.dFareMat/100
+                 dExpW_dFareMat=mi.11.dFareMat/100
+                 dLrfW_dFareMat=mi.12.dFareMat/100
+                 dLocW_dFareMat=mi.13.dFareMat/100
+                 dTrnW_dFareMat=mi.14.dFareMat/100
+       
+                 wComD_dFareMat=mi.15.dFareMat/100            
+                 wHvyD_dFareMat=mi.16.dFareMat/100              
+                 wExpD_dFareMat=mi.17.dFareMat/100                
+                 wLrfD_dFareMat=mi.18.dFareMat/100 
+                 wLocD_dFareMat=mi.19.dFareMat/100 
+                 wTrnD_dFareMat=mi.20.dFareMat/100				 
            
- 
-               
                ; write the output ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  
                 list = i(8.0),",",j(8.0),",",walk_Time(10.2),",",wComW_walktime(10.2),",",wHvyW_walktime(10.2),",",wExpW_walktime(10.2),",",wLrfW_walktime(10.2),",",wLocW_walktime(10.2),",",  
@@ -597,7 +747,43 @@ if (i>5000) exit
                        walk_Dist(10.2),",",bike_Dist(10.2),",",wComW_Dist(10.2),",",wHvyW_Dist(10.2),",",wExpW_Dist(10.2),",",wLrfW_Dist(10.2),",",wLocW_Dist(10.2),",",wTrnW_Dist(10.2),",",
                        dComW_Dist(10.2),",",dHvyW_Dist(10.2),",",dExpW_Dist(10.2),",",dLrfW_Dist(10.2),",",dLocW_Dist(10.2),",",dTrnW_Dist(10.2),",",  
                        wComD_Dist(10.2),",",wHvyD_Dist(10.2),",",wExpD_Dist(10.2),",",wLrfD_Dist(10.2),",",wLocD_Dist(10.2),",",wTrnD_Dist(10.2),
-                       file = database\SkimsDatabase@token_period@_distance.csv                     
+					   file = database\SkimsDatabase@token_period@_distance.csv     
+
+				list = i(8.0),",",j(8.0),",",da_Dist(10.2),",",daToll_Dist(10.2),",",s2_Dist(10.2),",",s2Toll_Dist(10.2),",",s3_Dist(10.2),",",s3Toll_Dist(10.2),",",
+                       walk_Dist(10.2),",",bike_Dist(10.2),",",wComW_ddist(10.2),",",wHvyW_ddist(10.2),",",wExpW_ddist(10.2),",",wLrfW_ddist(10.2),",",wLocW_ddist(10.2),",",wTrnW_ddist(10.2),",",
+                       dComW_ddist(10.2),",",dHvyW_ddist(10.2),",",dExpW_ddist(10.2),",",dLrfW_ddist(10.2),",",dLocW_ddist(10.2),",",dTrnW_ddist(10.2),",",  
+                       wComD_ddist(10.2),",",wHvyD_ddist(10.2),",",wExpD_ddist(10.2),",",wLrfD_ddist(10.2),",",wLocD_ddist(10.2),",",wTrnD_ddist(10.2),
+					   file = database\SkimsDatabase@token_period@_ddist.csv  
+					   
+				list = i(8.0),",",j(8.0),",",da_Dist(10.2),",",daToll_Dist(10.2),",",s2_Dist(10.2),",",s2Toll_Dist(10.2),",",s3_Dist(10.2),",",s3Toll_Dist(10.2),",",
+                       walk_Dist(10.2),",",bike_Dist(10.2),",",wComW_dLocal(10.2),",",wHvyW_dLocal(10.2),",",wExpW_dLocal(10.2),",",wLrfW_dLocal(10.2),",",wLocW_dLocal(10.2),",",wTrnW_dLocal(10.2),",",
+                       dComW_dLocal(10.2),",",dHvyW_dLocal(10.2),",",dExpW_dLocal(10.2),",",dLrfW_dLocal(10.2),",",dLocW_dLocal(10.2),",",dTrnW_dLocal(10.2),",",  
+                       wComD_dLocal(10.2),",",wHvyD_dLocal(10.2),",",wExpD_dLocal(10.2),",",wLrfD_dLocal(10.2),",",wLocD_dLocal(10.2),",",wTrnD_dLocal(10.2),
+					   file = database\SkimsDatabase@token_period@_dLocal.csv 
+					   
+				list = i(8.0),",",j(8.0),",",da_Dist(10.2),",",daToll_Dist(10.2),",",s2_Dist(10.2),",",s2Toll_Dist(10.2),",",s3_Dist(10.2),",",s3Toll_Dist(10.2),",",
+                       walk_Dist(10.2),",",bike_Dist(10.2),",",wComW_dRegional(10.2),",",wHvyW_dRegional(10.2),",",wExpW_dRegional(10.2),",",wLrfW_dRegional(10.2),",",wLocW_dRegional(10.2),",",wTrnW_dRegional(10.2),",",
+                       dComW_dRegional(10.2),",",dHvyW_dRegional(10.2),",",dExpW_dRegional(10.2),",",dLrfW_dRegional(10.2),",",dLocW_dRegional(10.2),",",dTrnW_dRegional(10.2),",",  
+                       wComD_dRegional(10.2),",",wHvyD_dRegional(10.2),",",wExpD_dRegional(10.2),",",wLrfD_dRegional(10.2),",",wLocD_dRegional(10.2),",",wTrnD_dRegional(10.2),
+					   file = database\SkimsDatabase@token_period@_dRegional.csv 
+					   
+			    list = i(8.0),",",j(8.0),",",da_Dist(10.2),",",daToll_Dist(10.2),",",s2_Dist(10.2),",",s2Toll_Dist(10.2),",",s3_Dist(10.2),",",s3Toll_Dist(10.2),",",
+                       walk_Dist(10.2),",",bike_Dist(10.2),",",wComW_dInterCity(10.2),",",wHvyW_dInterCity(10.2),",",wExpW_dInterCity(10.2),",",wLrfW_dInterCity(10.2),",",wLocW_dInterCity(10.2),",",wTrnW_dInterCity(10.2),",",
+                       dComW_dInterCity(10.2),",",dHvyW_dInterCity(10.2),",",dExpW_dInterCity(10.2),",",dLrfW_dInterCity(10.2),",",dLocW_dInterCity(10.2),",",dTrnW_dInterCity(10.2),",",  
+                       wComD_dInterCity(10.2),",",wHvyD_dInterCity(10.2),",",wExpD_dInterCity(10.2),",",wLrfD_dInterCity(10.2),",",wLocD_dInterCity(10.2),",",wTrnD_dInterCity(10.2),
+					   file = database\SkimsDatabase@token_period@_dInterCity.csv 
+					   
+				list = i(8.0),",",j(8.0),",",da_Dist(10.2),",",daToll_Dist(10.2),",",s2_Dist(10.2),",",s2Toll_Dist(10.2),",",s3_Dist(10.2),",",s3Toll_Dist(10.2),",",
+                       walk_Dist(10.2),",",bike_Dist(10.2),",",wComW_dFree(10.2),",",wHvyW_dFree(10.2),",",wExpW_dFree(10.2),",",wLrfW_dFree(10.2),",",wLocW_dFree(10.2),",",wTrnW_dFree(10.2),",",
+                       dComW_dFree(10.2),",",dHvyW_dFree(10.2),",",dExpW_dFree(10.2),",",dLrfW_dFree(10.2),",",dLocW_dFree(10.2),",",dTrnW_dFree(10.2),",",  
+                       wComD_dFree(10.2),",",wHvyD_dFree(10.2),",",wExpD_dFree(10.2),",",wLrfD_dFree(10.2),",",wLocD_dFree(10.2),",",wTrnD_dFree(10.2),
+					   file = database\SkimsDatabase@token_period@_dFree.csv 
+					   
+				list = i(8.0),",",j(8.0),",",da_Dist(10.2),",",daToll_Dist(10.2),",",s2_Dist(10.2),",",s2Toll_Dist(10.2),",",s3_Dist(10.2),",",s3Toll_Dist(10.2),",",
+                       walk_Dist(10.2),",",bike_Dist(10.2),",",wComW_dFareMat(10.2),",",wHvyW_dFareMat(10.2),",",wExpW_dFareMat(10.2),",",wLrfW_dFareMat(10.2),",",wLocW_dFareMat(10.2),",",wTrnW_dFareMat(10.2),",",
+                       dComW_dFareMat(10.2),",",dHvyW_dFareMat(10.2),",",dExpW_dFareMat(10.2),",",dLrfW_dFareMat(10.2),",",dLocW_dFareMat(10.2),",",dTrnW_dFareMat(10.2),",",  
+                       wComD_dFareMat(10.2),",",wHvyD_dFareMat(10.2),",",wExpD_dFareMat(10.2),",",wLrfD_dFareMat(10.2),",",wLocD_dFareMat(10.2),",",wTrnD_dFareMat(10.2),
+                       file = database\SkimsDatabase@token_period@_dFareMat.csv                     
                        
                        
                
