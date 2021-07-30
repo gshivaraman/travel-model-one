@@ -746,7 +746,7 @@ if (fullrun==TRUE) {
 	  
 	  if (myvar %in% names(mydf)) {
 	    
-	    cat(paste0("The variable ", myvar, " already exists."))
+	    cat(paste0("The variable ", myvar, " already exists.", "\n \n"))
 	    
 	  } else {
 	    
@@ -790,7 +790,7 @@ if (fullrun==TRUE) {
 	    
 	    if (checkvar %in% names(relevant)) {
 	      
-	      cat(paste0("The variable ", checkvar, " already exists."))
+	      cat(paste0("The variable ", checkvar, " already exists.", "\n \n"))
 	      
 	    } else {
 	      
@@ -875,6 +875,10 @@ if (fullrun==TRUE) {
 	
 	
 myvarlist <- c("walktime", "wait", "IVT", "transfers", "boardfare", "faremat", "xfare", "othercost", "distance")	
+
+trips <- dropr(trips, "da",  "daToll",  "s2",  "s2Toll",  "s3",  "s3Toll",  "walk",  "bike",  "wComW",  "wHvyW",  "wExpW",  "wLrfW",  "wLocW",  "wTrnW",  "dComW",  "dHvyW",  "dExpW",  "dLrfW",  "dLocW",  "dTrnW",  "wComD",  "wHvyD",  "wExpD",  "wLrfD",  "wLocD",  "wTrnD")
+
+browser()
 	
 	for (timeperiod in LOOKUP_TIMEPERIOD$timeperiod_abbrev) {
 	  for (myvar in myvarlist) {
