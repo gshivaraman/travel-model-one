@@ -1,4 +1,10 @@
 CoreSummariesStr <- function(fullrun=FALSE, iter=4, sampleshare=0.5, logrun=FALSE) {
+  
+  library(tidyverse)
+  library(readxl)
+  library(openxlsx)
+  library(reshape2)
+  library(crayon)
 
   # Version 1 01 by Alex Mitrani, based on CoreSummaries.R by MTC staff, updated on 21 July 2021.  This function takes time and cost variables from the CSV files corresponding to the detailed skims and joins them on to the trips .rdata file.  
   
@@ -7,6 +13,10 @@ CoreSummariesStr <- function(fullrun=FALSE, iter=4, sampleshare=0.5, logrun=FALS
   # trips <- CoreSummariesStr(fullrun=TRUE, iter=4, sampleshare=0.5, logrun=TRUE)
   
   # Utils
+  
+  
+  now1 <- Sys.time()
+  cat(yellow(paste0("CoreSummariesStr run started at ", now1, "\n \n")))  
   
   datestampr <- function(dateonly = FALSE, houronly = FALSE, minuteonly = FALSE, myusername = FALSE) {
     
@@ -115,15 +125,6 @@ CoreSummariesStr <- function(fullrun=FALSE, iter=4, sampleshare=0.5, logrun=FALS
 	# Core Summaries
 
 	# Overhead
-
-	library(tidyverse)
-	library(readxl)
-	library(openxlsx)
-  library(reshape2)
-  library(crayon)
-  
-
-  
   
   if (logrun==TRUE) {
   
@@ -939,11 +940,41 @@ trips <- dropr(trips, "da",  "daToll",  "s2",  "s2Toll",  "s3",  "s3Toll",  "wal
 	  rename(tour_duration=duration)
 	print(paste("After adding tour duration to trips -- have",prettyNum(nrow(trips),big.mark=","),"rows"))
 	remove(tours)
+	
+	# calculate total fare
+	trips <- trips %>%
+	  mutate(fare = boardfare + xfare + faremat)
 
 	trips <- as_tibble(trips)
 	
 	print(paste("Saving trips.rds with",prettyNum(nrow(trips),big.mark=","),"rows and",ncol(trips),"columns"))
 	saveRDS(trips, file=file.path(UPDATED_DIR, "trips.rds"))
+	
+	summarize_attributes_min <- trips %>%
+	  group_by(skims_mode) %>%
+	  summarize(walktime = min(walktime), wait = min(wait), IVT = min(IVT), transfers = min(transfers), boardfare = min(boardfare), xfare = min(xfare), faremat = min(faremat), fare = min(fare)) %>%
+	  ungroup()
+	
+	summarize_attributes_min %>% print(n = 23)
+	
+	summarize_attributes_mean <- trips %>%
+	  group_by(skims_mode) %>%
+	  summarize(walktime = mean(walktime), wait = mean(wait), IVT = mean(IVT), transfers = mean(transfers), boardfare = mean(boardfare), xfare = mean(xfare), faremat = mean(faremat), fare = mean(fare)) %>%
+	  ungroup()
+	
+	summarize_attributes_mean %>% print(n = 23)
+	
+	summarize_attributes_max <- trips %>%
+	  group_by(skims_mode) %>%
+	  summarize(walktime = max(walktime), wait = max(wait), IVT = max(IVT), transfers = max(transfers), boardfare = max(boardfare), xfare = max(xfare), faremat = max(faremat), fare = max(fare)) %>%
+	  ungroup()
+	
+	summarize_attributes_max %>% print(n = 23)	
+	
+	now2 <- Sys.time()
+	cat(yellow(paste0("CoreSummariesStr run finished at ", now2, "\n \n")))
+	elapsed_time <- now2 - now1
+	print(elapsed_time)	
 	
 	if (logrun==TRUE) {
 	  sink()
