@@ -8,6 +8,13 @@ CoreSummariesStr <- function(fullrun=FALSE, iter=4, sampleshare=0.5, logrun=FALS
 
   # Version 1 01 by Alex Mitrani, based on CoreSummaries.R by MTC staff, updated on 21 July 2021.  This function takes time and cost variables from the CSV files corresponding to the detailed skims and joins them on to the trips .rdata file.  
   
+  # Required subfolders of the root folder where this will be run:
+  # "database"
+  # "main" - only the files for the specified iteration are needed.  
+  # "popsyn"
+  # "landuse"
+  # "CTRAMP\scripts\block"
+  
   # Example of use:
   # Use fullrun=TRUE if the code will be run in the original model directory and the rdata files do not yet exist in updated_outputs.  
   # trips <- CoreSummariesStr(fullrun=TRUE, iter=4, sampleshare=0.5, logrun=TRUE)
