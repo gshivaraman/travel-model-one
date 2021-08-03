@@ -1,4 +1,4 @@
-SummariseStr <- function(sampleshare=0.5, logrun=FALSE) {
+SummariseStr <- function(sampleshare=0.5, pnrparkingcost=3.0, logrun=FALSE) {
 
   
   library(tidyverse)
@@ -198,7 +198,7 @@ SummariseStr <- function(sampleshare=0.5, logrun=FALSE) {
   
   # reduce the data in memory to the required variables
   
-  mydf <- keepr(mydf = trips, "trip_mode", "walktime", "wait", "IVT", "transfers", "fare", "othercost", "distance")
+  mydf <- keepr(mydf = trips, "trip_mode", "num_participants", "walktime", "wait", "IVT", "transfers", "fare", "othercost", "distance")
   
   remove(trips)
   
@@ -213,7 +213,18 @@ SummariseStr <- function(sampleshare=0.5, logrun=FALSE) {
   # calculate the numbers of trips taking into account the sample share
   
   mydf <- mydf %>% 
-    mutate(trips=1/sampleshare)
+    mutate(trips=num_participants/sampleshare)
+  
+  # add assumed cost per unit distance of auto access for PNR options
+  # to be continued
+  
+  # add assumed pnr parking cost to other costs
+  mydf <- mydf %>% 
+    mutate(othercost=ifelse(trip_mode>=14 & trip_mode<=18, othercost + pnrparkingcost, othercost))
+  
+  # adjust other costs to be per person for consistency with transit costs
+  mydf <- mydf %>% 
+    mutate(othercost=othercost/num_participants)
   
   # weight the variables by trips so that they can be aggregated
   
