@@ -5,8 +5,22 @@ SummariseStr <- function(sampleshare=0.5, logrun=FALSE) {
   library(openxlsx)
   library(crayon)
   
+  # report start of process and time
+  
   now1 <- Sys.time()
   cat(yellow(paste0("SummariseStr run started at ", now1, "\n \n")))  
+  
+  if (logrun==TRUE) {
+    
+    datestring <- datestampr(myusername=TRUE)
+    mylogfilename <- paste0("SummariseStr_", datestring,".txt")
+    sink()
+    sink(mylogfilename, split=TRUE)
+    cat(yellow(paste0("A log of the output will be saved to ", mylogfilename, ". \n \n")))
+    
+  }  
+  
+  # load utility functions
   
   datestampr <- function(dateonly = FALSE, houronly = FALSE, minuteonly = FALSE, myusername = FALSE) {
     
@@ -19,8 +33,6 @@ SummariseStr <- function(sampleshare=0.5, logrun=FALSE) {
     minute <- format(now, "%M")
     second <- format(now, "%S")
     username <- Sys.getenv("USERNAME")
-    
-    # Work --------------------------------------------------------------------
     
     
     if (nchar(day)==2) {
@@ -157,17 +169,7 @@ SummariseStr <- function(sampleshare=0.5, logrun=FALSE) {
     
   }
   
-  
-  
-  if (logrun==TRUE) {
-    
-    datestring <- datestampr(myusername=TRUE)
-    mylogfilename <- paste0("SummariseStr_", datestring,".txt")
-    sink()
-    sink(mylogfilename, split=TRUE)
-    cat(yellow(paste0("A log of the output will be saved to ", mylogfilename, ". \n \n")))
-    
-  }
+  # Work --------------------------------------------------------------------
   
   mywd <- getwd()
   
@@ -179,7 +181,6 @@ SummariseStr <- function(sampleshare=0.5, logrun=FALSE) {
   
   stopifnot(nchar(TARGET_DIR  )>0)
   stopifnot(nchar(SAMPLESHARE )>0)
-  
   
   MAIN_DIR    <- file.path(TARGET_DIR,"main"           )
   RESULTS_DIR <- file.path(TARGET_DIR,"core_summaries")
@@ -234,8 +235,12 @@ SummariseStr <- function(sampleshare=0.5, logrun=FALSE) {
     mutate(fare = revenue / trips) %>%
     mutate(othercost = othercost / trips) %>%
     mutate(distance = distance / trips)
+  
+  # apply labels to the category variable
     
   trip_mode <- StrLabeller(trip_mode, "trip_mode")
+  
+  # export the resulting table to Excel
   
   wb <- createWorkbook()
   sheetname <- "trip_mode"
@@ -244,6 +249,7 @@ SummariseStr <- function(sampleshare=0.5, logrun=FALSE) {
   filename <- paste0("SummariseStr_", datestring,".xlsx")
   saveWorkbook(wb, file = filename, overwrite = TRUE)
   
+  # report and finish
   
   now2 <- Sys.time()
   cat(yellow(paste0("SummariseStr run finished at ", now2, "\n \n")))
