@@ -1,4 +1,4 @@
-CoreSummariesStr <- function(fullrun=FALSE, iter=4, sampleshare=0.5, logrun=FALSE) {
+JoinSkimsStr <- function(fullrun=FALSE, iter=4, sampleshare=0.5, logrun=FALSE) {
   
   library(tidyverse)
   library(readxl)
@@ -17,13 +17,13 @@ CoreSummariesStr <- function(fullrun=FALSE, iter=4, sampleshare=0.5, logrun=FALS
   
   # Example of use:
   # Use fullrun=TRUE if the code will be run in the original model directory and the rdata files do not yet exist in updated_outputs.  
-  # trips <- CoreSummariesStr(fullrun=TRUE, iter=4, sampleshare=0.5, logrun=TRUE)
+  # trips <- JoinSkimsStr(fullrun=TRUE, iter=4, sampleshare=0.5, logrun=TRUE)
   
   # Utils
   
   
   now1 <- Sys.time()
-  cat(yellow(paste0("CoreSummariesStr run started at ", now1, "\n \n")))  
+  cat(yellow(paste0("JoinSkimsStr run started at ", now1, "\n \n")))  
   
   datestampr <- function(dateonly = FALSE, houronly = FALSE, minuteonly = FALSE, myusername = FALSE) {
     
@@ -136,7 +136,7 @@ CoreSummariesStr <- function(fullrun=FALSE, iter=4, sampleshare=0.5, logrun=FALS
   if (logrun==TRUE) {
   
     datestring <- datestampr(myusername=TRUE)
-    mylogfilename <- paste0("Strlog_", datestring,".txt")
+    mylogfilename <- paste0("JoinSkimsStr_", datestring,".txt")
     sink()
     sink(mylogfilename, split=TRUE)
     cat(yellow(paste0("A log of the output will be saved to ", mylogfilename, ". \n \n")))
@@ -979,7 +979,7 @@ trips <- dropr(trips, "da",  "daToll",  "s2",  "s2Toll",  "s3",  "s3Toll",  "wal
 	summarize_attributes_max %>% print(n = 23)	
 	
 	now2 <- Sys.time()
-	cat(yellow(paste0("CoreSummariesStr run finished at ", now2, "\n \n")))
+	cat(yellow(paste0("JoinSkimsStr run finished at ", now2, "\n \n")))
 	elapsed_time <- now2 - now1
 	print(elapsed_time)	
 	
