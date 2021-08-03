@@ -215,10 +215,9 @@ SummariseStr <- function(sampleshare=0.5, pnrparkingcost=3.0, logrun=FALSE) {
   mydf <- mydf %>% 
     mutate(trips=num_participants/sampleshare)
   
-  # add assumed cost per unit distance of auto access for PNR options
-  # to be continued
+  # should also add assumed cost per unit distance of auto access for PNR options, but the data to do it is not available at present.  
   
-  # add assumed pnr parking cost to other costs
+  # add assumed PNR parking cost to other costs
   mydf <- mydf %>% 
     mutate(othercost=ifelse(trip_mode>=14 & trip_mode<=18, othercost + pnrparkingcost, othercost))
   
@@ -229,6 +228,7 @@ SummariseStr <- function(sampleshare=0.5, pnrparkingcost=3.0, logrun=FALSE) {
   # weight the variables by trips so that they can be aggregated
   
   mydf <- mydf %>%   
+    mutate(num_participants = trips*num_participants) %>%
     mutate(walkmins = trips * walktime) %>%
     mutate(waitmins = trips * wait) %>%
     mutate(ivtmins = trips * IVT) %>%
@@ -241,12 +241,13 @@ SummariseStr <- function(sampleshare=0.5, pnrparkingcost=3.0, logrun=FALSE) {
   
   trip_mode <- mydf %>% 
     group_by(trip_mode) %>%
-    summarise(trips=sum(trips), walkmins = sum(walkmins), waitmins = sum(waitmins), ivtmins = sum(ivtmins), transfers = sum(transfers), revenue=sum(revenue), othercost = sum(othercost), distance = sum(distance)) %>%
+    summarise(num_participants=sum(num_participants), trips=sum(trips), walkmins = sum(walkmins), waitmins = sum(waitmins), ivtmins = sum(ivtmins), transfers = sum(transfers), revenue=sum(revenue), othercost = sum(othercost), distance = sum(distance)) %>%
     ungroup()
   
   # average
   
   trip_mode <- trip_mode %>%
+    mutate(num_participants = num_participants / trips) %>%
     mutate(walkmins = walkmins / trips) %>%
     mutate(waitmins = waitmins / trips) %>%
     mutate(ivtmins = ivtmins / trips) %>%
@@ -258,7 +259,7 @@ SummariseStr <- function(sampleshare=0.5, pnrparkingcost=3.0, logrun=FALSE) {
   # tidy up - put the columns in the desired order
   
   trip_mode <- trip_mode %>%
-    select(trip_mode, trips, revenue, fare, othercost, distance, walkmins, waitmins, ivtmins, transfers)
+    select(trip_mode, num_participants, trips, revenue, fare, othercost, distance, walkmins, waitmins, ivtmins, transfers)
   
   # apply labels to the category variable
     
