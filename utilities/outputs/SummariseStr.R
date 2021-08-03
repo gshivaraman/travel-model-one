@@ -189,7 +189,7 @@ SummariseStr <- function(sampleshare=0.5, logrun=FALSE) {
   
   trips <- readRDS(file=file.path(UPDATED_DIR, "trips.rds"))
   
-  mydf <- keepr(mydf = trips, "trip_mode", "fare")
+  mydf <- keepr(mydf = trips, "trip_mode", "walktime", "wait", "IVT", "transfers", "fare", "othercost", "distance")
   
   remove(trips)
   
@@ -197,16 +197,32 @@ SummariseStr <- function(sampleshare=0.5, logrun=FALSE) {
   
   mydf <- mydf %>% 
     mutate(trips=1/sampleshare) %>% 
-    mutate(revenue = trips * fare)
+    mutate(walkmins = trips * walktime) %>%
+    mutate(waitmins = trips * wait) %>%
+    mutate(ivtmins = trips * IVT) %>%
+    mutate(transfers = trips * transfers) %>%
+    mutate(revenue = trips * fare) %>%
+    mutate(othercost = trips * othercost) %>%
+    mutate(distance = trips * distance)
+     
+  # aggregate  
   
   trip_mode <- mydf %>% 
     group_by(trip_mode) %>%
-    summarise(trips=sum(trips), revenue=sum(revenue)) %>%
+    summarise(trips=sum(trips), walkmins = sum(walkmins), waitmins = sum(waitmins), ivtmins = sum(ivtmins), transfers = sum(transfers), revenue=sum(revenue), othercost = sum(othercost), distance = sum(distance)) %>%
     ungroup()
   
-  trip_mode <- trip_mode %>%
-    mutate(average_fare = revenue / trips)
+  # average
   
+  trip_mode <- trip_mode %>%
+    mutate(walkmins = walkmins / trips) %>%
+    mutate(waitmins = waitmins / trips) %>%
+    mutate(ivtmins = ivtmins / trips) %>%
+    mutate(transfers = transfers / trips) %>%
+    mutate(fare = revenue / trips) %>%
+    mutate(othercost = othercost / trips) %>%
+    mutate(distance = distance / trips)
+    
   trip_mode <- StrLabeller(trip_mode, "trip_mode")
   
   wb <- createWorkbook()
