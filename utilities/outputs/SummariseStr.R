@@ -5,6 +5,10 @@ SummariseStr <- function(sampleshare=0.5, pnrparkingcost=2.0, logrun=FALSE) {
   library(openxlsx)
   library(crayon)
   
+  # The default value of pnrparking cost is USD 2.0 (2000 prices).  BART parking costs approximately USD 3 is 2021.  
+  # $3 adjusted for inflation 2020 - 2000 gives approximately $2 in 2000 prices.  
+  # Source for inflation data: https://www.bls.gov/data/inflation_calculator.htm
+  
   # report start of process and time
   
   now1 <- Sys.time()
