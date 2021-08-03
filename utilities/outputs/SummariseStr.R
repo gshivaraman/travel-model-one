@@ -10,16 +10,6 @@ SummariseStr <- function(sampleshare=0.5, logrun=FALSE) {
   now1 <- Sys.time()
   cat(yellow(paste0("SummariseStr run started at ", now1, "\n \n")))  
   
-  if (logrun==TRUE) {
-    
-    datestring <- datestampr(myusername=TRUE)
-    mylogfilename <- paste0("SummariseStr_", datestring,".txt")
-    sink()
-    sink(mylogfilename, split=TRUE)
-    cat(yellow(paste0("A log of the output will be saved to ", mylogfilename, ". \n \n")))
-    
-  }  
-  
   # load utility functions
   
   datestampr <- function(dateonly = FALSE, houronly = FALSE, minuteonly = FALSE, myusername = FALSE) {
@@ -169,6 +159,16 @@ SummariseStr <- function(sampleshare=0.5, logrun=FALSE) {
     
   }
   
+  if (logrun==TRUE) {
+    
+    datestring <- datestampr(myusername=TRUE)
+    mylogfilename <- paste0("SummariseStr_", datestring,".txt")
+    sink()
+    sink(mylogfilename, split=TRUE)
+    cat(yellow(paste0("A log of the output will be saved to ", mylogfilename, ". \n \n")))
+    
+  }  
+  
   # Work --------------------------------------------------------------------
   
   mywd <- getwd()
@@ -235,6 +235,11 @@ SummariseStr <- function(sampleshare=0.5, logrun=FALSE) {
     mutate(fare = revenue / trips) %>%
     mutate(othercost = othercost / trips) %>%
     mutate(distance = distance / trips)
+  
+  # tidy up - put the columns in the desired order
+  
+  trip_mode <- trip_mode %>%
+    select(trip_mode, trips, revenue, distance, walkmins, waitmins, ivtmins, transfers, fare, othercost)
   
   # apply labels to the category variable
     
