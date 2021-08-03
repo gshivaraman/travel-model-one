@@ -213,7 +213,7 @@ SummariseStr <- function(sampleshare=0.5, logrun=FALSE) {
     mutate(waitmins = trips * wait) %>%
     mutate(ivtmins = trips * IVT) %>%
     mutate(transfers = trips * transfers) %>%
-    mutate(revenue_usd = trips * fare) %>%
+    mutate(revenue = trips * fare) %>%
     mutate(othercost = trips * othercost) %>%
     mutate(distance = trips * distance)
      
