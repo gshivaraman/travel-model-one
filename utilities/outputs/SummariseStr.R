@@ -6,7 +6,7 @@ SummariseStr <- function(sampleshare=0.5, logrun=FALSE) {
   library(crayon)
   
   now1 <- Sys.time()
-  cat(yellow(paste0("JoinSkimsStr run started at ", now1, "\n \n")))  
+  cat(yellow(paste0("SummariseStr run started at ", now1, "\n \n")))  
   
   datestampr <- function(dateonly = FALSE, houronly = FALSE, minuteonly = FALSE, myusername = FALSE) {
     
