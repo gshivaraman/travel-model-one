@@ -39,10 +39,12 @@
         <File name="model-files\RestartRunIteration3.bat" />
         <File name="model-files\scripts\skims\trnAssign3.bat" />
         <File name="utilities\outputs\tripsummary.R" />
-        <File name="utilities\outputs\CoreSummariesStr.R" />
         <File name="model-files\scripts\skims\TransitSkims_T1.job" />
         <File name="model-files\scripts\skims\TransitSkims_T2.job" />
         <File name="model-files\scripts\skims\TransitSkims_T3.job" />
         <File name="model-files\scripts\skims\TransitSkims_T4.job" />
+        <File name="model-files\scripts\skims\TransitSkims_NB.job" />
+        <File name="utilities\outputs\JoinSkimsStr.R" />
+        <File name="utilities\outputs\SummariseStr.R" />
     </Project>
 </NotepadPlus>
