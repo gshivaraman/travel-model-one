@@ -186,9 +186,17 @@ SummariseStr <- function(sampleshare=0.5, logrun=FALSE) {
   RESULTS_DIR <- file.path(TARGET_DIR,"core_summaries")
   UPDATED_DIR <- file.path(TARGET_DIR,"updated_output")
   
+  
   # trips, revenue, and average fare by mode
   
   trips <- readRDS(file=file.path(UPDATED_DIR, "trips.rds"))
+  
+  # report the available variables
+  cat(yellow(paste0("The following variables are available: \n \n")))  
+  print(names(trips))
+  cat((paste0("\n \n")))  
+  
+  # reduce the data in memory to the required variables
   
   mydf <- keepr(mydf = trips, "trip_mode", "walktime", "wait", "IVT", "transfers", "fare", "othercost", "distance")
   
@@ -239,7 +247,7 @@ SummariseStr <- function(sampleshare=0.5, logrun=FALSE) {
   # tidy up - put the columns in the desired order
   
   trip_mode <- trip_mode %>%
-    select(trip_mode, trips, revenue, distance, walkmins, waitmins, ivtmins, transfers, fare, othercost)
+    select(trip_mode, trips, revenue, fare, othercost, distance, walkmins, waitmins, ivtmins, transfers)
   
   # apply labels to the category variable
     
