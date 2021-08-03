@@ -1,4 +1,4 @@
-SummariseStr <- function(sampleshare=0.5, pnrparkingcost=3.0, logrun=FALSE) {
+SummariseStr <- function(sampleshare=0.5, pnrparkingcost=2.0, logrun=FALSE) {
 
   
   library(tidyverse)
@@ -217,9 +217,12 @@ SummariseStr <- function(sampleshare=0.5, pnrparkingcost=3.0, logrun=FALSE) {
   
   # should also add assumed cost per unit distance of auto access for PNR options, but the data to do it is not available at present.  
   
+  # divide pnr parking cot by 2 to get it per direction for comparability with transit fares
+  pnrparkingcostperdirection <- pnrparkingcost/2
+  
   # add assumed PNR parking cost to other costs
   mydf <- mydf %>% 
-    mutate(othercost=ifelse(trip_mode>=14 & trip_mode<=18, othercost + pnrparkingcost, othercost))
+    mutate(othercost=ifelse(trip_mode>=14 & trip_mode<=18, othercost + pnrparkingcostperdirection, othercost))
   
   # adjust other costs to be per person for consistency with transit costs
   mydf <- mydf %>% 
