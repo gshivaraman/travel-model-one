@@ -195,13 +195,25 @@ SummariseStr <- function(sampleshare=0.5, logrun=FALSE) {
   
   print(gc())
   
+  # convert monetary variables from cents to dollars
+  
+  mydf <- mydf %>%
+    mutate(fare=fare/100) %>% 
+    mutate(othercost=othercost/100)
+  
+  # calculate the numbers of trips taking into account the sample share
+  
   mydf <- mydf %>% 
-    mutate(trips=1/sampleshare) %>% 
+    mutate(trips=1/sampleshare)
+  
+  # weight the variables by trips so that they can be aggregated
+  
+  mydf <- mydf %>%   
     mutate(walkmins = trips * walktime) %>%
     mutate(waitmins = trips * wait) %>%
     mutate(ivtmins = trips * IVT) %>%
     mutate(transfers = trips * transfers) %>%
-    mutate(revenue = trips * fare) %>%
+    mutate(revenue_usd = trips * fare) %>%
     mutate(othercost = trips * othercost) %>%
     mutate(distance = trips * distance)
      
