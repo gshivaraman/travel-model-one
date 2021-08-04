@@ -1,4 +1,4 @@
-JoinSkimsStr <- function(fullrun=FALSE, iter=4, sampleshare=0.5, logrun=FALSE) {
+JoinSkimsStr <- function(fullrun=FALSE, iter=4, sampleshare=0.5, logrun=FALSE, ...) {
   
   library(tidyverse)
   library(readxl)
@@ -7,6 +7,7 @@ JoinSkimsStr <- function(fullrun=FALSE, iter=4, sampleshare=0.5, logrun=FALSE) {
   library(crayon)
 
   # Version 1 01 by Alex Mitrani, based on CoreSummaries.R by MTC staff, updated on 21 July 2021.  This function takes time and cost variables from the CSV files corresponding to the detailed skims and joins them on to the trips .rdata file.  
+  # Version 1 02 by Alex Mitrani, added "..." to the command syntax so that the user can specify the list of variables from CSV skims files to be added to the trips data.  
   
   # Required subfolders of the root folder where this will be run:
   # "database"
@@ -15,9 +16,15 @@ JoinSkimsStr <- function(fullrun=FALSE, iter=4, sampleshare=0.5, logrun=FALSE) {
   # "landuse"
   # "CTRAMP\scripts\block"
   
-  # Example of use:
+  # Examples of use:
   # Use fullrun=TRUE if the code will be run in the original model directory and the rdata files do not yet exist in updated_outputs.  
-  # trips <- JoinSkimsStr(fullrun=TRUE, iter=4, sampleshare=0.5, logrun=TRUE)
+  # 
+  # If detailed distance skims are not available:
+  # trips <- JoinSkimsStr(fullrun=TRUE, iter=4, sampleshare=0.5, logrun=TRUE, "walktime", "wait", "IVT", "transfers", "boardfare", "faremat", "xfare", "othercost", "distance")
+  # 
+  # If detailed distance skims are available:
+  # trips <- JoinSkimsStr(fullrun=TRUE, iter=4, sampleshare=0.5, logrun=TRUE, "walktime", "wait", "IVT", "transfers", "boardfare", "faremat", "xfare", "othercost", "distance", "dFree", "dInterCity", "dLocal", "dRegional", "ddist", "dFareMat")
+  
   
   # Utils
   
@@ -902,7 +909,8 @@ if (fullrun==TRUE) {
 	# trips <- add_myvariable(mydf = trips, mytp = timeperiod, myvar = myvar)
 	
 	
-myvarlist <- c("walktime", "wait", "IVT", "transfers", "boardfare", "faremat", "xfare", "othercost", "distance")	
+# myvarlist <- c("walktime", "wait", "IVT", "transfers", "boardfare", "faremat", "xfare", "othercost", "distance")	
+	myvarlist <- c(...)
 
 trips <- dropr(trips, "da",  "daToll",  "s2",  "s2Toll",  "s3",  "s3Toll",  "walk",  "bike",  "wComW",  "wHvyW",  "wExpW",  "wLrfW",  "wLocW",  "wTrnW",  "dComW",  "dHvyW",  "dExpW",  "dLrfW",  "dLocW",  "dTrnW",  "wComD",  "wHvyD",  "wExpD",  "wLrfD",  "wLocD",  "wTrnD")
 	
