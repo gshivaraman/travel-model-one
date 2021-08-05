@@ -209,7 +209,7 @@ WorkbookStr <- function(sampleshare=0.5, pnrparkingcost=2.0, logrun=TRUE, scenar
   
   # Save the workbook
   
-  filename <- paste0("WorkbookStr_", datestring,".xlsx")
+  filename <- paste0("WorkbookStr_", scenariocode, "_", datestring,".xlsx")
   saveWorkbook(wb, file = filename, overwrite = TRUE)
   
   # report and finish
