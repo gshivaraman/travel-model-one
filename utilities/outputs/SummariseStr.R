@@ -159,13 +159,13 @@ SummariseStr <- function(sampleshare=0.5, pnrparkingcost=2.0, logrun=FALSE, catv
   
   mydf <- mydf %>% 
     group_by(across(all_of(catvarslist))) %>%
-    summarise(across(all_of(mysumvarslist)), sum) %>%
+    summarise(across(all_of(mysumvarslist), sum)) %>%
     ungroup()
   
   # average
   
   mydf <- mydf %>%
-    mutate(across(all_of(sumvarslist)),  ~ .x/trips)
+    mutate(across(all_of(sumvarslist),  ~ .x/trips))
   
   # tidy up - put the columns in the desired order
   
