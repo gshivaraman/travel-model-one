@@ -37,3 +37,13 @@ JoinSkimsStr(fullrun=TRUE, iter=4, sampleshare=0.5, logrun=TRUE, "walktime", "wa
 print(gc())
 
 setwd("..")
+
+setwd("2015_TM152_STR_S2")
+
+JoinSkimsStr(fullrun=TRUE, iter=4, sampleshare=0.5, logrun=TRUE, "walktime", "wait", "IVT", "transfers", "boardfare", "faremat", "xfare", "othercost", "distance", "dFree", "dInterCity", "dLocal", "dRegional", "ddist", "dFareMat")
+
+print(gc())
+
+setwd("..")
+
+
