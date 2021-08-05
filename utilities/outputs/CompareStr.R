@@ -1,0 +1,82 @@
+CompareStr <- function(workbook1, workbook2, outputworkbook) {
+  
+  library(tidyverse)
+  library(openxlsx)
+  library(crayon)
+  library(readxl)
+  
+  # create output workbook
+  wb <- createWorkbook()  
+
+  # trip_mode
+  
+  trip_mode1 <- read_excel(workbook1, sheet = "trip_mode")
+  trip_mode2 <- read_excel(workbook2, sheet = "trip_mode")
+  
+  trip_mode <- trip_mode1 %>% left_join(trip_mode2, by=c("trip_mode"), suffix=c("1", "2"))
+  
+  trip_mode <- trip_mode %>% 
+    select("trip_mode", "trips1", "trips2",	"revenue1", "revenue2", "fare1", "fare2",	"num_participants1", "num_participants2", "walktime1", "walktime2", "wait1", "wait2", "IVT1", "IVT2", "transfers1", "transfers2", "othercost1", "othercost2", "distance1", "distance2", "dLocal1", "dLocal2", "dRegional1", "dRegional2", "dFree1", "dFree2", "dInterCity1", "dInterCity2", "ddist1", "ddist2", "dFareMat1", "dFareMat2")
+  
+  # export the resulting table to Excel
+  
+  sheetname <- "trip_mode"
+  addWorksheet(wb, sheetname)
+  writeData(wb, sheetname, trip_mode)
+  
+  
+  # other variables combined with trip_mode to define categories: 
+  
+  for (myvar in c("incQ", "timeCodeNum", "ptype", "home_taz")) {
+    
+    mysheetname <- paste0(myvar, "_trip_mode")
+  
+    mydf1 <- read_excel(workbook1, sheet = mysheetname)
+    mydf2 <- read_excel(workbook2, sheet = mysheetname)
+    
+    mydf <- mydf1 %>% left_join(mydf2, by=c(all_of(myvar), "trip_mode"), suffix=c("1", "2"))
+    
+    mydf <- mydf %>% 
+      select(all_of(myvar), "trip_mode", "trips1", "trips2",	"revenue1", "revenue2", "fare1", "fare2",	"num_participants1", "num_participants2", "walktime1", "walktime2", "wait1", "wait2", "IVT1", "IVT2", "transfers1", "transfers2", "othercost1", "othercost2", "distance1", "distance2", "dLocal1", "dLocal2", "dRegional1", "dRegional2", "dFree1", "dFree2", "dInterCity1", "dInterCity2", "ddist1", "ddist2", "dFareMat1", "dFareMat2")
+    
+    
+    if(myvar == "incQ") {
+      
+      incQ_trip_mode <- mydf
+      sheetname <- mysheetname
+      addWorksheet(wb, mysheetname)
+      writeData(wb, sheetname, incQ_trip_mode)
+      
+      
+    } else if(myvar == "timeCodeNum") {
+      
+      timeCodeNum_trip_mode <- mydf
+      sheetname <- mysheetname
+      addWorksheet(wb, mysheetname)
+      writeData(wb, sheetname, timeCodeNum_trip_mode)
+      
+    } else if(myvar == "ptype") {
+      
+      ptype_trip_mode <- mydf
+      sheetname <- mysheetname
+      addWorksheet(wb, mysheetname)
+      writeData(wb, sheetname, ptype_trip_mode)
+      
+      
+    } else if(myvar == "home_taz") {
+      
+      home_taz_trip_mode <- mydf
+      sheetname <- mysheetname
+      addWorksheet(wb, mysheetname)
+      writeData(wb, sheetname, home_taz_trip_mode)      
+      
+    }
+    
+  }   
+
+  # Save the workbook
+  
+  saveWorkbook(wb, file = outputworkbook, overwrite = TRUE)
+  
+}
+
