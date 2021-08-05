@@ -129,18 +129,34 @@ SummariseStr <- function(sampleshare=0.5, pnrparkingcost=2.0, logrun=FALSE, catv
   cat((paste0("\n \n")))  
   
   # define list of variables
-  myvarlist <- c(catvarslist, sumvarslist)
+  # trip_mode must be kept
+  essentialvarslist <- c("trip_mode")
+  myvarlist <- c(catvarslist, sumvarslist, essentialvarslist)
   
   # reduce the data in memory to the required variables
-  
-  
-  
   # mydf <- keepr(mydf = trips, "num_participants", "walktime", "wait", "IVT", "transfers", "fare", "othercost", "distance")
   mydf <- keepr(mydf = trips, myvarlist)
   
   remove(trips)
   
   print(gc())
+  
+  # Set to zero distance variables that should be zero for modes with no transit stages
+  
+  for (myvarname in c("dLocal", "dRegional", "dFree", "dInterCity", "ddist", "dFareMat")) {
+  
+    if (myvarname %in% names(mydf)) {
+      
+      myvar <- rlang::sym(paste0(myvarname))
+      
+      # Assign value
+      mydf <- mydf %>%
+        mutate(!!myvar := ifelse(trip_mode<=8, 0.0,!!myvar))
+      
+    }
+    
+  }
+  
   
   # convert monetary variables from cents to dollars
   
