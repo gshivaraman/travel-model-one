@@ -6,8 +6,8 @@ library(reshape2)
 library(crayon)
 
 # to install Rcpp in project directory (if needed and unable to install in default directory)
-# mypaths <- libpaths.
-# myotherpath <- "G:\AMitrani\BAF_23791501"
+# mypaths <- .libPaths()
+# myotherpath <- "G:/AMitrani/BAF_23791501"
 # mypaths <- c(myotherpath, mypaths)
 # .libPaths(mypaths)
 # install.packages("Rcpp")
