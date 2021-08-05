@@ -149,21 +149,23 @@ SummariseStr <- function(sampleshare=0.5, pnrparkingcost=2.0, logrun=FALSE, catv
   # weight the variables to be summarised by trips so that they can be aggregated
   
   mydf <- mydf %>% 
-    mutate(across(sumvarslist, ~ .x*trips))
+    mutate(across(all_of(sumvarslist), ~ .x*trips))
 
   # aggregate  
   
   mysumvarslist <- c(c("trips"), sumvarslist)
   
+  browser()
+  
   mydf <- mydf %>% 
-    group_by(catvarslist) %>%
-    summarise(across=mysumvarslist, sum) %>%
+    group_by(across(all_of(catvarslist))) %>%
+    summarise(across(all_of(mysumvarslist)), sum) %>%
     ungroup()
   
   # average
   
   mydf <- mydf %>%
-    mutate(across(sumvarslist),  ~ .x/trips)
+    mutate(across(all_of(sumvarslist)),  ~ .x/trips)
   
   # tidy up - put the columns in the desired order
   
