@@ -4,6 +4,8 @@ library(tidyverse)
 library(openxlsx)
 library(crayon)
 
+setwd("G:/AMitrani/BAF_23791501")
+
 source('WorkbookStr.R')
 source('SummariseStr.R')
 
