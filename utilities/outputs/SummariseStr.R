@@ -1,100 +1,19 @@
-SummariseStr <- function(sampleshare=0.5, pnrparkingcost=2.0, logrun=FALSE) {
+SummariseStr <- function(sampleshare=0.5, pnrparkingcost=2.0, logrun=FALSE, catvarslist=c("orig_taz", "dest_taz", "home_taz", "trip_mode", "incQ", "timeCode", "ptype"), sumvarslist=c("num_participants", "walktime", "wait", "IVT", "transfers", "fare", "othercost", "distance", "dFree", "dInterCity", "dLocal", "dRegional", "ddist", "dFareMat")) {
 
   
   library(tidyverse)
   library(openxlsx)
   library(crayon)
   
+  # Example of use
+  # SummariseStr(sampleshare=0.5, pnrparkingcost=2.0, logrun=TRUE, catvarslist = c("trip_mode"), sumvarslist=c("num_participants", "walktime", "wait", "IVT", "transfers", "fare", "othercost", "distance"))
+  
+  
   # The default value of pnrparking cost is USD 2.0 (2000 prices).  BART parking costs approximately USD 3 is 2021.  
   # $3 adjusted for inflation 2020 - 2000 gives approximately $2 in 2000 prices.  
   # Source for inflation data: https://www.bls.gov/data/inflation_calculator.htm
   
-  # report start of process and time
-  
-  now1 <- Sys.time()
-  cat(yellow(paste0("SummariseStr run started at ", now1, "\n \n")))  
-  
-  # load utility functions
-  
-  datestampr <- function(dateonly = FALSE, houronly = FALSE, minuteonly = FALSE, myusername = FALSE) {
-    
-    #General info
-    now <- Sys.time()
-    year <- format(now, "%Y")
-    month <- format(now, "%m")
-    day <- format(now, "%d")
-    hour <- format(now, "%H")
-    minute <- format(now, "%M")
-    second <- format(now, "%S")
-    username <- Sys.getenv("USERNAME")
-    
-    
-    if (nchar(day)==2) {
-      
-      day <- day
-      
-    } else {
-      
-      day <- paste0("0",day)
-      
-    }
-    
-    if (nchar(month)==2) {
-      
-      month <- month
-      
-    } else {
-      
-      month <- paste0("0",month)
-      
-    }
-    
-    if (myusername == TRUE) {
-      
-      if (dateonly == TRUE) {
-        
-        datestampr <- paste0(year,month,day,username)
-        
-      } else if (houronly == TRUE) {
-        
-        datestampr <- paste0(year,month,day,hour,username)
-        
-      } else if (minuteonly == TRUE) {
-        
-        datestampr <- paste0(year,month,day,hour,minute,username)
-        
-      } else {
-        
-        datestampr <- paste0(year,month,day,hour,minute,second,username)
-        
-      }
-      
-    } else {
-      
-      if (dateonly == TRUE) {
-        
-        datestampr <- paste0(year,month,day)
-        
-      } else if (houronly == TRUE) {
-        
-        datestampr <- paste0(year,month,day,hour)
-        
-      } else if (minuteonly == TRUE) {
-        
-        datestampr <- paste0(year,month,day,hour,minute)
-        
-      } else {
-        
-        datestampr <- paste0(year,month,day,hour,minute,second)
-        
-      }
-      
-    }
-    
-    return(datestampr)
-    
-  }
-  
+
   dropr <- function(mydf,...) {
     
     my_return_name <- deparse(substitute(mydf))
@@ -139,7 +58,6 @@ SummariseStr <- function(sampleshare=0.5, pnrparkingcost=2.0, logrun=FALSE) {
     
   }
   
-  
   StrLabeller <- function(mydf, ...) {
     
     # examples
@@ -162,16 +80,6 @@ SummariseStr <- function(sampleshare=0.5, pnrparkingcost=2.0, logrun=FALSE) {
     return(mydf)
     
   }
-  
-  if (logrun==TRUE) {
-    
-    datestring <- datestampr(myusername=TRUE)
-    mylogfilename <- paste0("SummariseStr_", datestring,".txt")
-    sink()
-    sink(mylogfilename, split=TRUE)
-    cat(yellow(paste0("A log of the output will be saved to ", mylogfilename, ". \n \n")))
-    
-  }  
   
   # Work --------------------------------------------------------------------
   
@@ -200,9 +108,15 @@ SummariseStr <- function(sampleshare=0.5, pnrparkingcost=2.0, logrun=FALSE) {
   print(names(trips))
   cat((paste0("\n \n")))  
   
+  # define list of variables
+  myvarlist <- c(catvarslist, sumvarslist)
+  
   # reduce the data in memory to the required variables
   
-  mydf <- keepr(mydf = trips, "trip_mode", "num_participants", "walktime", "wait", "IVT", "transfers", "fare", "othercost", "distance")
+  
+  
+  # mydf <- keepr(mydf = trips, "num_participants", "walktime", "wait", "IVT", "transfers", "fare", "othercost", "distance")
+  mydf <- keepr(mydf = trips, myvarlist)
   
   remove(trips)
   
@@ -232,66 +146,41 @@ SummariseStr <- function(sampleshare=0.5, pnrparkingcost=2.0, logrun=FALSE) {
   mydf <- mydf %>% 
     mutate(othercost=othercost/num_participants)
   
-  # weight the variables by trips so that they can be aggregated
+  # weight the variables to be summarised by trips so that they can be aggregated
   
-  mydf <- mydf %>%   
-    mutate(num_participants = trips*num_participants) %>%
-    mutate(walkmins = trips * walktime) %>%
-    mutate(waitmins = trips * wait) %>%
-    mutate(ivtmins = trips * IVT) %>%
-    mutate(transfers = trips * transfers) %>%
-    mutate(revenue = trips * fare) %>%
-    mutate(othercost = trips * othercost) %>%
-    mutate(distance = trips * distance)
-     
+  mydf <- mydf %>% 
+    mutate(across(sumvarslist, ~ .x*trips))
+
   # aggregate  
   
-  trip_mode <- mydf %>% 
-    group_by(trip_mode) %>%
-    summarise(num_participants=sum(num_participants), trips=sum(trips), walkmins = sum(walkmins), waitmins = sum(waitmins), ivtmins = sum(ivtmins), transfers = sum(transfers), revenue=sum(revenue), othercost = sum(othercost), distance = sum(distance)) %>%
+  mysumvarslist <- c(c("trips"), sumvarslist)
+  
+  mydf <- mydf %>% 
+    group_by(catvarslist) %>%
+    summarise(across=mysumvarslist, sum) %>%
     ungroup()
   
   # average
   
-  trip_mode <- trip_mode %>%
-    mutate(num_participants = num_participants / trips) %>%
-    mutate(walkmins = walkmins / trips) %>%
-    mutate(waitmins = waitmins / trips) %>%
-    mutate(ivtmins = ivtmins / trips) %>%
-    mutate(transfers = transfers / trips) %>%
-    mutate(fare = revenue / trips) %>%
-    mutate(othercost = othercost / trips) %>%
-    mutate(distance = distance / trips)
+  mydf <- mydf %>%
+    mutate(across(sumvarslist),  ~ .x/trips)
   
   # tidy up - put the columns in the desired order
   
-  trip_mode <- trip_mode %>%
-    select(trip_mode, num_participants, trips, revenue, fare, othercost, distance, walkmins, waitmins, ivtmins, transfers)
+  myvarslist <- c(catvarslist, mysumvarslist)
   
-  # apply labels to the category variable
-    
-  trip_mode <- StrLabeller(trip_mode, "trip_mode")
+  mydf <- mydf %>%
+    select(myvarslist)
   
-  # export the resulting table to Excel
+  # apply labels to the category variables
   
-  wb <- createWorkbook()
-  sheetname <- "trip_mode"
-  addWorksheet(wb, sheetname)
-  writeData(wb, sheetname, trip_mode)
-  filename <- paste0("SummariseStr_", datestring,".xlsx")
-  saveWorkbook(wb, file = filename, overwrite = TRUE)
+  for(myvar in catvarslist) {
   
-  # report and finish
+    mydf <- StrLabeller(mydf, myvar)
   
-  now2 <- Sys.time()
-  cat(yellow(paste0("SummariseStr run finished at ", now2, "\n \n")))
-  elapsed_time <- now2 - now1
-  print(elapsed_time)	
-  
-  if (logrun==TRUE) {
-    sink()
-    cat(yellow(paste0("A log of the output has been saved to ", mylogfilename, ". \n \n")))
-  }	
+  }
+
+  return(mydf)
   
   print(gc())
 
