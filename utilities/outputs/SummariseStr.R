@@ -1,4 +1,4 @@
-SummariseStr <- function(sampleshare=0.5, pnrparkingcost=2.0, logrun=FALSE, catvarslist=c("orig_taz", "dest_taz", "home_taz", "trip_mode", "incQ", "timeCode", "ptype"), sumvarslist=c("num_participants", "walktime", "wait", "IVT", "transfers", "fare", "othercost", "distance", "dFree", "dInterCity", "dLocal", "dRegional", "ddist", "dFareMat")) {
+SummariseStr <- function(sampleshare=0.5, pnrparkingcost=2.0, logrun=FALSE, catvarslist=c("orig_taz", "dest_taz", "home_taz", "trip_mode", "incQ", "timeCodeNum", "ptype"), sumvarslist=c("num_participants", "walktime", "wait", "IVT", "transfers", "fare", "othercost", "distance", "dFree", "dInterCity", "dLocal", "dRegional", "ddist", "dFareMat")) {
 
   
   library(tidyverse)
@@ -74,6 +74,26 @@ SummariseStr <- function(sampleshare=0.5, pnrparkingcost=2.0, logrun=FALSE, catv
         mydf$trip_mode <- factor(mydf$trip_mode, levels = c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21), labels = c("Drive alone (single-occupant vehicles), not eligibile to use value toll facilities","Drive alone (single-occupant), eligible to use value toll facilities","Shared ride 2 (two-occupant vehicles), not eligibile to use value toll facilities","Shared ride 2 (two-occupant vehicles), eligible to use value toll facilities","Shared ride 3+ (three-or-more-occupant vehicles), not eligibile to use value toll facilities","Shared ride 3+ (three-of-more occupant vehicles), eligible to use value toll facilities","Walk the entire way (no transit, no bicycle)","Bicycle the entire way (no transit)","Walk to local bus","Walk to light rail or ferry","Walk to express bus","Walk to heavy rail","Walk to commuter rail","Drive to local bus","Drive to light rail or ferry","Drive to express bus","Drive to heavy rail","Drive to commuter rail","Taxi (added in Travel Model 1.5)","TNC (Transportation Network Company, or ride-hailing services) - Single party (added in Travel Model 1.5)","TNC - Shared e.g. sharing with strangers (added in Travel Model 1.5)"))
         
       }
+      
+      if (myvarname=="incQ") {
+        
+        mydf$incQ <- factor(mydf$incQ, levels = c(1,2,3,4), labels = c("Less than $30k", "$30k to $60k", "$60k to $100k", "More than $100k"))
+        
+      }
+      
+      if (myvarname=="timeCodeNum") {
+        
+        mydf$timeCodeNum <- factor(mydf$timeCodeNum, levels = c(1,2,3,4,5), labels = c("Early AM", "AM Peak", "Midday", "PM Peak", "Evening"))
+        
+      }
+
+      if (myvarname=="ptype") {
+        
+        mydf$ptype <- factor(mydf$ptype, levels = c(1,2,3,4,5,6,7,8), labels = c("Full-time worker", "Part-time worker", "College student", "Non-working adult", "Retired", "Driving-age student", "Non-driving-age student", "Child too young for school"))
+        
+      }
+      
+      
       
     }
     
@@ -155,8 +175,6 @@ SummariseStr <- function(sampleshare=0.5, pnrparkingcost=2.0, logrun=FALSE, catv
   
   mysumvarslist <- c(c("trips"), sumvarslist)
   
-  browser()
-  
   mydf <- mydf %>% 
     group_by(across(all_of(catvarslist))) %>%
     summarise(across(all_of(mysumvarslist), sum)) %>%
@@ -167,12 +185,19 @@ SummariseStr <- function(sampleshare=0.5, pnrparkingcost=2.0, logrun=FALSE, catv
   mydf <- mydf %>%
     mutate(across(all_of(sumvarslist),  ~ .x/trips))
   
+  # calculate revenue
+  
+  mydf <- mydf %>%
+    mutate(revenue = trips*fare)
+  
   # tidy up - put the columns in the desired order
+  
+  mysumvarslist <- c(c("trips", "revenue"), sumvarslist)
   
   myvarslist <- c(catvarslist, mysumvarslist)
   
   mydf <- mydf %>%
-    select(myvarslist)
+    select(all_of(myvarslist))
   
   # apply labels to the category variables
   
@@ -183,8 +208,6 @@ SummariseStr <- function(sampleshare=0.5, pnrparkingcost=2.0, logrun=FALSE, catv
   }
 
   return(mydf)
-  
-  print(gc())
 
 }
 

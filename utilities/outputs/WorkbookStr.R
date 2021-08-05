@@ -168,6 +168,9 @@ WorkbookStr <- function(sampleshare=0.5, pnrparkingcost=2.0, logrun=TRUE) {
   UPDATED_DIR <- file.path(TARGET_DIR,"updated_output")
   
   mydf1 <- SummariseStr(sampleshare=sampleshare, pnrparkingcost=pnrparkingcost, logrun=logrun, catvarslist = c("trip_mode"), sumvarslist=c("num_participants", "walktime", "wait", "IVT", "transfers", "fare", "othercost", "distance"))
+  
+  browser()
+  
   sheetname1 <- "trip_mode"
   
   # create output workbook
