@@ -167,21 +167,28 @@ WorkbookStr <- function(sampleshare=0.5, pnrparkingcost=2.0, logrun=TRUE) {
   RESULTS_DIR <- file.path(TARGET_DIR,"core_summaries")
   UPDATED_DIR <- file.path(TARGET_DIR,"updated_output")
   
-  mydf1 <- SummariseStr(sampleshare=sampleshare, pnrparkingcost=pnrparkingcost, logrun=logrun, catvarslist = c("trip_mode"), sumvarslist=c("num_participants", "walktime", "wait", "IVT", "transfers", "fare", "othercost", "distance"))
-  
-  browser()
-  
   sheetname1 <- "trip_mode"
+  mydf1 <- SummariseStr(sampleshare=sampleshare, pnrparkingcost=pnrparkingcost, logrun=logrun, catvarslist = c("trip_mode"), sumvarslist=c("num_participants", "walktime", "wait", "IVT", "transfers", "fare", "othercost", "distance", "dLocal", "dRegional", "dFree", "dIntercity", "ddist", "dFareMat"))
+  
+  sheetname2 <- "incQ_trip_mode"
+  mydf2 <- SummariseStr(sampleshare=sampleshare, pnrparkingcost=pnrparkingcost, logrun=logrun, catvarslist = c("incQ", "trip_mode"), sumvarslist=c("num_participants", "walktime", "wait", "IVT", "transfers", "fare", "othercost", "distance", "dLocal", "dRegional", "dFree", "dIntercity", "ddist", "dFareMat"))
+  
   
   # create output workbook
   wb <- createWorkbook()
   
   # export the resulting tables to Excel
   
-  
   sheetname <- sheetname1
   addWorksheet(wb, sheetname)
   writeData(wb, sheetname, mydf1)
+  
+  sheetname <- sheetname2
+  addWorksheet(wb, sheetname)
+  writeData(wb, sheetname, mydf2)
+  
+  # Save the workbook
+  
   filename <- paste0("WorkbookStr_", datestring,".xlsx")
   saveWorkbook(wb, file = filename, overwrite = TRUE)
   
