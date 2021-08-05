@@ -1,4 +1,4 @@
-WorkbookStr <- function(sampleshare=0.5, pnrparkingcost=2.0, logrun=TRUE) {
+WorkbookStr <- function(sampleshare=0.5, pnrparkingcost=2.0, logrun=TRUE, scenariocode="") {
   
   # The default value of pnrparking cost is USD 2.0 (2000 prices).  BART parking costs approximately USD 3 is 2021.  
   # $3 adjusted for inflation 2020 - 2000 gives approximately $2 in 2000 prices.  
@@ -143,7 +143,7 @@ WorkbookStr <- function(sampleshare=0.5, pnrparkingcost=2.0, logrun=TRUE) {
   if (logrun==TRUE) {
     
     datestring <- datestampr(myusername=TRUE)
-    mylogfilename <- paste0("WorkbookStr_", datestring,".txt")
+    mylogfilename <- paste0("WorkbookStr_", scenariocode, "_", datestring,".txt")
     sink()
     sink(mylogfilename, split=TRUE)
     cat(yellow(paste0("A log of the output will be saved to ", mylogfilename, ". \n \n")))
@@ -168,11 +168,19 @@ WorkbookStr <- function(sampleshare=0.5, pnrparkingcost=2.0, logrun=TRUE) {
   UPDATED_DIR <- file.path(TARGET_DIR,"updated_output")
   
   sheetname1 <- "trip_mode"
-  mydf1 <- SummariseStr(sampleshare=sampleshare, pnrparkingcost=pnrparkingcost, logrun=logrun, catvarslist = c("trip_mode"), sumvarslist=c("num_participants", "walktime", "wait", "IVT", "transfers", "fare", "othercost", "distance", "dLocal", "dRegional", "dFree", "dInterCity", "ddist", "dFareMat"))
+  mydf1 <- SummariseStr(sampleshare=sampleshare, pnrparkingcost=pnrparkingcost, logrun=logrun, catvarslist = c("trip_mode"), sumvarslist=c("fare", "num_participants", "walktime", "wait", "IVT", "transfers", "othercost", "distance", "dLocal", "dRegional", "dFree", "dInterCity", "ddist", "dFareMat"))
   
   sheetname2 <- "incQ_trip_mode"
-  mydf2 <- SummariseStr(sampleshare=sampleshare, pnrparkingcost=pnrparkingcost, logrun=logrun, catvarslist = c("incQ", "trip_mode"), sumvarslist=c("num_participants", "walktime", "wait", "IVT", "transfers", "fare", "othercost", "distance", "dLocal", "dRegional", "dFree", "dInterCity", "ddist", "dFareMat"))
+  mydf2 <- SummariseStr(sampleshare=sampleshare, pnrparkingcost=pnrparkingcost, logrun=logrun, catvarslist = c("incQ", "trip_mode"), sumvarslist=c("fare", "num_participants", "walktime", "wait", "IVT", "transfers", "othercost", "distance", "dLocal", "dRegional", "dFree", "dInterCity", "ddist", "dFareMat"))
   
+  sheetname3 <- "timeCodeNum_trip_mode"
+  mydf3 <- SummariseStr(sampleshare=sampleshare, pnrparkingcost=pnrparkingcost, logrun=logrun, catvarslist = c("timeCodeNum", "trip_mode"), sumvarslist=c("fare", "num_participants", "walktime", "wait", "IVT", "transfers", "othercost", "distance", "dLocal", "dRegional", "dFree", "dInterCity", "ddist", "dFareMat"))
+  
+  sheetname4 <- "ptype_trip_mode"
+  mydf4 <- SummariseStr(sampleshare=sampleshare, pnrparkingcost=pnrparkingcost, logrun=logrun, catvarslist = c("ptype", "trip_mode"), sumvarslist=c("fare", "num_participants", "walktime", "wait", "IVT", "transfers", "othercost", "distance", "dLocal", "dRegional", "dFree", "dInterCity", "ddist", "dFareMat"))
+  
+  sheetname5 <- "home_taz"
+  mydf5 <- SummariseStr(sampleshare=sampleshare, pnrparkingcost=pnrparkingcost, logrun=logrun, catvarslist = c("home_taz"), sumvarslist=c("fare", "num_participants", "walktime", "wait", "IVT", "transfers", "othercost", "distance", "dLocal", "dRegional", "dFree", "dInterCity", "ddist", "dFareMat"))
   
   # create output workbook
   wb <- createWorkbook()
@@ -186,6 +194,18 @@ WorkbookStr <- function(sampleshare=0.5, pnrparkingcost=2.0, logrun=TRUE) {
   sheetname <- sheetname2
   addWorksheet(wb, sheetname)
   writeData(wb, sheetname, mydf2)
+  
+  sheetname <- sheetname3
+  addWorksheet(wb, sheetname)
+  writeData(wb, sheetname, mydf3)  
+  
+  sheetname <- sheetname4
+  addWorksheet(wb, sheetname)
+  writeData(wb, sheetname, mydf4)   
+  
+  sheetname <- sheetname5
+  addWorksheet(wb, sheetname)
+  writeData(wb, sheetname, mydf5)    
   
   # Save the workbook
   

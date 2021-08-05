@@ -11,7 +11,7 @@ source('SummariseStr.R')
 
 setwd("2015_TM152_STR_T8")
 
-WorkbookStr()
+WorkbookStr(scenariocode="2015_TM152_STR_T8")
 
 print(gc())
 
