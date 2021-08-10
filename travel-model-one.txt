@@ -46,6 +46,11 @@
         <File name="model-files\scripts\skims\TransitSkims_NB.job" />
         <File name="utilities\outputs\JoinSkimsStr.R" />
         <File name="utilities\outputs\SummariseStr.R" />
+        <File name="utilities\outputs\WorkbookStr.R" />
         <File name="utilities\outputs\CompareStr.R" />
+        <File name="utilities\outputs\20210803_to_process_CSVs.R" />
+        <File name="utilities\outputs\20210802_to_test_SummariseStr.R" />
+        <File name="utilities\outputs\20210804_to_test_WorbookStr.R" />
+        <File name="utilities\outputs\20210805_to_test_CompareStr.R" />
     </Project>
 </NotepadPlus>
