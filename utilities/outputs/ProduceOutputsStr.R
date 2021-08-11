@@ -12,15 +12,14 @@ ProduceOutputsStr <- function(myrunfoldername="NotDefined", fullrun=TRUE, iter=4
   library(crayon)
   
   source("JoinSkimsStr.R", encoding = "UTF-8")
+  source("SummariseStr.R", encoding = "UTF-8")
+  source("WorkbookStr.R", encoding = "UTF-8")
   
   setwd(myrunfoldername)
   
   JoinSkimsStr(fullrun=fullrun, iter=iter, sampleshare=sampleshare, logrun=logrun, "walktime", "wait", "IVT", "transfers", "boardfare", "faremat", "xfare", "othercost", "distance", "dFree", "dInterCity", "dLocal", "dRegional", "ddist", "dFareMat")
   
   print(gc())
-  
-  source('WorkbookStr.R')
-  source('SummariseStr.R')
   
   WorkbookStr(scenariocode=myrunfoldername)
   
