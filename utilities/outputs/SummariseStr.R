@@ -171,13 +171,18 @@ SummariseStr <- function(sampleshare=0.5, pnrparkingcost=2.0, logrun=FALSE, catv
     mutate(trips=num_participants/sampleshare)
   
   # should also add assumed cost per unit distance of auto access for PNR options, but the data to do it is not available at present.  
+  # Auto operating cost per mile, from ModeChoice.xls
+  costPerMile <- 18.29
+  mydf <- mydf %>% 
+	mutate(pnr_operatingcost = ifelse(trip_mode>=14 & trip_mode<=18,costPerMile*ddist/100,0)
+
   
   # divide pnr parking cot by 2 to get it per direction for comparability with transit fares
   pnrparkingcostperdirection <- pnrparkingcost/2
   
   # add assumed PNR parking cost to other costs
   mydf <- mydf %>% 
-    mutate(othercost=ifelse(trip_mode>=14 & trip_mode<=18, othercost + pnrparkingcostperdirection, othercost))
+    mutate(othercost=ifelse(trip_mode>=14 & trip_mode<=18, othercost + pnrparkingcostperdirection + pnr_operatingcost, othercost))
   
   # adjust other costs to be per person for consistency with transit costs
   mydf <- mydf %>% 
