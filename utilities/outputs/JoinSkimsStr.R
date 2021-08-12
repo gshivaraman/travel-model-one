@@ -692,7 +692,22 @@ if (fullrun==TRUE) {
 		      
 		    )
 		    
-		  )
+		  )		  
+
+		num_tours       <- nrow(tours)
+		num_tours_dist  <- nrow( distinct(tours, hh_id, tour_participants, tour_id))
+		print(paste("num_tours",      prettyNum(num_tours,big.mark=",")))
+		print(paste("num_tours_dist", prettyNum(num_tours_dist,big.mark=",")))
+
+		## Add Tour Duration to Trips
+		print(paste("Before adding tour duration to trips -- have",prettyNum(nrow(trips),big.mark=","),"rows"))
+		# this will only work for individual tours since person_id is set
+		# trips <- left_join(trips, select(tours, hh_id, tour_participants, tour_id, duration), by=c("hh_id", "tour_participants", "tour_id")) %>% 
+	#	  rename(tour_duration=duration)
+		trips <- left_join(trips, select(tours, hh_id, tour_participants, tour_id, duration))
+		trips <- trips %>% 
+		  rename(tour_duration=duration)
+		print(paste("After adding tour duration to trips -- have",prettyNum(nrow(trips),big.mark=","),"rows"))		  
 		
 		## Cleanup and save tours, trips and households
 		print(paste("Saving trips.rds with",prettyNum(nrow(trips),big.mark=","),"rows and",ncol(trips),"columns"))
@@ -704,7 +719,7 @@ if (fullrun==TRUE) {
 		
 		print(paste("Saving households.rds with",prettyNum(nrow(households),big.mark=","),"rows and",ncol(households),"columns"))
 		save(households, file=file.path(UPDATED_DIR, "households.rds"))
-		remove(households)
+		remove(households)				
 			
 	} else {
 	  
@@ -934,28 +949,7 @@ trips <- dropr(trips, "da",  "daToll",  "s2",  "s2Toll",  "s3",  "s3Toll",  "wal
 	}
 
 	trips <- as_tibble(trips)
-	
-	print(paste("Saving trips.rds with",prettyNum(nrow(trips),big.mark=","),"rows and",ncol(trips),"columns"))
-	saveRDS(trips, file=file.path(UPDATED_DIR, "trips.rds"))
-	
-	tours <- readRDS(file=file.path(UPDATED_DIR, "tours.rds"))
-
-	num_tours       <- nrow(tours)
-	num_tours_dist  <- nrow( distinct(tours, hh_id, tour_participants, tour_id))
-	print(paste("num_tours",      prettyNum(num_tours,big.mark=",")))
-	print(paste("num_tours_dist", prettyNum(num_tours_dist,big.mark=",")))
-
-	## Add Tour Duration to Trips
-	print(paste("Before adding tour duration to trips -- have",prettyNum(nrow(trips),big.mark=","),"rows"))
-	# this will only work for individual tours since person_id is set
-	# trips <- left_join(trips, select(tours, hh_id, tour_participants, tour_id, duration), by=c("hh_id", "tour_participants", "tour_id")) %>% 
-#	  rename(tour_duration=duration)
-	trips <- left_join(trips, select(tours, hh_id, tour_participants, tour_id, duration))
-	trips <- trips %>% 
-	  rename(tour_duration=duration)
-	print(paste("After adding tour duration to trips -- have",prettyNum(nrow(trips),big.mark=","),"rows"))
-	remove(tours)
-	
+			
 	# calculate bau fare, for purposes of comparison
 	trips <- trips %>%
 	  mutate(bau_fare = boardfare + xfare + faremat)
