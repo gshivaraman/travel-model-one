@@ -183,7 +183,7 @@ CompareFaresStr <- function(mybaufolder = "NotDefined", mydsfolder = "NotDefined
   cat(yellow(paste0("There are ", nrow_mydf_compare_mm, " mismatched records, transit trips which exist in one but not the other file. \n \n")))
   
   dataframelist <- c("mydf_bau", "mydf_ds", "mydf_compare", "mydf_compare_mm")
-  nrows <- c(nrow_transit_trips_bau, nrow_transit_trips_ds, nrow_trips_compare, nrow_mydf_compare_mm)
+  nrows <- c(nrow_transit_trips_bau, nrow_transit_trips_ds, nrow_mydf_compare, nrow_mydf_compare_mm)
   dataframe_nrows <- data.frame(dataframelist, nrows)
   
   check <- as.data.frame(table(mydf_compare$fares_change_pcnt))
