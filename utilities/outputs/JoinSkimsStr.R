@@ -960,10 +960,10 @@ trips <- dropr(trips, "da",  "daToll",  "s2",  "s2Toll",  "s3",  "s3Toll",  "wal
 	trips <- trips %>%
 	  mutate(bau_fare = boardfare + xfare + faremat)
 	  
-	if bau_fares=TRUE {
+	if (bau_fares=TRUE) {
 	
-	trips <- trips %>%
-	  mutate(fare = bau_fare)
+		trips <- trips %>%
+		  mutate(fare = bau_fare)
 	
 	}
 
