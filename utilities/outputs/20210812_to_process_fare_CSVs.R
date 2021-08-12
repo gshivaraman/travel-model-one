@@ -15,7 +15,7 @@ source("JoinSkimsStr.R", encoding = "UTF-8")
 
 setwd("2015_TM152_STR_S2")
 
-JoinSkimsStr(fullrun=FALSE, iter=4, sampleshare=0.5, logrun=TRUE, baufares=TRUE, "walktime")
+JoinSkimsStr(fullrun=FALSE, iter=4, sampleshare=0.5, logrun=TRUE, baufares=TRUE)
 
 print(gc())
 
