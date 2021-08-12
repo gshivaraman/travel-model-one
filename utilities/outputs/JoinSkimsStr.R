@@ -956,9 +956,9 @@ trips <- dropr(trips, "da",  "daToll",  "s2",  "s2Toll",  "s3",  "s3Toll",  "wal
 	print(paste("After adding tour duration to trips -- have",prettyNum(nrow(trips),big.mark=","),"rows"))
 	remove(tours)
 	
-	# calculate total fare
+	# calculate bau fare, for purposes of comparison
 	trips <- trips %>%
-	  mutate(fare = boardfare + xfare + faremat)
+	  mutate(bau_fare = boardfare + xfare + faremat)
 
 	trips <- as_tibble(trips)
 	
