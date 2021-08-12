@@ -53,5 +53,6 @@
         <File name="utilities\outputs\20210804_to_test_WorbookStr.R" />
         <File name="utilities\outputs\20210805_to_test_CompareStr.R" />
         <File name="utilities\outputs\20210811_to_run_CompareStr.R" />
+        <File name="utilities\outputs\20210812_to_process_CSVs.R" />
     </Project>
 </NotepadPlus>
