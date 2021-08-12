@@ -168,19 +168,19 @@ WorkbookStr <- function(sampleshare=0.5, pnrparkingcost=2.0, logrun=TRUE, scenar
   UPDATED_DIR <- file.path(TARGET_DIR,"updated_output")
   
   sheetname1 <- "trip_mode"
-  mydf1 <- SummariseStr(sampleshare=sampleshare, pnrparkingcost=pnrparkingcost, logrun=logrun, catvarslist = c("trip_mode"), sumvarslist=c("fare", "num_participants", "walktime", "wait", "IVT", "transfers", "othercost", "distance", "dLocal", "dRegional", "dFree", "dInterCity", "ddist", "dFareMat"))
+  mydf1 <- SummariseStr(sampleshare=sampleshare, pnrparkingcost=pnrparkingcost, logrun=logrun, catvarslist = c("trip_mode"), sumvarslist=c("fare", "bau_fare", "num_participants", "walktime", "wait", "IVT", "transfers", "othercost", "distance", "dLocal", "dRegional", "dFree", "dInterCity", "ddist", "dFareMat"))
   
   sheetname2 <- "incQ_trip_mode"
-  mydf2 <- SummariseStr(sampleshare=sampleshare, pnrparkingcost=pnrparkingcost, logrun=logrun, catvarslist = c("incQ", "trip_mode"), sumvarslist=c("fare", "num_participants", "walktime", "wait", "IVT", "transfers", "othercost", "distance", "dLocal", "dRegional", "dFree", "dInterCity", "ddist", "dFareMat"))
+  mydf2 <- SummariseStr(sampleshare=sampleshare, pnrparkingcost=pnrparkingcost, logrun=logrun, catvarslist = c("incQ", "trip_mode"), sumvarslist=c("fare", "bau_fare", "num_participants", "walktime", "wait", "IVT", "transfers", "othercost", "distance", "dLocal", "dRegional", "dFree", "dInterCity", "ddist", "dFareMat"))
   
   sheetname3 <- "timeCodeNum_trip_mode"
-  mydf3 <- SummariseStr(sampleshare=sampleshare, pnrparkingcost=pnrparkingcost, logrun=logrun, catvarslist = c("timeCodeNum", "trip_mode"), sumvarslist=c("fare", "num_participants", "walktime", "wait", "IVT", "transfers", "othercost", "distance", "dLocal", "dRegional", "dFree", "dInterCity", "ddist", "dFareMat"))
+  mydf3 <- SummariseStr(sampleshare=sampleshare, pnrparkingcost=pnrparkingcost, logrun=logrun, catvarslist = c("timeCodeNum", "trip_mode"), sumvarslist=c("fare", "bau_fare", "num_participants", "walktime", "wait", "IVT", "transfers", "othercost", "distance", "dLocal", "dRegional", "dFree", "dInterCity", "ddist", "dFareMat"))
   
   sheetname4 <- "ptype_trip_mode"
-  mydf4 <- SummariseStr(sampleshare=sampleshare, pnrparkingcost=pnrparkingcost, logrun=logrun, catvarslist = c("ptype", "trip_mode"), sumvarslist=c("fare", "num_participants", "walktime", "wait", "IVT", "transfers", "othercost", "distance", "dLocal", "dRegional", "dFree", "dInterCity", "ddist", "dFareMat"))
+  mydf4 <- SummariseStr(sampleshare=sampleshare, pnrparkingcost=pnrparkingcost, logrun=logrun, catvarslist = c("ptype", "trip_mode"), sumvarslist=c("fare", "bau_fare", "num_participants", "walktime", "wait", "IVT", "transfers", "othercost", "distance", "dLocal", "dRegional", "dFree", "dInterCity", "ddist", "dFareMat"))
   
   sheetname5 <- "home_taz_trip_mode"
-  mydf5 <- SummariseStr(sampleshare=sampleshare, pnrparkingcost=pnrparkingcost, logrun=logrun, catvarslist = c("home_taz", "trip_mode"), sumvarslist=c("fare", "num_participants", "walktime", "wait", "IVT", "transfers", "othercost", "distance", "dLocal", "dRegional", "dFree", "dInterCity", "ddist", "dFareMat"))
+  mydf5 <- SummariseStr(sampleshare=sampleshare, pnrparkingcost=pnrparkingcost, logrun=logrun, catvarslist = c("home_taz", "trip_mode"), sumvarslist=c("fare", "bau_fare", "num_participants", "walktime", "wait", "IVT", "transfers", "othercost", "distance", "dLocal", "dRegional", "dFree", "dInterCity", "ddist", "dFareMat"))
   
   # create output workbook
   wb <- createWorkbook()

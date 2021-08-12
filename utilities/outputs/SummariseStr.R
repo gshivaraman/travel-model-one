@@ -162,6 +162,7 @@ SummariseStr <- function(sampleshare=0.5, pnrparkingcost=2.0, logrun=FALSE, catv
   
   mydf <- mydf %>%
     mutate(fare=fare/100) %>% 
+	mutate(bau_fare=bau_fare/100) %>%
     mutate(othercost=othercost/100)
   
   # calculate the numbers of trips taking into account the sample share
