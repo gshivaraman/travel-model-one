@@ -3,7 +3,7 @@
 *Cluster CTRAMP 1-40 Starthide Exit 
 
 
-Work_Folder='F:\23791501\outputs\20210729230749' 
+Work_Folder='F:\23791501\2015_TM152_STR_T8' 
 
 /*; ----------------------------------------------------------------------------------------------------------------
 ;
@@ -186,7 +186,9 @@ if (i>5000) exit
                            
          list = "orig,dest,wComW,wHvyW,wExpW,wLrfW,wLocW,wTrnW,dComW,dHvyW,dExpW,dLrfW,dLocW,dTrnW,wComD,wHvyD,wExpD,wLrfD,wLocD,wTrnD",file = database\SkimsDatabase@token_period@_faremat.csv 
          
-         list = "orig,dest,da,daToll,s2,s2Toll,s3,s3Toll",file = database\SkimsDatabase@token_period@_othercost.csv  
+         list = "orig,dest,wComW,wHvyW,wExpW,wLrfW,wLocW,wTrnW,dComW,dHvyW,dExpW,dLrfW,dLocW,dTrnW,wComD,wHvyD,wExpD,wLrfD,wLocD,wTrnD",file = database\SkimsDatabase@token_period@_fare.csv 
+		 
+		 list = "orig,dest,da,daToll,s2,s2Toll,s3,s3Toll",file = database\SkimsDatabase@token_period@_othercost.csv  
          
          list = "orig,dest,da,daToll,s2,s2Toll,s3,s3Toll,walk,bike,wComW,wHvyW,wExpW,wLrfW,wLocW,wTrnW,dComW,dHvyW,dExpW,dLrfW,dLocW,dTrnW,wComD,wHvyD,wExpD,wLrfD,wLocD,wTrnD",file =  
                  database\SkimsDatabase@token_period@_distance.csv    
@@ -497,7 +499,29 @@ if (i>5000) exit
                  wExpD_faremat=mi.17.faremat                
                  wLrfD_faremat=mi.18.faremat 
                  wLocD_faremat=mi.19.faremat 
-                 wTrnD_faremat=mi.20.faremat    
+                 wTrnD_faremat=mi.20.faremat  
+
+		   ; read fares after fare manipulations
+                 wComW_fare=mi.3.fare
+                 wHvyW_fare=mi.4.fare
+                 wExpW_fare=mi.5.fare
+                 wLrfW_fare=mi.6.fare
+                 wLocW_fare=mi.7.fare
+                 wTrnW_fare=mi.8.fare
+    
+                 dComW_fare=mi.9.fare
+                 dHvyW_fare=mi.10.fare
+                 dExpW_fare=mi.11.fare
+                 dLrfW_fare=mi.12.fare
+                 dLocW_fare=mi.13.fare
+                 dTrnW_fare=mi.14.fare
+       
+                 wComD_fare=mi.15.fare            
+                 wHvyD_fare=mi.16.fare              
+                 wExpD_fare=mi.17.fare                
+                 wLrfD_fare=mi.18.fare 
+                 wLocD_fare=mi.19.fare 
+                 wTrnD_fare=mi.20.fare	 
 				 
 				 
            ; read other costs 
@@ -736,7 +760,12 @@ if (i>5000) exit
                 list = i(8.0),",",j(8.0),",",wComW_faremat(10.2),",",wHvyW_faremat(10.2),",",wExpW_faremat(10.2),",",wLrfW_faremat(10.2),",",wLocW_faremat(10.2),",",wTrnW_faremat(10.2),",",
                        dComW_faremat(10.2),",",dHvyW_faremat(10.2),",",dExpW_faremat(10.2),",",dLrfW_faremat(10.2),",",dLocW_faremat(10.2),",",dTrnW_faremat(10.2),",",  
                        wComD_faremat(10.2),",",wHvyD_faremat(10.2),",",wExpD_faremat(10.2),",",wLrfD_faremat(10.2),",",wLocD_faremat(10.2),",",wTrnD_faremat(10.2),
-                       file = database\SkimsDatabase@token_period@_faremat.csv        
+                       file = database\SkimsDatabase@token_period@_faremat.csv     
+
+				list = i(8.0),",",j(8.0),",",wComW_fare(10.2),",",wHvyW_fare(10.2),",",wExpW_fare(10.2),",",wLrfW_fare(10.2),",",wLocW_fare(10.2),",",wTrnW_fare(10.2),",",
+                       dComW_fare(10.2),",",dHvyW_fare(10.2),",",dExpW_fare(10.2),",",dLrfW_fare(10.2),",",dLocW_fare(10.2),",",dTrnW_fare(10.2),",",  
+                       wComD_fare(10.2),",",wHvyD_fare(10.2),",",wExpD_fare(10.2),",",wLrfD_fare(10.2),",",wLocD_fare(10.2),",",wTrnD_fare(10.2),
+                       file = database\SkimsDatabase@token_period@_fare.csv  	   
                        
                        
                 list = i(8.0),",",j(8.0),",",da_Cost(10.2),",",daToll_Cost(10.2),",",s2_Cost(10.2),",",s2Toll_Cost(10.2),",",s3_Cost(10.2),",",s3Toll_Cost(10.2),
