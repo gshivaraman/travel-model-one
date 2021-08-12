@@ -16,8 +16,6 @@ CompareFaresStr(mybaufolder = "2015_TM152_STR_S2", mydsfolder = "2015_TM152_STR_
 
 CompareFaresStr(mybaufolder = "2015_TM152_STR_S2", mydsfolder = "2015_TM152_STR_T14")
 
-CompareFaresStr(mybaufolder = "2015_TM152_IPA_16_NB", mydsfolder = "2015_TM152_IPA_16_T3")
-
 CompareFaresStr(mybaufolder = "2015_TM152_IPA_16_NB", mydsfolder = "2015_TM152_IPA_16_T16")
 
 
