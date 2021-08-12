@@ -174,7 +174,7 @@ SummariseStr <- function(sampleshare=0.5, pnrparkingcost=2.0, logrun=FALSE, catv
   # Auto operating cost per mile, from ModeChoice.xls
   costPerMile <- 18.29
   mydf <- mydf %>% 
-	mutate(pnr_operatingcost = ifelse(trip_mode>=14 & trip_mode<=18,costPerMile*ddist/100,0)
+	mutate(pnr_operatingcost = ifelse(trip_mode>=14 & trip_mode<=18,costPerMile*ddist/100,0))
 
   
   # divide pnr parking cot by 2 to get it per direction for comparability with transit fares
