@@ -929,7 +929,7 @@ if (fullrun==TRUE) {
 
 trips <- dropr(trips, "da",  "daToll",  "s2",  "s2Toll",  "s3",  "s3Toll",  "walk",  "bike",  "wComW",  "wHvyW",  "wExpW",  "wLrfW",  "wLocW",  "wTrnW",  "dComW",  "dHvyW",  "dExpW",  "dLrfW",  "dLocW",  "dTrnW",  "wComD",  "wHvyD",  "wExpD",  "wLrfD",  "wLocD",  "wTrnD")
 	
-	for (myvarname in seq_along(myvarlist)) {
+	for (myvarname in myvarlist) {
 
 	  for (timeperiod in LOOKUP_TIMEPERIOD$timeperiod_abbrev) {
 	    trips <- add_myvariable(mydf = trips, mytp = timeperiod, myvarname = myvarname)
