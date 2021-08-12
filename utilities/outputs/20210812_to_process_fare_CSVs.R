@@ -15,7 +15,7 @@ source("JoinSkimsStr.R", encoding = "UTF-8")
 
 setwd("2015_TM152_STR_S2")
 
-JoinSkimsStr(fullrun=FALSE, iter=4, sampleshare=0.5, logrun=TRUE, baufares=TRUE, "walktime", "wait", "IVT", "transfers", "boardfare", "faremat", "xfare", "othercost", "distance", "dFree", "dInterCity", "dLocal", "dRegional", "ddist", "dFareMat")
+JoinSkimsStr(fullrun=FALSE, iter=4, sampleshare=0.5, logrun=TRUE, baufares=TRUE, "walktime")
 
 print(gc())
 
@@ -23,7 +23,7 @@ setwd("..")
 
 setwd("2015_TM152_STR_T8")
 
-JoinSkimsStr(fullrun=FALSE, iter=4, sampleshare=0.5, logrun=TRUE, baufares=FALSE, "walktime", "wait", "IVT", "transfers", "fare", "boardfare", "faremat", "xfare", "othercost", "distance", "dFree", "dInterCity", "dLocal", "dRegional", "ddist", "dFareMat")
+JoinSkimsStr(fullrun=FALSE, iter=4, sampleshare=0.5, logrun=TRUE, baufares=FALSE, "fare")
 
 print(gc())
 
