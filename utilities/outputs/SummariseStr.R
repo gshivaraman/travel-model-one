@@ -1,4 +1,4 @@
-SummariseStr <- function(sampleshare=0.5, pnrparkingcost=2.0, logrun=FALSE, catvarslist=c("orig_taz", "dest_taz", "home_taz", "trip_mode", "incQ", "timeCodeNum", "ptype"), sumvarslist=c("num_participants", "walktime", "wait", "IVT", "transfers", "fare", "othercost", "distance", "dFree", "dInterCity", "dLocal", "dRegional", "ddist", "dFareMat")) {
+SummariseStr <- function(sampleshare=0.5, pnrparkingcost=2.0, logrun=FALSE, catvarslist=c("orig_taz", "dest_taz", "home_taz", "trip_mode", "incQ", "timeCodeNum", "ptype"), sumvarslist=c("num_participants", "walktime", "wait", "IVT", "transfers", "bau_fare", "fare", "othercost", "distance", "dFree", "dInterCity", "dLocal", "dRegional", "ddist", "dFareMat")) {
 
   
   library(tidyverse)

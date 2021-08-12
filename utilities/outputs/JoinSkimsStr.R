@@ -1,4 +1,4 @@
-JoinSkimsStr <- function(fullrun=FALSE, iter=4, sampleshare=0.5, logrun=FALSE, ...) {
+JoinSkimsStr <- function(fullrun=FALSE, iter=4, sampleshare=0.5, logrun=FALSE, baufares=FALSE, ...) {
   
   library(tidyverse)
   library(readxl)
@@ -959,6 +959,13 @@ trips <- dropr(trips, "da",  "daToll",  "s2",  "s2Toll",  "s3",  "s3Toll",  "wal
 	# calculate bau fare, for purposes of comparison
 	trips <- trips %>%
 	  mutate(bau_fare = boardfare + xfare + faremat)
+	  
+	if bau_fares=TRUE {
+	
+	trips <- trips %>%
+	  mutate(fare = bau_fare)
+	
+	}
 
 	trips <- as_tibble(trips)
 	
@@ -967,21 +974,21 @@ trips <- dropr(trips, "da",  "daToll",  "s2",  "s2Toll",  "s3",  "s3Toll",  "wal
 	
 	summarize_attributes_min <- trips %>%
 	  group_by(skims_mode) %>%
-	  summarize(walktime = min(walktime), wait = min(wait), IVT = min(IVT), transfers = min(transfers), boardfare = min(boardfare), xfare = min(xfare), faremat = min(faremat), fare = min(fare)) %>%
+	  summarize(walktime = min(walktime), wait = min(wait), IVT = min(IVT), transfers = min(transfers), boardfare = min(boardfare), xfare = min(xfare), faremat = min(faremat), bau_fare = min(bau_fare), fare = min(fare)) %>%
 	  ungroup()
 	
 	summarize_attributes_min %>% print(n = 23)
 	
 	summarize_attributes_mean <- trips %>%
 	  group_by(skims_mode) %>%
-	  summarize(walktime = mean(walktime), wait = mean(wait), IVT = mean(IVT), transfers = mean(transfers), boardfare = mean(boardfare), xfare = mean(xfare), faremat = mean(faremat), fare = mean(fare)) %>%
+	  summarize(walktime = mean(walktime), wait = mean(wait), IVT = mean(IVT), transfers = mean(transfers), boardfare = mean(boardfare), xfare = mean(xfare), faremat = mean(faremat), bau_fare = mean(bau_fare), fare = mean(fare)) %>%
 	  ungroup()
 	
 	summarize_attributes_mean %>% print(n = 23)
 	
 	summarize_attributes_max <- trips %>%
 	  group_by(skims_mode) %>%
-	  summarize(walktime = max(walktime), wait = max(wait), IVT = max(IVT), transfers = max(transfers), boardfare = max(boardfare), xfare = max(xfare), faremat = max(faremat), fare = max(fare)) %>%
+	  summarize(walktime = max(walktime), wait = max(wait), IVT = max(IVT), transfers = max(transfers), boardfare = max(boardfare), xfare = max(xfare), faremat = max(faremat), bau_fare = max(bau_fare), fare = max(fare)) %>%
 	  ungroup()
 	
 	summarize_attributes_max %>% print(n = 23)	
