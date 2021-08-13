@@ -11,19 +11,21 @@ library(openxlsx)
 library(reshape2)
 library(crayon)
 
+setwd("G:/AMitrani/BAF_23791501")
+
 source("JoinSkimsStr.R", encoding = "UTF-8")
 
-setwd("2015_TM152_STR_S2")
+setwd("2015_TM152_STR_T8")
 
-JoinSkimsStr(fullrun=FALSE, iter=4, sampleshare=0.5, logrun=TRUE, baufares=TRUE)
+JoinSkimsStr(fullrun=FALSE, iter=4, sampleshare=0.5, logrun=TRUE, baufares=FALSE, "fare")
 
 print(gc())
 
 setwd("..")
 
-setwd("2015_TM152_STR_T8")
+setwd("2015_TM152_STR_S2")
 
-JoinSkimsStr(fullrun=FALSE, iter=4, sampleshare=0.5, logrun=TRUE, baufares=FALSE, "fare")
+JoinSkimsStr(fullrun=FALSE, iter=4, sampleshare=0.5, logrun=TRUE, baufares=TRUE, "walktime")
 
 print(gc())
 

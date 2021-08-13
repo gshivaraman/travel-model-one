@@ -11,6 +11,8 @@ library(openxlsx)
 library(reshape2)
 library(crayon)
 
+setwd("G:/AMitrani/BAF_23791501")
+
 source("JoinSkimsStr.R", encoding = "UTF-8")
 
 setwd("2015_TM152_STR_T8")
