@@ -182,6 +182,10 @@ WorkbookStr <- function(sampleshare=0.5, pnrparkingcost=2.0, logrun=TRUE, scenar
   sheetname5 <- "home_taz_trip_mode"
   mydf5 <- SummariseStr(sampleshare=sampleshare, pnrparkingcost=pnrparkingcost, logrun=logrun, catvarslist = c("home_taz", "trip_mode"), sumvarslist=c("fare", "bau_fare", "num_participants", "walktime", "wait", "IVT", "transfers", "othercost", "distance", "dLocal", "dRegional", "dFree", "dInterCity", "ddist", "dFareMat"))
   
+  sheetname6 <- "county_od_trip_mode"
+  mydf5 <- SummariseStr(sampleshare=sampleshare, pnrparkingcost=pnrparkingcost, logrun=logrun, catvarslist = c("orig_county", "dest_county", "trip_mode"), sumvarslist=c("fare", "bau_fare", "num_participants", "walktime", "wait", "IVT", "transfers", "othercost", "distance", "dLocal", "dRegional", "dFree", "dInterCity", "ddist", "dFareMat"))
+  
+  
   # create output workbook
   wb <- createWorkbook()
   

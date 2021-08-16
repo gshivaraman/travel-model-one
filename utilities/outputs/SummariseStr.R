@@ -93,6 +93,18 @@ SummariseStr <- function(sampleshare=0.5, pnrparkingcost=2.0, logrun=FALSE, catv
         
       }
       
+      if (myvarname=="orig_county") {
+        
+        mydf$ptype <- factor(mydf$orig_county, levels = c(1,2,3,4,5,6,7,8,9), labels = c("San Francisco", "San Mateo", "Santa Clara", "Alameda", "Contra Costa", "Solano", "Napa", "Sonoma", "Marin"))
+        
+      }
+      
+      if (myvarname=="dest_county") {
+        
+        mydf$ptype <- factor(mydf$dest_county, levels = c(1,2,3,4,5,6,7,8,9), labels = c("San Francisco", "San Mateo", "Santa Clara", "Alameda", "Contra Costa", "Solano", "Napa", "Sonoma", "Marin"))
+        
+      }      
+      
       
       
     }
@@ -114,7 +126,7 @@ SummariseStr <- function(sampleshare=0.5, pnrparkingcost=2.0, logrun=FALSE, catv
   stopifnot(nchar(TARGET_DIR  )>0)
   stopifnot(nchar(SAMPLESHARE )>0)
   
-  MAIN_DIR    <- file.path(TARGET_DIR,"main"           )
+  MAIN_DIR    <- file.path(TARGET_DIR,"main"          )
   RESULTS_DIR <- file.path(TARGET_DIR,"core_summaries")
   UPDATED_DIR <- file.path(TARGET_DIR,"updated_output")
   
@@ -122,6 +134,15 @@ SummariseStr <- function(sampleshare=0.5, pnrparkingcost=2.0, logrun=FALSE, catv
   # trips, revenue, and average fare by mode
   
   trips <- readRDS(file=file.path(UPDATED_DIR, "trips.rds"))
+  
+  # Join on geographical categories
+  tazData <- read.table(file=file.path(TARGET_DIR,"landuse","tazData.csv"), header=TRUE, sep=",")
+  tazData <- tazData %>% select(ZONE, DISTRICT, SD, COUNTY)
+  orig_taz_data <- tazData %>% rename(orig_taz = ZONE, orig_district = DISTRICT, orig_sd = SD, orig_county = COUNTY)
+  dest_taz_data <- tazData %>% rename(dest_taz = ZONE, dest_district = DISTRICT, dest_sd = SD, dest_county = COUNTY)
+  trips <- trips %>% left_join(orig_taz_data)
+  trips <- trips %>% left_join(dest_taz_data)
+  rm(orig_taz_data, dest_taz_data, tazData)
   
   # report the available variables
   cat(yellow(paste0("The following variables are available: \n \n")))  
