@@ -74,7 +74,26 @@ CompareStr <- function(workbook1, workbook2, outputworkbook) {
       
     }
     
-  }   
+  }  
+  
+  # County OD outputs
+  
+  # trip_mode
+  
+  county_od_trip_mode1 <- read_excel(workbook1, sheet = "county_od_trip_mode")
+  county_od_trip_mode2 <- read_excel(workbook2, sheet = "county_od_trip_mode")
+  
+  county_od_trip_mode <- county_od_trip_mode1 %>% full_join(county_od_trip_mode2, by=c("orig_county", "dest_county", "trip_mode"), suffix=c("1", "2"))
+  
+  county_od_trip_mode <- county_od_trip_mode %>% 
+    select("orig_county", "dest_county", "trip_mode", "trips1", "trips2",	"revenue1", "revenue2", "fare1", "fare2",	"num_participants1", "num_participants2", "walktime1", "walktime2", "wait1", "wait2", "IVT1", "IVT2", "transfers1", "transfers2", "othercost1", "othercost2", "distance1", "distance2", "dLocal1", "dLocal2", "dRegional1", "dRegional2", "dFree1", "dFree2", "dInterCity1", "dInterCity2", "ddist1", "ddist2", "dFareMat1", "dFareMat2") %>%
+    arrange("orig_county", "dest_county", "trip_mode")
+  
+  # export the resulting table to Excel
+  
+  sheetname <- "county_od_trip_mode"
+  addWorksheet(wb, sheetname)
+  writeData(wb, sheetname, county_od_trip_mode)
 
   # Save the workbook
   

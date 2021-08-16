@@ -27,6 +27,18 @@ print(gc())
 
 setwd("..")
 
+myrunfoldername <- "2015_TM152_STR_S2"
+
+setwd(myrunfoldername)
+
+WorkbookStr(scenariocode=myrunfoldername)
+
+print(gc())
+
+setwd("..")
+
+
+
 
 
 #
