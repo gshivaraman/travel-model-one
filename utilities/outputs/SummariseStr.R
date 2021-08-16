@@ -95,13 +95,13 @@ SummariseStr <- function(sampleshare=0.5, pnrparkingcost=2.0, logrun=FALSE, catv
       
       if (myvarname=="orig_county") {
         
-        mydf$ptype <- factor(mydf$orig_county, levels = c(1,2,3,4,5,6,7,8,9), labels = c("San Francisco", "San Mateo", "Santa Clara", "Alameda", "Contra Costa", "Solano", "Napa", "Sonoma", "Marin"))
+        mydf$orig_county <- factor(mydf$orig_county, levels = c(1,2,3,4,5,6,7,8,9), labels = c("San Francisco", "San Mateo", "Santa Clara", "Alameda", "Contra Costa", "Solano", "Napa", "Sonoma", "Marin"))
         
       }
       
       if (myvarname=="dest_county") {
         
-        mydf$ptype <- factor(mydf$dest_county, levels = c(1,2,3,4,5,6,7,8,9), labels = c("San Francisco", "San Mateo", "Santa Clara", "Alameda", "Contra Costa", "Solano", "Napa", "Sonoma", "Marin"))
+        mydf$dest_county <- factor(mydf$dest_county, levels = c(1,2,3,4,5,6,7,8,9), labels = c("San Francisco", "San Mateo", "Santa Clara", "Alameda", "Contra Costa", "Solano", "Napa", "Sonoma", "Marin"))
         
       }      
       
