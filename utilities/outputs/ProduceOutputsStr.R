@@ -17,7 +17,7 @@ ProduceOutputsStr <- function(myrunfoldername="NotDefined", fullrun=TRUE, iter=4
   
   setwd(myrunfoldername)
   
-  JoinSkimsStr(fullrun=fullrun, iter=iter, sampleshare=sampleshare, logrun=logrun, "walktime", "wait", "IVT", "transfers", "boardfare", "faremat", "xfare", "othercost", "distance", "dFree", "dInterCity", "dLocal", "dRegional", "ddist", "dFareMat")
+  JoinSkimsStr(fullrun=fullrun, iter=iter, sampleshare=sampleshare, logrun=logrun, baufares=baufares, "walktime", "wait", "IVT", "transfers", "fare", "boardfare", "faremat", "xfare", "othercost", "distance", "dFree", "dInterCity", "dLocal", "dRegional", "ddist", "dFareMat")
   
   print(gc())
   
