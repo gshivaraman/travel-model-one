@@ -189,7 +189,7 @@ SummariseStr <- function(sampleshare=0.5, pnrparkingcost=2.0, logrun=FALSE, catv
   # calculate the numbers of trips taking into account the sample share
   
   mydf <- mydf %>% 
-    mutate(trips=num_participants/sampleshare)
+    mutate(trips=1/sampleshare)
   
   # should also add assumed cost per unit distance of auto access for PNR options, but the data to do it is not available at present.  
   # Auto operating cost per mile, from ModeChoice.xls

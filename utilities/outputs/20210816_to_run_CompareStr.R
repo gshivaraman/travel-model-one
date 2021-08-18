@@ -16,4 +16,6 @@ CompareStr(workbook1 = "WorkbookStr_2015_TM152_STR_S2_20210816161555amitrani.xls
 
 CompareStr(workbook1 = "WorkbookStr_2015_TM152_IPA_16_NB_20210817191457amitrani.xlsx", workbook2 = "WorkbookStr_2015_TM152_IPA_16_T3_20210817175955amitrani.xlsx", outputworkbook = "WorkbookStr_2015_TM152_IPA_16_T3_20210817175955amitrani_vs_BAU.xlsx")
 
+CompareStr(workbook1 = "WorkbookStr_2015_TM152_STR_S2_20210816161555amitrani.xlsx", workbook2 = "WorkbookStr_2015_TM152_STR_T20_20210818093025amitrani.xlsx", outputworkbook = "WorkbookStr_2015_TM152_STR_T20_20210818093025amitrani_vs_BAU.xlsx")
+
 #
