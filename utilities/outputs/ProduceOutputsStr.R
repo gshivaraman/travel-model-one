@@ -12,7 +12,6 @@ ProduceOutputsStr <- function(myrunfoldername="NotDefined", fullrun=TRUE, iter=4
   library(crayon)
   
   source("JoinSkimsStr.R", encoding = "UTF-8")
-  source("SummariseStr.R", encoding = "UTF-8")
   source("WorkbookStr.R", encoding = "UTF-8")
   
   setwd(myrunfoldername)
