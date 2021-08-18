@@ -1,6 +1,6 @@
 
 
-ProduceOutputsStr <- function(myrunfoldername="NotDefined", fullrun=TRUE, iter=4, sampleshare=0.5, logrun=TRUE) {
+ProduceOutputsStr <- function(myrunfoldername="NotDefined", fullrun=TRUE, iter=4, sampleshare=0.5, logrun=TRUE, baufares=FALSE) {
   
   # Example of use
   # ProduceOutputsStr(myrunfoldername="2015_TM152_STR_T14")
