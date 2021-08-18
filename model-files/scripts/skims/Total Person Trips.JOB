@@ -1,0 +1,65 @@
+;
+; Report Total Trips
+;
+NB3_PATH='G:\MTC_FARE_STUDY\RunFolder\2015_TM152_IPA_16\main'
+NB4_PATH='G:\MTC_FARE_STUDY\RunFolder\2015_TM152_IPA_16_NB\main'
+T3__PATH='G:\MTC_FARE_STUDY\RunFolder\2015_TM152_IPA_16_T3\main'
+
+RUN PGM=MATRIX
+    MATI[1] =@NB3_PATH@\tripsEA.tpp
+    MATI[2] =@NB3_PATH@\tripsAM.tpp
+    MATI[3] =@NB3_PATH@\tripsMD.tpp
+    MATI[4] =@NB3_PATH@\tripsPM.tpp
+    MATI[5] =@NB3_PATH@\tripsEV.tpp  
+    
+    MATI[6] =@NB4_PATH@\tripsEA.tpp
+    MATI[7] =@NB4_PATH@\tripsAM.tpp
+    MATI[8] =@NB4_PATH@\tripsMD.tpp
+    MATI[9] =@NB4_PATH@\tripsPM.tpp
+    MATI[10]=@NB4_PATH@\tripsEV.tpp
+    
+    MATI[11]=@T3__PATH@\tripsEA.tpp
+    MATI[12]=@T3__PATH@\tripsAM.tpp
+    MATI[13]=@T3__PATH@\tripsMD.tpp
+    MATI[14]=@T3__PATH@\tripsPM.tpp
+    MATI[15]=@T3__PATH@\tripsEV.tpp
+    
+
+    FILLMW MW[11] =MI.1.1(26)
+    FILLMW MW[41] =MI.2.1(26)
+    FILLMW MW[71] =MI.3.1(26)
+    FILLMW MW[101]=MI.4.1(26)
+    FILLMW MW[131]=MI.5.1(26)
+    
+    FILLMW MW[211]=MI.6.1(26)
+    FILLMW MW[241]=MI.7.1(26)
+    FILLMW MW[271]=MI.8.1(26)
+    FILLMW MW[301]=MI.9.1(26)
+    FILLMW MW[331]=MI.10.1(26)
+    
+    FILLMW MW[411]=MI.11.1(26)
+    FILLMW MW[441]=MI.12.1(26)
+    FILLMW MW[471]=MI.13.1(26)
+    FILLMW MW[501]=MI.14.1(26)
+    FILLMW MW[531]=MI.15.1(26)        
+    
+    LOOP IDX=1,200
+          NB3_TOTAL= NB3_TOTAL + ROWSUM(IDX)
+    ENDLOOP
+    
+    LOOP IDX=201,400
+          NB4_TOTAL= NB4_TOTAL + ROWSUM(IDX)
+    ENDLOOP
+    
+    LOOP IDX=401,600
+          T3__TOTAL= T3__TOTAL + ROWSUM(IDX)
+    ENDLOOP
+
+    IF (I=ZONES)
+        PRINT FORM=16.0, LIST=
+          'NB3_TOTAL', ',', NB3_TOTAL,'\n',
+          'NB4_TOTAL', ',', NB4_TOTAL,'\n', 
+          'T3__TOTAL', ',', T3__TOTAL,'\n', 
+        FILE="TOTAL_TRIPS.CSV"
+    ENDIF
+ENDRUN
