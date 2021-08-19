@@ -11,7 +11,8 @@ CompareStr <- function(workbook1, workbook2) {
   workbook2 <- gsub(".xlsx", "", workbook2)
   workbook1filename <- paste0(workbook1, ".xlsx")
   workbook2filename <- paste0(workbook2, ".xlsx")
-  outputworkbookfilename <- paste(workbook1, "_", workbook2, ".xlsx")
+  outputworkbookfilename <- paste(workbook1, "_vs_", workbook2, ".xlsx")
+  outputworkbookfilename <- gsub(" ", "", outputworkbookfilename)
   
   # trip_mode
   
