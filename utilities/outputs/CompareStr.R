@@ -1,17 +1,22 @@
-CompareStr <- function(workbook1, workbook2, outputworkbook) {
+CompareStr <- function(workbook1, workbook2) {
   
   library(tidyverse)
   library(openxlsx)
   library(crayon)
   library(readxl)
   
-  # create output workbook
-  wb <- createWorkbook()  
-
+  # regularize strings and create output workbook
+  wb <- createWorkbook() 
+  workbook1 <- gsub(".xlsx", "", workbook1)
+  workbook2 <- gsub(".xlsx", "", workbook2)
+  workbook1filename <- paste0(workbook1, ".xlsx")
+  workbook2filename <- paste0(workbook2, ".xlsx")
+  outputworkbookfilename <- paste(workbook1, "_", workbook2, ".xlsx")
+  
   # trip_mode
   
-  trip_mode1 <- read_excel(workbook1, sheet = "trip_mode")
-  trip_mode2 <- read_excel(workbook2, sheet = "trip_mode")
+  trip_mode1 <- read_excel(workbook1filename, sheet = "trip_mode")
+  trip_mode2 <- read_excel(workbook2filename, sheet = "trip_mode")
   
   trip_mode <- trip_mode1 %>% full_join(trip_mode2, by=c("trip_mode"), suffix=c("1", "2"))
   
@@ -32,8 +37,8 @@ CompareStr <- function(workbook1, workbook2, outputworkbook) {
     
     mysheetname <- paste0(myvar, "_trip_mode")
   
-    mydf1 <- read_excel(workbook1, sheet = mysheetname)
-    mydf2 <- read_excel(workbook2, sheet = mysheetname)
+    mydf1 <- read_excel(workbook1filename, sheet = mysheetname)
+    mydf2 <- read_excel(workbook2filename, sheet = mysheetname)
     
     mydf <- mydf1 %>% full_join(mydf2, by=c(all_of(myvar), "trip_mode"), suffix=c("1", "2"))
     
@@ -80,8 +85,8 @@ CompareStr <- function(workbook1, workbook2, outputworkbook) {
   
   # trip_mode
   
-  county_od_trip_mode1 <- read_excel(workbook1, sheet = "county_od_trip_mode")
-  county_od_trip_mode2 <- read_excel(workbook2, sheet = "county_od_trip_mode")
+  county_od_trip_mode1 <- read_excel(workbook1filename, sheet = "county_od_trip_mode")
+  county_od_trip_mode2 <- read_excel(workbook2filename, sheet = "county_od_trip_mode")
   
   county_od_trip_mode <- county_od_trip_mode1 %>% full_join(county_od_trip_mode2, by=c("orig_county", "dest_county", "trip_mode"), suffix=c("1", "2"))
   
@@ -97,7 +102,7 @@ CompareStr <- function(workbook1, workbook2, outputworkbook) {
 
   # Save the workbook
   
-  saveWorkbook(wb, file = outputworkbook, overwrite = TRUE)
+  saveWorkbook(wb, file = outputworkbookfilename, overwrite = TRUE)
   
 }
 
