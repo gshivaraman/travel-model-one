@@ -1,9 +1,9 @@
- 
+
 :: The index number of the scenario
-SET SCENARIOINDEX=2
+SET SCENARIOINDEX=22
 
 :: The name of the scenario and the name of the scenario folder in which the model will be run.
-SET SCENARIONAME=2015_TM152_STR_S%SCENARIOINDEX%
+SET SCENARIONAME=2015_TM152_STR_T%SCENARIOINDEX%
 
 :: The path to the project folder
 SET PROJECTPATH=F:\23791501\
