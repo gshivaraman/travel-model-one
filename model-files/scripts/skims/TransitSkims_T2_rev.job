@@ -483,10 +483,24 @@ loop period = 1,5
                 ELSE   ;
  
                   IF (XFERS>0) ; if there are transfers 
+				  
+					IF (DIST_Regional=0)   ; no Regional Services (only local)
+					
+						  IF (MW[26]=@FCIS_FAREMAT@) 
+							  INI_FARE=MW[29]
+							  REM_FARE=MW[27]+MW[28]
+						
+						  ELSE
+							  INI_FARE=MW[28]
+							  REM_FARE=MW[27]+MW[29]
+							  
+						  ENDIF 
  
-                      IF (XFERS=1) ; one transfer
+							MW[10]=MAX(INI_FARE,REM_FARE)					
+					
+					ELSE ; a combination of regional and local services
  
-						Regonal <-> Local Services
+						IF (XFERS=1) ; one transfer
    
 						  IF (MW[26]=@FCIS_FAREMAT@) 
 							  INI_FARE=MW[29]
@@ -500,11 +514,13 @@ loop period = 1,5
  
 							MW[10]=MAX(INI_FARE,REM_FARE)
  
-                     ELSE ; 2+ transfers
+						ELSE ; 2+ transfers
                           WT_DIST=DIST_LOCAL*1.6+DIST_Regional ; weighted distance of Local and Regional
                           MW[10]=MW[10]*(DIST_Regional/WT_DIST)
 						 
-                     ENDIF ; check # of transfers                      
+						ENDIF ; check # of transfers                      
+					 
+					ENDIF; check on regional distance
 					 
                   ENDIF ; with transfers
 				  
