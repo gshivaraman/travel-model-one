@@ -463,7 +463,7 @@ loop period = 1,5
               
           FILLMW MW[1]=MI.1.1(34) ; read in original transit skims
           ;
-          ; Calculate FARE -- Test 18: Fare by Distance, LL, 8/23/21
+          ; Calculate FARE -- Test 18: Fare by Distance, LL, 8/23/21.  Updated by GS and AM 8/25/21.
           ;          
           LOOKUP, NAME=FareByDist, LOOKUP[1]=1, RESULT=5, LOOKUPI=1, SETUPPER=T, LIST=T
           
