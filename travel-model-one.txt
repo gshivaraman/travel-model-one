@@ -45,6 +45,8 @@
         <File name="model-files\scripts\skims\TransitSkims_T3.job" />
         <File name="model-files\scripts\skims\TransitSkims_T4.job" />
         <File name="model-files\scripts\skims\TransitSkims_NB.job" />
+        <File name="model-files\scripts\skims\TransitSkims_T18_rev.job" />
+        <File name="model-files\scripts\skims\TransitSkims23_test_GS.job" />
         <File name="utilities\outputs\JoinSkimsStr.R" />
         <File name="utilities\outputs\SummariseStr.R" />
         <File name="utilities\outputs\WorkbookStr.R" />
@@ -57,6 +59,5 @@
         <File name="utilities\outputs\20210811_to_test_ProduceOutputsStr.R" />
         <File name="utilities\outputs\20210812_to_process_CSVs.R" />
         <File name="utilities\outputs\20210812_to_process_fare_CSVs.R" />
-        <File name="model-files\scripts\skims\TransitSkims23_test_GS.job" />
     </Project>
 </NotepadPlus>

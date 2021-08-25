@@ -467,52 +467,27 @@ loop period = 1,5
           ;          
           LOOKUP, NAME=FareByDist, LOOKUP[1]=1, RESULT=5, LOOKUPI=1, SETUPPER=T, LIST=T
           
+ ;        MYDIST=ROWADD(100,20,21,22,23,24,25) ; total transit distance is summed and filled into MW[100] 
+          
           JLOOP   
 		      XFERS=MW[11]-1    ; number of transfers
-			  
-			  ; read in distance variables
-              DIST_LOCAL    =MW[30] ; total distance of FCIS_Local services
-              DIST_Regional =MW[31] ; total distance of FCIS_Regional services
-              DIST_Intercity=MW[32] ; total distance of FCIS_Intercity services
-              DIST_Free_SHTL=MW[33] ; total distance of FCIS_Free_SHTL services
-              DIST_FAREMAT  =MW[34] ; total distance of FCIS_FAREMAT services
-			  
-			  ; dist_shuttle=0 AND dist_intercity=0 <- if in scope
-              IF (DIST_Intercity+DIST_Free_SHTL=0)
 	
-				IF (DIST_Regional=0); only local services are used
-				  
-					  IF (XFERS>0) ; Cases with local trips with transfers
-					  
-						  IF (MW[26]=@FCIS_FAREMAT@) 
-						  
-							  INI_FARE=MW[29]
-							  REM_FARE=MW[27]+MW[28]
-						
-						  ELSE
-						  
-							  INI_FARE=MW[28]
-							  REM_FARE=MW[27]+MW[29]
-							  
-						  ENDIF 
-						  
-						  MW[10]=MAX(INI_FARE,REM_FARE)
-
-					  ELSE  ; no transfers
-						;       No change to local fare
-					  ENDIF ; check on number of transfers for local-only trips
-					  
-				ELSE ; Regional services are used
-				  
-						  MYFARE=FareByDist(1,DIST_Regional[J]) ; look up fare from "fare by distance" curve
-						  MW[10][J]=MYFARE*100            ; convert fares to cents
-					
-				ENDIF ; check on regional distance
-				  
-			  ENDIF ; in scope
-			  
+              IF (MW[32]+MW[33]=0 && MW[31]=0); only local services are used
+				  IF (XFERS>0) ; Cases with local trips with transfers
+                                  INI_FARE=MW[28]
+                                  REM_FARE=MW[27]
+                                  MW[10]=MAX(INI_FARE,REM_FARE)
+				  ELSEIF (MW[32]+MW[33]=0)  ; if no Intercity or Free Shuttle Services are used and no transfers
+			  ;       No change to local fare
+					  IF (MW[31]=0)  ; if no regional services
+			  ;       No change to local fare	
+					  ELSEIF (MW[31]>0) ; if regional Services are used
+					  MYFARE=FareByDist(1,MW[31][J]) ; look up fare from "fare by distance" curve
+					  MW[10][J]=MYFARE*100            ; convert fares to cents
+					  ENDIF ; regional fare curve
+				  ENDIF ; no change to local fares with no transfers
+			  ENDIF ; maximum of local fares with transfers
           ENDJLOOP
-		  
         ENDRUN
 
 
