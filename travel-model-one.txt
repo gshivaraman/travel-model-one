@@ -41,6 +41,7 @@
         <File name="utilities\outputs\tripsummary.R" />
         <File name="model-files\scripts\skims\TransitSkims_T1.job" />
         <File name="model-files\scripts\skims\TransitSkims_T2.job" />
+        <File name="model-files\scripts\skims\TransitSkims_T2_rev.job" />
         <File name="model-files\scripts\skims\TransitSkims_T3.job" />
         <File name="model-files\scripts\skims\TransitSkims_T4.job" />
         <File name="model-files\scripts\skims\TransitSkims_NB.job" />
