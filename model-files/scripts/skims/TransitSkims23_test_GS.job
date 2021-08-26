@@ -95,14 +95,14 @@ FCIS_FAREMAT='100,101,102,103,104,105,120,122,130'
 ;
 ; ----------------------------------------------------------------------------------------------------------------
 
-token_model_dir = '%MODEL_DIR%'
-token_trnassigniter = '%TRNASSIGNITER%'
-token_prevtrnassigniter = '%PREVTRNASSIGNITER%'
+token_model_dir = 'F:\23791501\T23_Test'
+token_trnassigniter = '0'
+token_prevtrnassigniter = '0'
 
 counter = 0
 
 ; time period loop
-loop period = 1,5
+loop period = 1,2
 
   ; set a debug origin
   token_debug_origin = '64,240,277,378,967,1449'
@@ -143,7 +143,7 @@ loop period = 1,5
     counter = 3 * (period - 1) + accegg
 
     ; distribute the tasks
-    DistributeMultistep processid = "ctramp", processnum = counter,  commpath = '%COMMPATH%'
+    DistributeMultistep processid = "ctramp", processnum = counter,  commpath = 'F:\23791501\T23_Test\'
 
       ; line haul loop
       loop path = 1,6
@@ -302,20 +302,20 @@ loop period = 1,5
 
           ; read the transit line and link files
           read file = "@token_model_dir@\trn\transitLines.link"
-          read file = transit@token_period@.lin     
+          read file = @token_model_dir@\trn\TransitAssignment.iter3\transit@token_period@.lin     
 
           ; read in the generated walk support links
-          read file = @token_period@_transit_suplinks_walk.dat
+          read file = @token_model_dir@\trn\TransitAssignment.iter3\@token_period@_transit_suplinks_walk.dat
 
           ; read in the generated drive access/egress links for this mode             
-          @token_drivelinks_express_bus@    read file = @token_period@_transit_suplinks_express_bus.dat
-          @token_drivelinks_light_rail@     read file = @token_period@_transit_suplinks_light_rail.dat
-          @token_drivelinks_ferry@          read file = @token_period@_transit_suplinks_ferry.dat
-          @token_drivelinks_heavy_rail@     read file = @token_period@_transit_suplinks_heavy_rail.dat
-          @token_drivelinks_commuter_rail@  read file = @token_period@_transit_suplinks_commuter_rail.dat            
+          @token_drivelinks_express_bus@    read file = @token_model_dir@\trn\TransitAssignment.iter3\@token_period@_transit_suplinks_express_bus.dat
+          @token_drivelinks_light_rail@     read file = @token_model_dir@\trn\TransitAssignment.iter3\@token_period@_transit_suplinks_light_rail.dat
+          @token_drivelinks_ferry@          read file = @token_model_dir@\trn\TransitAssignment.iter3\@token_period@_transit_suplinks_ferry.dat
+          @token_drivelinks_heavy_rail@     read file = @token_model_dir@\trn\TransitAssignment.iter3\@token_period@_transit_suplinks_heavy_rail.dat
+          @token_drivelinks_commuter_rail@  read file = @token_model_dir@\trn\TransitAssignment.iter3\@token_period@_transit_suplinks_commuter_rail.dat            
 
           ; read in the generated KNR links for local bus
-          @token_bus_acclinks_KNR@    READ FILE = @TOKEN_PERIOD@_BUS_ACCLINKS_KNR.DAT
+          @token_bus_acclinks_KNR@    READ FILE = @token_model_dir@\trn\TransitAssignment.iter3\@TOKEN_PERIOD@_BUS_ACCLINKS_KNR.DAT
 
           ; set the service headways
           freqperiod = @period@
@@ -459,7 +459,7 @@ loop period = 1,5
               distFerry  firstMode xfare modefare faremat,
               dLocal, dRegional, dInterCity, dFree, dFareMat 
 
-          LOOKUPI[1]="FareByDistLKUP.csv"    ;  LL, 8/23/21
+          LOOKUPI[1]="F:\23791501\T23_Test\trn\TransitAssignment.iter4\FareByDistLKUP.csv"    ;  LL, 8/23/21
               
           FILLMW MW[1]=MI.1.1(34) ; read in original transit skims
           ;
@@ -504,7 +504,7 @@ loop period = 1,5
 					  
 				ELSE ; Regional services are used
 				  
-						  MYFARE=FareByDist(1,DIST_Regional[J]) ; look up fare from "fare by distance" curve
+						  MYFARE=FareByDist(1,MW[31][J]) ; look up fare from "fare by distance" curve
 						  MW[10][J]=MYFARE*100            ; convert fares to cents
 					
 				ENDIF ; check on regional distance
@@ -715,10 +715,10 @@ loop period = 1,5
   endloop ; access/egress loop 
 endloop ; time period loop
    
-wait4files files = ctramp1.script.end,  ctramp2.script.end,  ctramp3.script.end,  ctramp4.script.end,  ctramp5.script.end,
-                   ctramp6.script.end,  ctramp7.script.end,  ctramp8.script.end,  ctramp9.script.end,  ctramp10.script.end,
-                   ctramp11.script.end, ctramp12.script.end, ctramp13.script.end, ctramp14.script.end, ctramp15.script.end, 
-          printfiles = save, DelDistribFiles = t, CheckReturnCode = t
+;wait4files files = ctramp1.script.end,  ctramp2.script.end,  ctramp3.script.end,  ctramp4.script.end,  ctramp5.script.end,
+;                   ctramp6.script.end,  ctramp7.script.end,  ctramp8.script.end,  ctramp9.script.end,  ctramp10.script.end,
+;                   ctramp11.script.end, ctramp12.script.end, ctramp13.script.end, ctramp14.script.end, ctramp15.script.end, 
+;          printfiles = save, DelDistribFiles = t, CheckReturnCode = t
                    
 
 ; combine all the debug output
