@@ -492,7 +492,7 @@ loop period = 1,5
 			  
 			  ENDIF
 			  
-              MW[10][J]=MYFARE*100  ; convert to cents, LL, 8/19/21
+              MW[10][J]=MYFARE*1.08*100  ; convert to cents, LL, 8/19/21 + "raise all fares 8%" AM 20210827
               ;PRINT FORM=6.0, LIST=I,',',J,',',FZ_O,',',FZ_D, MYFARE, FILE=FARE_QAQC.CSV 
 			  
           ENDJLOOP
