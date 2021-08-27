@@ -63,5 +63,6 @@
         <File name="utilities\outputs\20210812_to_process_CSVs.R" />
         <File name="utilities\outputs\20210812_to_process_fare_CSVs.R" />
         <File name="model-files\scripts\skims\FareByDistLKUP.CSV" />
+        <File name="model-files\scripts\skims\Zone_Lookup_Seamless.csv" />
     </Project>
 </NotepadPlus>
