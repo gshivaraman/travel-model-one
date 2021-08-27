@@ -511,7 +511,7 @@ loop period = 1,2
 					
 						IF (DIST_Regional>DIST_BART) ; check if other regional services are used as well as BART
 						  ; if other regional services are used as well as BART
-						  MYFARE=FareByDist(1,DIST_Regional[J]) ; look up fare from "fare by distance" curve
+						  MYFARE=FareByDist(1,MW[31][J]) ; look up fare from "fare by distance" curve
 						  MW[10][J]=MYFARE*100            ; convert fares to cents
 						  
 						ELSE				
