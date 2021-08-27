@@ -92,7 +92,7 @@ FCIS_BART='120'
 ; See also: (1) PrepHwyNet.job -- computes the bus time as a function of the highway time 
 ;
 ; version:  Travel Model One
-; authors:  dto, be (2014 02 03); dto (2011 10 27); gde; sai (2009 04 15)
+; authors:  dto, be (2014 02 03); dto (2011 10 27); gde; sai (2009 04 15); ll (2021 07 01 - 2021 08 23); gs, am (2021 08 26)
 ;
 ;
 ; ----------------------------------------------------------------------------------------------------------------

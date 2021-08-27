@@ -47,6 +47,7 @@
         <File name="model-files\scripts\skims\TransitSkims_NB.job" />
         <File name="model-files\scripts\skims\TransitSkims_T18_rev.job" />
         <File name="model-files\scripts\skims\TransitSkims23_test_GS.job" />
+        <File name="model-files\scripts\skims\TransitSkims23.job" />
         <File name="utilities\outputs\JoinSkimsStr.R" />
         <File name="utilities\outputs\SummariseStr.R" />
         <File name="utilities\outputs\WorkbookStr.R" />
