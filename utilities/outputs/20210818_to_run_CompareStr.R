@@ -34,6 +34,8 @@ CompareStr(workbook1 = "WorkbookStr_2015_TM152_STR_S2_20210818160843amitrani", w
 
 CompareStr(workbook1 = "WorkbookStr_2015_TM152_STR_S2_20210818160843amitrani", workbook2 = "WorkbookStr_2015_TM152_STR_T23_20210825114332amitrani.xlsx")
 
+CompareStr(workbook1 = "WorkbookStr_2015_TM152_STR_S2_20210818160843amitrani", workbook2 = "WorkbookStr_2015_TM152_STR_T24_20210830103758amitrani.xlsx")
+
 # ETG base versus Steer base
 
 CompareStr(workbook1 = "WorkbookStr_2015_TM152_IPA_16_NB_20210818144759amitrani", workbook2 = "WorkbookStr_2015_TM152_STR_S2_20210818160843amitrani")
