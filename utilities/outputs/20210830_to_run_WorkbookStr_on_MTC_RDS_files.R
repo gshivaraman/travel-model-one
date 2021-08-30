@@ -13,11 +13,17 @@ setwd("2015_TM152_MTC_T26")
 
 WorkbookStrMTC(scenariocode="2015_TM152_MTC_T26")
 
+setwd("..")
+
 setwd("2015_TM152_MTC_T27")
 
 WorkbookStrMTC(scenariocode="2015_TM152_MTC_T27")
 
+setwd("..")
+
 setwd("2015_TM152_MTC_T28")
 
 WorkbookStrMTC(scenariocode="2015_TM152_MTC_T28")
+
+setwd("..")
 
