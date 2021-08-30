@@ -68,7 +68,7 @@ FCIS_BART='120'
 ;	  (8) A .block file that lists commands to combine headways for all line-haul modes when the difference in path time
 ;	       is less than plus or minus five minutes (transit_combined_headways.block);
 ;	  (9) A .block file containing access- and egress-mode-specific transfer prohibitor tables (transferprohibitors*.block);
-; 	  (10) A lookup file called "FareByDistLKUP.CSV" containing the fare-by-distance step function for regional transit fares.  This should be placed in 2015_TM152_STR_T23\trn\TransitAssignment.iter4, where 2015_TM152_STR_T23 is the folder used to run the scenario, or an equivalent location on the computer used to do the run.  
+; 	  (10) A lookup file called "FareByDistLKUP.csv" containing the fare-by-distance step function for regional transit fares.  This should be placed in 2015_TM152_STR_T23\trn\TransitAssignment.iter4, where 2015_TM152_STR_T23 is the folder used to run the scenario, or an equivalent location on the computer used to do the run.  
 
 ; Output: (A) A 16-table skim for each time-of-day, access/egress, and line-haul mode combination, containing the following:
 ;		 (1) Transit in-vehicle time, time (minutes x 100), ivt;
@@ -463,7 +463,7 @@ loop period = 1,5
                           DELIMITER=',', MAXFIELDS=14, MO=1,10,50,11,27-35,51,
                           NAME=ivt, fare, fareOrig, boards, xfare, modefare, faremat, dLocal, dRegional, dInterCity, dFree, dFareMat, dBART, ivtMode
 
-            FILEI LOOKUPI[1]="@token_model_dir@\INPUT\trn\FareByDistanceLookup.csv"
+            FILEI LOOKUPI[1]="@token_model_dir@\INPUT\trn\FareByDistLKUP.csv"
 
             FILLMW MW[1]=MI.1.1(35) ; read in original transit skims
             MW[50] = MI.1.fare      ; save copy of fare for debug
