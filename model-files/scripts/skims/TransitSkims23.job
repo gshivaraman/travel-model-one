@@ -281,9 +281,7 @@ loop period = 1,5
           ; KNR access links to local bus
           token_bus_acclinks_KNR = ' '
         endif
-;
-; Update by “TransitSkims_FCIS_test_2.job”, LL, 7/1/21
-;
+
         run pgm = trnbuild
           ; path parameter: do not list all of the input
           parameters listinput = F
@@ -297,8 +295,7 @@ loop period = 1,5
           read file = "@token_model_dir@\trn\xfare.far"
 
           ; output skim matrix
-;          fileo mato  = trnskm@token_period@_@token_access@_@token_path@_@token_egress@.iter@token_trnassigniter@.tpp
-          fileo mato  = trnskm@token_period@_@token_access@_@token_path@_@token_egress@.iter@token_trnassigniter@_tmp.tpp ; by LL, 7/1/21
+          fileo mato  = trnskm@token_period@_@token_access@_@token_path@_@token_egress@.iter@token_trnassigniter@_tmp.tpp
 
           ; the bus times are based on those computed in the highway network
           hwytime = BUS_TIME
@@ -371,7 +368,7 @@ loop period = 1,5
                           ivtLOC,  ivtLRF,  ivtEXP,  ivtHVY,  ivtCOM,  ivtFerry,  ivtMUNILoc, ivtMUNIMet,
                           distLOC, distLRF, distEXP, distHVY, distCOM, distFerry, firstMode, 
                           xfare,   modefare, faremat,
-                          dLocal,  dRegional, dInterCity, dFree, dFareMat, dBART 
+                          dLocal,  dRegional, dInterCity, dFree, dFareMat, dBART,
             ; in-vehicle time for all transit modes, use TP+ code 1001    
             mw[1]  = time(1001),
             ; initial wait time, use TP+ code 'iwait'
@@ -440,12 +437,12 @@ loop period = 1,5
             ; FCIS Free Shuttle Services
             mw[33] = dist(@FCIS_Free_SHTL@),
             ; FCIS Regional Services using FAREMAT
-            mw[34] = dist(@FCIS_FAREMAT@)
-			; FCIS Regional Services using BART
+            mw[34] = dist(@FCIS_FAREMAT@),
+            ; FCIS Regional Services using BART
             mw[35] = dist(@FCIS_BART@)
 
           ; trace a selection of o/d pairs for debugging
-;          select trace=(i=@token_debug_origin@ && j=@token_debug_destination@)            
+          select trace=(i=@token_debug_origin@ && j=@token_debug_destination@)            
         endrun
         
         ;
@@ -455,82 +452,65 @@ loop period = 1,5
         ;    (80)  through  (99) express bus modes, coded by provider
         ;
         RUN PGM=MATRIX
-          FILEI MATI  = trnskm@token_period@_@token_access@_@token_path@_@token_egress@.iter@token_trnassigniter@_tmp.tpp ; by LL, 7/1/21        
-          FILEO MATO  = trnskm@token_period@_@token_access@_@token_path@_@token_egress@.iter@token_trnassigniter@.tpp,     ; by LL, 7/1/21        
-            MO=1-35,
-            NAME=
-              ivt  iwait  xwait  wait  wacc  waux  wegr  dtime  ddist  fare  boards  ivtLOC  ivtLRF  ivtEXP  ivtHVY,
-              ivtCOM  ivtFerry  ivtMUNILoc  ivtMUNIMet  distLOC  distLRF  distEXP  distHVY  distCOM,
-              distFerry  firstMode xfare modefare faremat,
-              dLocal, dRegional, dInterCity, dFree, dFareMat, dBART 
+            FILEI MATI[1]=trnskm@token_period@_@token_access@_@token_path@_@token_egress@.iter@token_trnassigniter@_tmp.tpp  ; by LL, 7/1/21        
+            FILEO MATO[1]=trnskm@token_period@_@token_access@_@token_path@_@token_egress@.iter@token_trnassigniter@.tpp, MO=1-35,
+                          NAME=ivt, iwait, xwait, wait, wacc, waux, wegr, dtime, ddist, fare, boards,
+                               ivtLOC,  ivtLRF,  ivtEXP,  ivtHVY,  ivtCOM,  ivtFerry,  ivtMUNILoc, ivtMUNIMet,
+                               distLOC, distLRF, distEXP, distHVY, distCOM, distFerry, firstMode,
+                               xfare, modefare, faremat, 
+                               dLocal, dRegional, dInterCity, dFree, dFareMat, dBART
+            FILEO MATO[2]=trnskm@token_period@_@token_access@_@token_path@_@token_egress@_debug_noheader.csv, FORMAT=txt, PATTERN=IJM:V, 
+                          DELIMITER=',', MAXFIELDS=14, MO=1,10,50,11,27-35,51,
+                          NAME=ivt, fare, fareOrig, boards, xfare, modefare, faremat, dLocal, dRegional, dInterCity, dFree, dFareMat, dBART, ivtMode
 
-          LOOKUPI[1]="FareByDistLKUP.csv"    ;  LL, 8/23/21
-              
-          FILLMW MW[1]=MI.1.1(35) ; read in original transit skims
-          ;
-          ; Calculate FARE -- Test 18: Fare by Distance, LL, 8/23/21.  Updated by GS and AM 8/25/21.
-          ;          
-          LOOKUP, NAME=FareByDist, LOOKUP[1]=1, RESULT=5, LOOKUPI=1, SETUPPER=T, LIST=T
+            FILEI LOOKUPI[1]="@token_model_dir@\INPUT\trn\FareByDistanceLookup.csv"
+
+            FILLMW MW[1]=MI.1.1(35) ; read in original transit skims
+            MW[50] = MI.1.fare      ; save copy of fare for debug
+            MW[51] = MI.1.@token_ivt@ ; note if this is zero, this OD has no path for this mode
+
+            ; Calculate FARE -- Test 18: Fare by Distance, LL, 8/23/21.  Updated by GS and AM 8/25/21.
+            LOOKUP, NAME=FareByDist, LOOKUP[1]=1, RESULT=5, LOOKUPI=1, SETUPPER=T, LIST=T
           
-          JLOOP   
-		      XFERS=MW[11]-1    ; number of transfers
-			  
-			  ; read in distance variables
-              DIST_LOCAL    =MW[30] ; total distance of FCIS_Local services
-              DIST_Regional =MW[31] ; total distance of FCIS_Regional services
-              DIST_Intercity=MW[32] ; total distance of FCIS_Intercity services
-              DIST_Free_SHTL=MW[33] ; total distance of FCIS_Free_SHTL services
-              DIST_FAREMAT  =MW[34] ; total distance of FCIS_FAREMAT services
-			  DIST_BART  =MW[35] ; distance on BART / E-BART
-			  
-			  ; dist_shuttle=0 AND dist_intercity=0 <- if in scope
-              IF (DIST_Intercity+DIST_Free_SHTL=0)
-	
-				IF (DIST_LOCAL>0 && DIST_Regional=0); only local services are used
-				  
-					  IF (XFERS>0) ; Cases with local trips with transfers
-					   
-					  
-						  IF (MW[26]=@FCIS_FAREMAT@) 
-						  
-							  INI_FARE=MW[29]
-							  REM_FARE=MW[27]+MW[28]
-						
-						  ELSE
-						  
-							  INI_FARE=MW[28]
-							  REM_FARE=MW[27]+MW[29]
-							  
-						  ENDIF 
-						  
-						  MW[10]=MAX(INI_FARE,REM_FARE)
-					  ELSE ; local trips without transfers  
-					   ; no change in local fares
-					  ENDIF ; Cases with local trips with transfers
-					  
-				ELSE
-					IF (DIST_Regional>0) ; check if Regional services are used
-					
-						IF (DIST_Regional>DIST_BART) ; check if other regional services are used as well as BART
-						  ; if other regional services are used as well as BART
-						  MYFARE=FareByDist(1,MW[31][J]) ; look up fare from "fare by distance" curve
-						  MW[10][J]=MYFARE*100            ; convert fares to cents
-						  
-						ELSE				
-						  ; if the regional distance is just BART
-				          WT_DIST=DIST_LOCAL*1.6 + DIST_Regional
-						  MW[10]=MW[10]*(DIST_Regional/WT_DIST)
-						ENDIF ; check if other regional services are used as well as BART
-						  
-					ENDIF; check if Regional services are used
-					
-				ENDIF ; check if only local services are used
-				  
-			  ENDIF ; in scope
-			  
-          ENDJLOOP
-		  
+            JLOOP   
+  
+                IF ((MI.1.dInterCity + MI.1.dFree) = 0)            ; if in scope (no free shuttle, no intercity)
+  
+                    IF (MI.1.dLocal>0 && MI.1.dRegional=0)         ; only local services are used
+  
+                        IF (MI.1.boards>1) ; Cases with local trips with transfers
+                            IF (MI.1.firstMode = @FCIS_FAREMAT@) 
+                                INI_FARE=MI.1.faremat
+                                REM_FARE=MI.1.xfare + MI.1.modefare
+                            ELSE
+                                INI_FARE=MI.1.modefare
+                                REM_FARE=MI.1.xfare + MI.1.faremat
+                            ENDIF
+                            MW[10]=MAX(INI_FARE,REM_FARE)
+                        ENDIF ; Cases with local trips with transfers
+  
+                    ELSEIF (MI.1.dRegional > 0)                    ; if Regional services are used
+  
+                        IF (MI.1.dRegional > MI.1.dBART)           ; check if other regional services are used as well as BART
+                            MYFARE = FareByDist(1,MI.1.dRegional)  ; look up fare from "fare by distance" curve
+                            MW[10] = MYFARE*100                    ; convert fares to cents
+                        ELSE                                       ; if the regional distance is just BART
+                            WT_DIST = MI.1.dLocal*1.6 + MI.1.dRegional
+                            MW[10]  = MI.1.fare *(MI.1.dRegional/WT_DIST)
+                        ENDIF
+  
+                    ENDIF                                          ; end: if Regional services are used
+  
+                ENDIF                                              ; end: if in scope
+                
+            ENDJLOOP
+          
         ENDRUN
+
+        ; add header to debug file
+        *echo orig,dest,one,ivt,fare,fareOrig,boards,xfare,modefare,faremat,dLocal,dRegional,dInterCity,dFree,dFareMat,dBART,ivtMode > "trnskm@token_period@_@token_access@_@token_path@_@token_egress@_debug.csv"
+        *type "trnskm@token_period@_@token_access@_@token_path@_@token_egress@_debug_noheader.csv" >> "trnskm@token_period@_@token_access@_@token_path@_@token_egress@_debug.csv"
+        *del "trnskm@token_period@_@token_access@_@token_path@_@token_egress@_debug_noheader.csv"
 
 
         ; TRNAMW%TIMEPERIOD%.avg.iter%PREVTRNASSIGNITER%.mat is the MSA'd version of the skim
@@ -542,21 +522,18 @@ loop period = 1,5
             FILEI MATI[2]=trnskm@token_period@_@token_access@_@token_path@_@token_egress@.iter@token_trnassigniter@.tpp  ; current travel times +
             FILEI MATI[3]=trnskm@token_period@_@token_access@_@token_path@_@token_egress@.avg.iter@token_prevtrnassigniter@.tpp ; bring in averaged travel times
         
-;            FILEO MATO[1]=trnskm@token_period@_@token_access@_@token_path@_@token_egress@.avg.iter@token_trnassigniter@.tpp, MO=1-26,
-            FILEO MATO[1]=trnskm@token_period@_@token_access@_@token_path@_@token_egress@.avg.iter@token_trnassigniter@.tpp, 
-                MO=1-35,
-                NAME=
-                  ivt  iwait  xwait  wait  wacc  waux  wegr  dtime  ddist  fare  boards  ivtLOC  ivtLRF  ivtEXP  ivtHVY,
-                  ivtCOM  ivtFerry  ivtMUNILoc  ivtMUNIMet  distLOC  distLRF  distEXP  distHVY  distCOM,
-                  distFerry  firstMode xfare modefare faremat,
-                  dLocal, dRegional, dInterCity, dFree, dFareMat, dBART 
+            FILEO MATO[1]=trnskm@token_period@_@token_access@_@token_path@_@token_egress@.avg.iter@token_trnassigniter@.tpp, MO=1-35,
+                          NAME=ivt, iwait, xwait, wait, wacc, waux, wegr, dtime, ddist, fare, boards,
+                               ivtLOC,  ivtLRF,  ivtEXP,  ivtHVY,  ivtCOM,  ivtFerry,  ivtMUNILoc, ivtMUNIMet,
+                               distLOC, distLRF, distEXP, distHVY, distCOM, distFerry, firstMode,
+                               xfare, modefare, faremat,
+                               dLocal, dRegional, dInterCity, dFree, dFareMat, dBART
 
             FILEO PRINTO[1]=PHT_total_trnskm@token_period@_@token_access@_@token_path@_@token_egress@.csv, APPEND=T
 
             ; Write out the same skim file from Iteration 4, by LL, 7/18/21
             FILLMW MW[1]=MI.2.1(35)
-            
-/* commented out by LL, 7/18/21
+
             ; this is the relevant trips matrix
             ; This is the reason for the @token_real_path@ -- using @token_path@ here would error when
             ; @token_path@ is 'trn', even though the else block isn't executing
@@ -598,6 +575,15 @@ loop period = 1,5
                 MW[24] =(MI.2.distCOM   *LAMBDA)+((1-LAMBDA)*MI.3.distCOM   )
                 MW[25] =(MI.2.distFerry *LAMBDA)+((1-LAMBDA)*MI.3.distFerry )
                 MW[26] =(MI.2.firstMode *LAMBDA)+((1-LAMBDA)*MI.3.firstMode )
+                MW[27] =(MI.2.xfare     *LAMBDA)+((1-LAMBDA)*MI.3.xfare     )
+                MW[28] =(MI.2.modefare  *LAMBDA)+((1-LAMBDA)*MI.3.modefare  )
+                MW[29] =(MI.2.faremat   *LAMBDA)+((1-LAMBDA)*MI.3.faremat   )
+                MW[30] =(MI.2.dLocal    *LAMBDA)+((1-LAMBDA)*MI.3.dLocal    )
+                MW[31] =(MI.2.dRegional *LAMBDA)+((1-LAMBDA)*MI.3.dRegional )
+                MW[32] =(MI.2.dInterCity*LAMBDA)+((1-LAMBDA)*MI.3.dInterCity)
+                MW[33] =(MI.2.dFree     *LAMBDA)+((1-LAMBDA)*MI.3.dFree     )
+                MW[34] =(MI.2.dFareMat  *LAMBDA)+((1-LAMBDA)*MI.3.dFareMat  )
+                MW[35] =(MI.2.dBART     *LAMBDA)+((1-LAMBDA)*MI.3.dBART     )
                 _BOTH = _BOTH+1
               ELSEIF (MI.2.@token_ivt@>0)
                 MW[1 ] =MI.2.ivt
@@ -626,6 +612,15 @@ loop period = 1,5
                 MW[24] =MI.2.distCOM  
                 MW[25] =MI.2.distFerry
                 MW[26] =MI.2.firstMode
+                MW[27] =MI.2.xfare
+                MW[28] =MI.2.modefare
+                MW[29] =MI.2.faremat
+                MW[30] =MI.2.dLocal
+                MW[31] =MI.2.dRegional
+                MW[32] =MI.2.dInterCity
+                MW[33] =MI.2.dFree
+                MW[34] =MI.2.dFareMat
+                MW[35] =MI.2.dBART
                 _ITERONLY = _ITERONLY+1
               ELSEIF (MI.3.@token_ivt@>0)
                 MW[1 ] =MI.3.ivt      
@@ -654,6 +649,15 @@ loop period = 1,5
                 MW[24] =MI.3.distCOM  
                 MW[25] =MI.3.distFerry
                 MW[26] =MI.3.firstMode
+                MW[27] =MI.3.xfare
+                MW[28] =MI.3.modefare
+                MW[29] =MI.3.faremat
+                MW[30] =MI.3.dLocal
+                MW[31] =MI.3.dRegional
+                MW[32] =MI.3.dInterCity
+                MW[33] =MI.3.dFree
+                MW[34] =MI.3.dFareMat
+                MW[35] =MI.3.dBART
                 _AVGONLY = _AVGONLY+1
               ENDIF
         
@@ -687,14 +691,13 @@ loop period = 1,5
                   _RMSE_IVTT(12.3LRS), _RMSE_TOTT(12.3LRS), _AVGPATHS(12.0LRS), _CURRPATHS(12.0LRS), _CURRBOARDS(12.3LRS),
                   _BOTH(12.0LRS), _ITERONLY(12.0LRS), _AVGONLY(12.0LRS)
             ENDIF
-*/
         ENDRUN
         
         ; print out some debugging information
         run pgm = matrix
           mati[1] = trnskm@token_period@_@token_access@_@token_path@_@token_egress@.iter@token_trnassigniter@.tpp
 
- 	        jloop
+             jloop
             ; debug print
             if (i = @token_debug_origin@ & j = @token_debug_destination@) 
               ; one header
@@ -744,13 +747,13 @@ wait4files files = ctramp1.script.end,  ctramp2.script.end,  ctramp3.script.end,
 * copy @token_debug_filename@.md.wlk.com.wlk.debug+@token_debug_filename@.md.wlk.hvy.wlk.debug+@token_debug_filename@.md.wlk.exp.wlk.debug+@token_debug_filename@.md.wlk.lrf.wlk.debug+@token_debug_filename@.md.wlk.loc.wlk.debug+@token_debug_filename@.md.wlk.trn.wlk.debug @token_debug_filename@.md.wlk.all.wlk.debug
 * copy @token_debug_filename@.pm.wlk.com.wlk.debug+@token_debug_filename@.pm.wlk.hvy.wlk.debug+@token_debug_filename@.pm.wlk.exp.wlk.debug+@token_debug_filename@.pm.wlk.lrf.wlk.debug+@token_debug_filename@.pm.wlk.loc.wlk.debug+@token_debug_filename@.pm.wlk.trn.wlk.debug @token_debug_filename@.pm.wlk.all.wlk.debug
 * copy @token_debug_filename@.ev.wlk.com.wlk.debug+@token_debug_filename@.ev.wlk.hvy.wlk.debug+@token_debug_filename@.ev.wlk.exp.wlk.debug+@token_debug_filename@.ev.wlk.lrf.wlk.debug+@token_debug_filename@.ev.wlk.loc.wlk.debug+@token_debug_filename@.ev.wlk.trn.wlk.debug @token_debug_filename@.ev.wlk.all.wlk.debug
-    													 											 					
+                                                                                                                          
 * copy @token_debug_filename@.ea.wlk.com.drv.debug+@token_debug_filename@.ea.wlk.hvy.drv.debug+@token_debug_filename@.ea.wlk.exp.drv.debug+@token_debug_filename@.ea.wlk.lrf.drv.debug+@token_debug_filename@.ea.wlk.loc.drv.debug+@token_debug_filename@.ea.wlk.trn.drv.debug @token_debug_filename@.ea.wlk.all.drv.debug
 * copy @token_debug_filename@.am.wlk.com.drv.debug+@token_debug_filename@.am.wlk.hvy.drv.debug+@token_debug_filename@.am.wlk.exp.drv.debug+@token_debug_filename@.am.wlk.lrf.drv.debug+@token_debug_filename@.am.wlk.loc.drv.debug+@token_debug_filename@.am.wlk.trn.drv.debug @token_debug_filename@.am.wlk.all.drv.debug
 * copy @token_debug_filename@.md.wlk.com.drv.debug+@token_debug_filename@.md.wlk.hvy.drv.debug+@token_debug_filename@.md.wlk.exp.drv.debug+@token_debug_filename@.md.wlk.lrf.drv.debug+@token_debug_filename@.md.wlk.loc.drv.debug+@token_debug_filename@.md.wlk.trn.drv.debug @token_debug_filename@.md.wlk.all.drv.debug
 * copy @token_debug_filename@.pm.wlk.com.drv.debug+@token_debug_filename@.pm.wlk.hvy.drv.debug+@token_debug_filename@.pm.wlk.exp.drv.debug+@token_debug_filename@.pm.wlk.lrf.drv.debug+@token_debug_filename@.pm.wlk.loc.drv.debug+@token_debug_filename@.pm.wlk.trn.drv.debug @token_debug_filename@.pm.wlk.all.drv.debug
 * copy @token_debug_filename@.ev.wlk.com.drv.debug+@token_debug_filename@.ev.wlk.hvy.drv.debug+@token_debug_filename@.ev.wlk.exp.drv.debug+@token_debug_filename@.ev.wlk.lrf.drv.debug+@token_debug_filename@.ev.wlk.loc.drv.debug+@token_debug_filename@.ev.wlk.trn.drv.debug @token_debug_filename@.ev.wlk.all.drv.debug
-																										   
+                                                                                                           
 * copy @token_debug_filename@.ea.drv.com.wlk.debug+@token_debug_filename@.ea.drv.hvy.wlk.debug+@token_debug_filename@.ea.drv.exp.wlk.debug+@token_debug_filename@.ea.drv.lrf.wlk.debug+@token_debug_filename@.ea.drv.loc.wlk.debug+@token_debug_filename@.ea.drv.trn.wlk.debug @token_debug_filename@.ea.drv.all.wlk.debug
 * copy @token_debug_filename@.am.drv.com.wlk.debug+@token_debug_filename@.am.drv.hvy.wlk.debug+@token_debug_filename@.am.drv.exp.wlk.debug+@token_debug_filename@.am.drv.lrf.wlk.debug+@token_debug_filename@.am.drv.loc.wlk.debug+@token_debug_filename@.am.drv.trn.wlk.debug @token_debug_filename@.am.drv.all.wlk.debug
 * copy @token_debug_filename@.md.drv.com.wlk.debug+@token_debug_filename@.md.drv.hvy.wlk.debug+@token_debug_filename@.md.drv.exp.wlk.debug+@token_debug_filename@.md.drv.lrf.wlk.debug+@token_debug_filename@.md.drv.loc.wlk.debug+@token_debug_filename@.md.drv.trn.wlk.debug @token_debug_filename@.md.drv.all.wlk.debug
