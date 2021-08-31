@@ -474,43 +474,60 @@ loop period = 1,5
           
           JLOOP   
 		  
-			  ; read in auto distance, added by AM 20210827
+              ; read in distance variables
               DIST_AUTO    =MW[9] ; total distance of drive access / egress
-			  DIST_LOCAL    =MW[30] ; total distance on FCIS local transit services  
+			  DIST_LOCAL    =MW[30] ; total distance on FCIS_Local transit services  			  
+              DIST_Regional =MW[31] ; total distance of FCIS_Regional services
+              DIST_Intercity=MW[32] ; total distance of FCIS_Intercity services
+              DIST_Free_SHTL=MW[33] ; total distance of FCIS_Free_SHTL services
+              DIST_FAREMAT  =MW[34] ; total distance of FCIS_FAREMAT services
+ 
+				; dist_shuttle=0 AND dist_intercity=0 <- if in scope
+				IF (DIST_Intercity+DIST_Free_SHTL=0)		  
 			  
-			  
-			  IF (DIST_AUTO < 1000 && DIST_LOCAL < 1000) ; distance is measured in miles * 100
-		  
-				  FZ_O=TAZ_to_FZ(1,I) ; Fare Zone - Origin
-				  FZ_D=TAZ_to_FZ(1,J) ; Fare Zone - Destination
-				  MYFARE=MATVAL(2,1,FZ_O,FZ_D)
+					IF (DIST_Regional=0 && DIST_LOCAL>0)   ; no Regional Services (only local)
+				
+						MW[10]=148
+				
+					ELSE 
 				  
-			  ELSEIF ((DIST_AUTO >= 1000 && DIST_LOCAL < 1000)|(DIST_AUTO < 1000 && DIST_LOCAL >= 1000))
-			  ; if auto distance OR local transit distance is 10 miles or more (but not both), one zone should be taken off the number of zones to be used in calculating the transit fare
-			  ; the minimum number of zones crossed should be ONE for the purpose of calculating the fare
-			  
-				  FZ_O=TAZ_to_FZ_auto(1,I) ; Fare Zone - Origin
-				  FZ_D=TAZ_to_FZ_auto(1,J) ; Fare Zone - Destination
-				  MYFARE=MATVAL(3,1,FZ_O,FZ_D)			  
+					  IF (DIST_AUTO < 1000 && DIST_LOCAL < 1000) ; distance is measured in miles * 100
 				  
-			  ELSEIF (DIST_AUTO >= 1000 && DIST_LOCAL >= 1000)
-			  ; if BOTH auto distance AND local transit distance is 10 miles or more, TWO zones should be taken off the number of zones to be used in calculating the transit fare
-			  ; the minimum number of zones crossed should be ONE for the purpose of calculating the fare
-			  
-			  	  FZ_O=TAZ_to_FZ_auto(1,I) ; Fare Zone - Origin
-				  FZ_D=TAZ_to_FZ_auto(1,J) ; Fare Zone - Destination
-				  MYFARE=MATVAL(4,1,FZ_O,FZ_D)	
+						  FZ_O=TAZ_to_FZ(1,I) ; Fare Zone - Origin
+						  FZ_D=TAZ_to_FZ(1,J) ; Fare Zone - Destination
+						  MYFARE=MATVAL(2,1,FZ_O,FZ_D)
+						  
+					  ELSEIF ((DIST_AUTO >= 1000 && DIST_LOCAL < 1000)|(DIST_AUTO < 1000 && DIST_LOCAL >= 1000))
+					  ; if auto distance OR local transit distance is 10 miles or more (but not both), one zone should be taken off the number of zones to be used in calculating the transit fare
+					  ; the minimum number of zones crossed should be ONE for the purpose of calculating the fare
+					  
+						  FZ_O=TAZ_to_FZ_auto(1,I) ; Fare Zone - Origin
+						  FZ_D=TAZ_to_FZ_auto(1,J) ; Fare Zone - Destination
+						  MYFARE=MATVAL(3,1,FZ_O,FZ_D)			  
+						  
+					  ELSEIF (DIST_AUTO >= 1000 && DIST_LOCAL >= 1000)
+					  ; if BOTH auto distance AND local transit distance is 10 miles or more, TWO zones should be taken off the number of zones to be used in calculating the transit fare
+					  ; the minimum number of zones crossed should be ONE for the purpose of calculating the fare
+					  
+						  FZ_O=TAZ_to_FZ_auto(1,I) ; Fare Zone - Origin
+						  FZ_D=TAZ_to_FZ_auto(1,J) ; Fare Zone - Destination
+						  MYFARE=MATVAL(4,1,FZ_O,FZ_D)	
+						  
+					  ELSE
+					  
+						; There shouldn't be any cases in this category
+					  
+					  ENDIF
 				  
-			  ELSE
-			  
-				; There shouldn't be any cases in this category
-			  
-			  ENDIF
-			  
-              MW[10][J]=MYFARE*100  ; convert to cents, LL, 8/19/21
-              ;PRINT FORM=6.0, LIST=I,',',J,',',FZ_O,',',FZ_D, MYFARE, FILE=FARE_QAQC.CSV 
+					  MW[10][J]=MYFARE*100  ; convert to cents, LL, 8/19/21
+					  ;PRINT FORM=6.0, LIST=I,',',J,',',FZ_O,',',FZ_D, MYFARE, FILE=FARE_QAQC.CSV 
+					  
+					ENDIF ; no Regional Services (only local)
+				  
+				ENDIF	; if in scope			  
 			  
           ENDJLOOP
+		  
         ENDRUN
 
 

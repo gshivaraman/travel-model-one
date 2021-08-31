@@ -476,24 +476,33 @@ loop period = 1,5
 		  
 			  ; read in auto distance, added by AM 20210827
               DIST_AUTO    =MW[9] ; total distance of drive access / egress
+              DIST_Intercity=MW[32] ; total distance of FCIS_Intercity services
+              DIST_Free_SHTL=MW[33] ; total distance of FCIS_Free_SHTL services
+
+ 
+			; dist_shuttle=0 AND dist_intercity=0 <- if in scope, added by AM 20210830
+			IF (DIST_Intercity+DIST_Free_SHTL=0)		  
 			  
-			  ; if auto distance is 10 miles or more one zone should be taken off the number of zones to be used in calculating the transit fare
-			  IF (DIST_AUTO < 1000) ; distance is measured in miles * 100
-		  
-				  FZ_O=TAZ_to_FZ(1,I) ; Fare Zone - Origin
-				  FZ_D=TAZ_to_FZ(1,J) ; Fare Zone - Destination
-				  MYFARE=MATVAL(2,1,FZ_O,FZ_D)
+			  
+				  ; if auto distance is 10 miles or more one zone should be taken off the number of zones to be used in calculating the transit fare
+				  IF (DIST_AUTO < 1000) ; distance is measured in miles * 100
+			  
+					  FZ_O=TAZ_to_FZ(1,I) ; Fare Zone - Origin
+					  FZ_D=TAZ_to_FZ(1,J) ; Fare Zone - Destination
+					  MYFARE=MATVAL(2,1,FZ_O,FZ_D)
+					  
+				  ELSE
 				  
-			  ELSE
-			  
-				  FZ_O=TAZ_to_FZ_auto(1,I) ; Fare Zone - Origin
-				  FZ_D=TAZ_to_FZ_auto(1,J) ; Fare Zone - Destination
-				  MYFARE=MATVAL(4,3,FZ_O,FZ_D)			  
-			  
-			  ENDIF
-			  
-              MW[10][J]=MYFARE*1.08*100  ; convert to cents, LL, 8/19/21 + "raise all fares 8%" AM 20210827
-              ;PRINT FORM=6.0, LIST=I,',',J,',',FZ_O,',',FZ_D, MYFARE, FILE=FARE_QAQC.CSV 
+					  FZ_O=TAZ_to_FZ_auto(1,I) ; Fare Zone - Origin
+					  FZ_D=TAZ_to_FZ_auto(1,J) ; Fare Zone - Destination
+					  MYFARE=MATVAL(4,3,FZ_O,FZ_D)			  
+				  
+				  ENDIF
+				  
+				  MW[10][J]=MYFARE*1.08*100  ; convert to cents, LL, 8/19/21 + "raise all fares 8%" AM 20210827
+				  ;PRINT FORM=6.0, LIST=I,',',J,',',FZ_O,',',FZ_D, MYFARE, FILE=FARE_QAQC.CSV 
+				  
+			ENDIF ; if in scope
 			  
           ENDJLOOP
         ENDRUN
