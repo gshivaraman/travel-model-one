@@ -138,6 +138,7 @@ SummariseStr <- function(sampleshare=0.5, pnrparkingcost=2.0, logrun=FALSE, catv
   # calculate bau fare, for purposes of comparison
   trips <- trips %>%
     mutate(bau_fare = modefare + xfare + faremat)
+    
   
   # calculate / rename other required variables
   trips <- trips %>%
@@ -190,8 +191,8 @@ SummariseStr <- function(sampleshare=0.5, pnrparkingcost=2.0, logrun=FALSE, catv
   
   # convert monetary variables from cents to dollars
   
-  mydf <- mydf %>%
-    mutate(fare=fare/100)
+  # mydf <- mydf %>%
+    # mutate(fare=fare/100)
 
   # calculate the numbers of trips taking into account the sample share
   
