@@ -501,16 +501,16 @@ loop period = 1,5
 					  ; if auto distance OR local transit distance is 10 miles or more (but not both), one zone should be taken off the number of zones to be used in calculating the transit fare
 					  ; the minimum number of zones crossed should be ONE for the purpose of calculating the fare
 					  
-						  FZ_O=TAZ_to_FZ_auto(1,I) ; Fare Zone - Origin
-						  FZ_D=TAZ_to_FZ_auto(1,J) ; Fare Zone - Destination
+						  FZ_O=TAZ_to_FZ(1,I) ; Fare Zone - Origin
+						  FZ_D=TAZ_to_FZ(1,J) ; Fare Zone - Destination
 						  MYFARE=MATVAL(3,1,FZ_O,FZ_D)			  
 						  
 					  ELSEIF (DIST_AUTO >= 1000 && DIST_LOCAL >= 1000)
 					  ; if BOTH auto distance AND local transit distance is 10 miles or more, TWO zones should be taken off the number of zones to be used in calculating the transit fare
 					  ; the minimum number of zones crossed should be ONE for the purpose of calculating the fare
 					  
-						  FZ_O=TAZ_to_FZ_auto(1,I) ; Fare Zone - Origin
-						  FZ_D=TAZ_to_FZ_auto(1,J) ; Fare Zone - Destination
+						  FZ_O=TAZ_to_FZ(1,I) ; Fare Zone - Origin
+						  FZ_D=TAZ_to_FZ(1,J) ; Fare Zone - Destination
 						  MYFARE=MATVAL(4,1,FZ_O,FZ_D)	
 						  
 					  ELSE
