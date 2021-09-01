@@ -20,9 +20,9 @@ CompareStr(workbook1 = "WorkbookStr_2015_TM152_IPA_16_NB_20210818144759amitrani.
 
 # MTC base vs MTC tests
 
-CompareStr(workbook1 = "WorkbookStr_2015_TM152_MTC_T26_20210830160334amitrani.xlsx", workbook2 = "WorkbookStr_2015_TM152_MTC_T27_20210830161549amitrani.xlsx")
+CompareStr(workbook1 = "WorkbookStr_2015_TM152_MTC_T26_20210830201723amitrani.xlsx", workbook2 = "WorkbookStr_2015_TM152_MTC_T27_20210830202437amitrani.xlsx")
 
-CompareStr(workbook1 = "WorkbookStr_2015_TM152_MTC_T26_20210830160334amitrani.xlsx", workbook2 = "WorkbookStr_2015_TM152_MTC_T28_20210830162310amitrani.xlsx")
+CompareStr(workbook1 = "WorkbookStr_2015_TM152_MTC_T26_20210830201723amitrani.xlsx", workbook2 = "WorkbookStr_2015_TM152_MTC_T28_20210830203150amitrani.xlsx")
 
 # Steer base vs Steer tests
 
@@ -48,6 +48,6 @@ CompareStr(workbook1 = "WorkbookStr_2015_TM152_IPA_16_NB_20210818144759amitrani.
 
 # MTC base versus Steer base
 
-CompareStr(workbook1 = "WorkbookStr_2015_TM152_MTC_T26_20210830160334amitrani.xlsx", workbook2 = "WorkbookStr_2015_TM152_STR_S2_20210818160843amitrani.xlsx")
+CompareStr(workbook1 = "WorkbookStr_2015_TM152_MTC_T26_20210830201723amitrani.xlsx", workbook2 = "WorkbookStr_2015_TM152_STR_S2_20210818160843amitrani.xlsx")
 
 #
