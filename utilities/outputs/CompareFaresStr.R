@@ -139,7 +139,7 @@ CompareFaresStr <- function(mybaufolder = "NotDefined", mydsfolder = "NotDefined
   nrow_trips_bau <- nrow(trips_bau)
   cat(yellow(paste0("In the folder ", mybaufolder, ", the file ", mybaufilename, " has ", nrow_trips_bau, " records. \n \n")))
   
-  mydf_bau <- keepr(trips_bau, "hh_id", "person_id", "tour_id", "stop_id", "orig_taz", "dest_taz", "skims_mode", "fare")
+  mydf_bau <- keepr(trips_bau, "hh_id", "person_id", "tour_id", "stop_id", "orig_taz", "dest_taz", "skims_mode", "fare", "bau_fare")
   
   mydf_bau <- mydf_bau %>% 
     filter(skims_mode!="walk" & skims_mode!="bike" & skims_mode!="da" & skims_mode!="s2" & skims_mode!="s3" & skims_mode!="Taxi" & skims_mode!="TNCa" & skims_mode!="TNCs")
@@ -157,7 +157,7 @@ CompareFaresStr <- function(mybaufolder = "NotDefined", mydsfolder = "NotDefined
   nrow_trips_ds <- nrow(trips)
   cat(yellow(paste0("In the folder ", mydsfolder, ", the file ", mydsfilename, " has ", nrow_trips_ds, " records. \n \n")))
   
-  mydf_ds <- keepr(trips, "hh_id", "person_id", "tour_id", "stop_id", "orig_taz", "dest_taz", "skims_mode", "fare")
+  mydf_ds <- keepr(trips, "hh_id", "person_id", "tour_id", "stop_id", "orig_taz", "dest_taz", "skims_mode", "fare", "bau_fare")
   
   mydf_ds <- mydf_ds %>% 
     filter(skims_mode!="walk" & skims_mode!="bike" & skims_mode!="da" & skims_mode!="s2" & skims_mode!="s3" & skims_mode!="Taxi" & skims_mode!="TNCa" & skims_mode!="TNCs")
