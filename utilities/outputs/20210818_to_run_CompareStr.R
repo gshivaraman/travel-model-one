@@ -26,6 +26,12 @@ CompareStr(workbook1 = "WorkbookStr_2015_TM152_MTC_T26_20210830201723amitrani.xl
 
 CompareStr(workbook1 = "WorkbookStr_2015_TM152_MTC_T26_20210830201723amitrani.xlsx", workbook2 = "WorkbookStr_2015_TM152_MTC_T30_20210901144143amitrani.xlsx")
 
+# Steer base vs Steer tests, including the incQ-mode-hometaz sheet
+
+CompareStr(workbook1 = "WorkbookStr_2015_TM152_MTC_T26_20210902103141amitrani.xlsx", workbook2 = "WorkbookStr_2015_TM152_MTC_T31_20210902094336amitrani.xlsx")
+
+CompareStr(workbook1 = "WorkbookStr_2015_TM152_MTC_T26_20210902103141amitrani.xlsx", workbook2 = "WorkbookStr_2015_TM152_MTC_T33_20210902095157amitrani.xlsx")
+
 # Steer base vs Steer tests
 
 CompareStr(workbook1 = "WorkbookStr_2015_TM152_STR_S2_20210818160843amitrani.xlsx", workbook2 = "WorkbookStr_2015_TM152_STR_T8_20210818162014amitrani.xlsx")
