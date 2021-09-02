@@ -34,7 +34,7 @@ CompareStr <- function(workbook1, workbook2) {
   
   # other variables combined with trip_mode to define categories: 
   
-  for (myvar in c("incQ", "timeCodeNum", "ptype", "home_taz")) {
+  for (myvar in c("incQ", "timeCodeNum", "ptype")) {
     
     mysheetname <- paste0(myvar, "_trip_mode")
   
@@ -71,16 +71,27 @@ CompareStr <- function(workbook1, workbook2) {
       writeData(wb, sheetname, ptype_trip_mode)
       
       
-    } else if(myvar == "home_taz") {
-      
-      home_taz_trip_mode <- mydf
-      sheetname <- mysheetname
-      addWorksheet(wb, mysheetname)
-      writeData(wb, sheetname, home_taz_trip_mode)      
-      
-    }
+    } 
     
   }  
+  
+  # incQ_trip_mode_home_taz
+  
+  incQ_trip_mode_home_taz1 <- read_excel(workbook1filename, sheet = "incQ_trip_mode_home_taz")
+  incQ_trip_mode_home_taz2 <- read_excel(workbook2filename, sheet = "incQ_trip_mode_home_taz")
+  
+  incQ_trip_mode_home_taz <- incQ_trip_mode_home_taz1 %>% full_join(incQ_trip_mode_home_taz2, by=c("incQ", "trip_mode", "home_taz"), suffix=c("1", "2"))
+  
+  incQ_trip_mode_home_taz <- incQ_trip_mode_home_taz %>% 
+    select("incQ", "trip_mode", "home_taz", "trips1", "trips2",	"revenue1", "revenue2", "fare1", "fare2",	"bau_fare1", "bau_fare2",	"num_participants1", "num_participants2", "walktime1", "walktime2", "wait1", "wait2", "IVT1", "IVT2", "transfers1", "transfers2", "othercost1", "othercost2", "distance1", "distance2", "dLocal1", "dLocal2", "dRegional1", "dRegional2", "dFree1", "dFree2", "dInterCity1", "dInterCity2", "ddist1", "ddist2", "dFareMat1", "dFareMat2") %>%
+    arrange("incQ", "trip_mode", "home_taz")
+  
+  # export the resulting table to Excel
+  
+  sheetname <- "incQ_trip_mode_home_taz"
+  addWorksheet(wb, sheetname)
+  writeData(wb, sheetname, incQ_trip_mode_home_taz)
+  
   
   # County OD outputs
   
