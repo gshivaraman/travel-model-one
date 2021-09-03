@@ -279,7 +279,7 @@ loop period = 1,5
           token_bus_acclinks_KNR = ' '
         endif
 ;
-; Update by ?TransitSkims_FCIS_test_2.job?, LL, 7/1/21
+; Update by LL, 7/1/21
 ;
         run pgm = trnbuild
           ; path parameter: do not list all of the input
@@ -533,7 +533,7 @@ loop period = 1,5
               
           FILLMW MW[1]=MI.1.1(56) ; read in original transit skims ; LL, 9/1/21 
           ;
-          ; Calculate FARE -- Test 2 Revised, LL, AM, 8/25/21
+          ; Calculate FARE -- Test 3 based on Test 2 with additional discounts for regional to regional transfers.   Revised by LL, AM, 9/3/21
           ;          
           JLOOP    ; for each I-J pair
               XFERS=MW[11]-1        ; number of transfers
@@ -612,14 +612,23 @@ loop period = 1,5
               IF (DIST_Intercity+DIST_Free_SHTL=0)
  
                 IF (DIST_LOCAL=0)   ; no Local Services (only regional)
+				
                     ; apply discount if there are regional transfers
-					IF (NUM_REG_XFERS=1) ; one regional transfer
-                        MW[10]=ORIGINAL_FARE*0.75 ; 75% discount on total regional fare
+					IF (NUM_REG_XFERS>0) ; check if there are regional transfers
 					
-					ELSE ; 2+ regional transfers
-                        MW[10]=ORIGINAL_FARE*0.85 ; 85% discount on total regional fare
-					 
-					ENDIF ; check # of transfers                      
+						IF (NUM_REG_XFERS=1) ; one regional transfer
+							MW[10]=ORIGINAL_FARE*0.75 ; 75% discount on total regional fare
+						
+						ELSE ; 2+ regional transfers
+							MW[10]=ORIGINAL_FARE*0.85 ; 85% discount on total regional fare
+						 
+						ENDIF ; check # of transfers                      
+						
+					ELSE 
+					
+						; no change to base fare if only regional transit used and no transfers
+						
+					END IF ; check if there are regional transfers
  
                 ELSE   ;
  
