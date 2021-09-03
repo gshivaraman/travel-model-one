@@ -53,6 +53,7 @@
         <File name="model-files\scripts\skims\TransitSkims25.job" />
         <File name="model-files\scripts\skims\TransitSkims_T29.job" />
         <File name="model-files\scripts\skims\TransitSkims_T31.job" />
+        <File name="model-files\scripts\skims\TransitSkims_T37.job" />
         <File name="model-files\scripts\skims\TransitSkims35.job" />
         <File name="utilities\outputs\JoinSkimsStr.R" />
         <File name="utilities\outputs\SummariseStr.R" />
