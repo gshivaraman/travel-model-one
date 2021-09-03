@@ -69,5 +69,6 @@
         <File name="model-files\scripts\skims\FareByDistLKUP.CSV" />
         <File name="model-files\scripts\skims\FareByDistLKUP2.csv" />
         <File name="model-files\scripts\skims\Zone_Lookup_Seamless.csv" />
+        <File name="model-files\scripts\skims\Zone_Lookup_Option_6.csv" />
     </Project>
 </NotepadPlus>
