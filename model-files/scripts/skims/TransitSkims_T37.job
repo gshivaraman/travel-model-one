@@ -9,7 +9,7 @@
 ; rev'd 7/27/21
 ;
 FCIS_Local='15,20,21,24,27,28,30,33,38,42,44,46,49,52,55,56,60,63,66,68,70,110,111'
-FCIS_Regional='80,81,82,84,86,87,88,90,91,92,93,95,100,101,102,103,104,105,120,121,122,130'
+FCIS_Regional='80,81,82,84,86,87,88,90,91,92,93,95,100,101,102,103,104,105,120,121,130'
 FCIS_Intercity='131,132,133,135'
 FCIS_Free_SHTL='10,11,12,13,14,16,19'
 FCIS_FAREMAT='100,101,102,103,104,105,120,122,130'
@@ -373,7 +373,6 @@ loop period = 1,5
                           d_80,  ; SamTrans - Express                          
                           d_81,  ; Santa Clara VTA - Express                   
                           d_82,  ; Dumbarton Express                           
-                          d_83,  ; AC Transit - Transbay                       
                           d_84,  ; AC Transit - Transbay (Local travel allowed)
                           d_86,  ; County Connection - Express                 
                           d_87,  ; Golden Gate Transit - Express San Francisco 
@@ -382,7 +381,6 @@ loop period = 1,5
                           d_91,  ; SolTrans - Express                          
                           d_92,  ; Fairfield And Suisun Transit - Express      
                           d_93,  ; VINE - Express                              
-                          d_94,  ; SMART - Temporary Express                   
                           d_95,  ; VINE - Express                              
                           d_100, ; East Bay Ferries                            
                           d_101, ; Golden Gate Ferry - Larkspur                
@@ -393,8 +391,7 @@ loop period = 1,5
                           d_120, ; BART & E-BART                               
                           d_121, ; Oakland Airport Connector                   
                           d_130, ; Caltrain                                    
-                          d_135,  ; SMART                                       
-
+                          d_135, ; SMART                                       
                           
             ; in-vehicle time for all transit modes, use TP+ code 1001    
             mw[1]  = time(1001),
@@ -469,27 +466,25 @@ loop period = 1,5
             mw[35] = dist(80),  ; SamTrans - Express                          
             mw[36] = dist(81),  ; Santa Clara VTA - Express                   
             mw[37] = dist(82),  ; Dumbarton Express                           
-            mw[38] = dist(83),  ; AC Transit - Transbay                       
-            mw[39] = dist(84),  ; AC Transit - Transbay (Local travel allowed)
-            mw[40] = dist(86),  ; County Connection - Express                 
-            mw[41] = dist(87),  ; Golden Gate Transit - Express San Francisco 
-            mw[42] = dist(88),  ; Golden Gate Transit - Express Richmond      
-            mw[43] = dist(90),  ; WestCAT - Express                           
-            mw[44] = dist(91),  ; SolTrans - Express                          
-            mw[45] = dist(92),  ; Fairfield And Suisun Transit - Express      
-            mw[46] = dist(93),  ; VINE - Express                              
-            mw[47] = dist(94),  ; SMART - Temporary Express                   
-            mw[48] = dist(95),  ; VINE - Express                              
-            mw[49] = dist(100), ; East Bay Ferries                            
-            mw[50] = dist(101), ; Golden Gate Ferry - Larkspur                
-            mw[51] = dist(102), ; Golden Gate Ferry - Sausalito               
-            mw[52] = dist(103), ; Tiburon Ferry                               
-            mw[53] = dist(104), ; Vallejo Baylink Ferry                       
-            mw[54] = dist(105), ; South San Francisco Ferry                   
-            mw[55] = dist(120), ; BART & E-BART                               
-            mw[56] = dist(121), ; Oakland Airport Connector                   
-            mw[57] = dist(130), ; Caltrain                                    
-            mw[58] = dist(135)  ; SMART                                       
+            mw[38] = dist(84),  ; AC Transit - Transbay (Local travel allowed)
+            mw[39] = dist(86),  ; County Connection - Express                 
+            mw[40] = dist(87),  ; Golden Gate Transit - Express San Francisco 
+            mw[41] = dist(88),  ; Golden Gate Transit - Express Richmond      
+            mw[42] = dist(90),  ; WestCAT - Express                           
+            mw[43] = dist(91),  ; SolTrans - Express                          
+            mw[44] = dist(92),  ; Fairfield And Suisun Transit - Express      
+            mw[45] = dist(93),  ; VINE - Express                              
+            mw[46] = dist(95),  ; VINE - Express                              
+            mw[47] = dist(100), ; East Bay Ferries                            
+            mw[48] = dist(101), ; Golden Gate Ferry - Larkspur                
+            mw[49] = dist(102), ; Golden Gate Ferry - Sausalito               
+            mw[50] = dist(103), ; Tiburon Ferry                               
+            mw[51] = dist(104), ; Vallejo Baylink Ferry                       
+            mw[52] = dist(105), ; South San Francisco Ferry                   
+            mw[53] = dist(120), ; BART & E-BART                               
+            mw[54] = dist(121), ; Oakland Airport Connector                   
+            mw[55] = dist(130), ; Caltrain                                    
+            mw[56] = dist(135)  ; SMART                                       
 
           ; trace a selection of o/d pairs for debugging
 ;          select trace=(i=@token_debug_origin@ && j=@token_debug_destination@)            
@@ -504,17 +499,17 @@ loop period = 1,5
         RUN PGM=MATRIX
           FILEI MATI  = trnskm@token_period@_@token_access@_@token_path@_@token_egress@.iter@token_trnassigniter@_tmp.tpp ; by LL, 7/1/21        
           FILEO MATO  = trnskm@token_period@_@token_access@_@token_path@_@token_egress@.iter@token_trnassigniter@.tpp,     ; by LL, 7/1/21        
-            MO=1-58, ; LL, 9/1/21
+            MO=1-56, ; LL, 9/1/21
             NAME=
               ivt  iwait  xwait  wait  wacc  waux  wegr  dtime  ddist  fare  boards  ivtLOC  ivtLRF  ivtEXP  ivtHVY,
               ivtCOM  ivtFerry  ivtMUNILoc  ivtMUNIMet  distLOC  distLRF  distEXP  distHVY  distCOM,
               distFerry  firstMode xfare modefare faremat,
               dLocal, dRegional, dInterCity, dFree, dFareMat, 
               ; distance by FCIS Regional Services Operator, LL, 9/1/21
+              ; distance by FCIS Regional Services Operator, LL, 9/1/21
               d_80,  ; SamTrans - Express                          
               d_81,  ; Santa Clara VTA - Express                   
               d_82,  ; Dumbarton Express                           
-              d_83,  ; AC Transit - Transbay                       
               d_84,  ; AC Transit - Transbay (Local travel allowed)
               d_86,  ; County Connection - Express                 
               d_87,  ; Golden Gate Transit - Express San Francisco 
@@ -523,7 +518,6 @@ loop period = 1,5
               d_91,  ; SolTrans - Express                          
               d_92,  ; Fairfield And Suisun Transit - Express      
               d_93,  ; VINE - Express                              
-              d_94,  ; SMART - Temporary Express                   
               d_95,  ; VINE - Express                              
               d_100, ; East Bay Ferries                            
               d_101, ; Golden Gate Ferry - Larkspur                
@@ -537,7 +531,7 @@ loop period = 1,5
               d_135  ; SMART                                       
 
               
-          FILLMW MW[1]=MI.1.1(58) ; read in original transit skims ; LL, 9/1/21 
+          FILLMW MW[1]=MI.1.1(56) ; read in original transit skims ; LL, 9/1/21 
           ;
           ; Calculate FARE -- Test 2 Revised, LL, AM, 8/25/21
           ;          
@@ -553,76 +547,79 @@ loop period = 1,5
 
               ; set distance by Regional Services Operator, LL, 9/1/21
               ;   and reset indicators to 0
-              DIST_80 =mw[35], USE_80  = 0 ; SamTrans - Express                          
-              DIST_81 =mw[36], USE_81  = 0 ; Santa Clara VTA - Express                   
-              DIST_82 =mw[37], USE_82  = 0 ; Dumbarton Express                           
-              DIST_83 =mw[38], USE_83  = 0 ; AC Transit - Transbay                       
-              DIST_84 =mw[39], USE_84  = 0 ; AC Transit - Transbay (Local travel allowed)
-              DIST_86 =mw[40], USE_86  = 0 ; County Connection - Express                 
-              DIST_87 =mw[41], USE_87  = 0 ; Golden Gate Transit - Express San Francisco 
-              DIST_88 =mw[42], USE_88  = 0 ; Golden Gate Transit - Express Richmond      
-              DIST_90 =mw[43], USE_90  = 0 ; WestCAT - Express                           
-              DIST_91 =mw[44], USE_91  = 0 ; SolTrans - Express                          
-              DIST_92 =mw[45], USE_92  = 0 ; Fairfield And Suisun Transit - Express      
-              DIST_93 =mw[46], USE_93  = 0 ; VINE - Express                              
-              DIST_94 =mw[47], USE_94  = 0 ; SMART - Temporary Express                   
-              DIST_95 =mw[48], USE_95  = 0 ; VINE - Express                              
-              DIST_100=mw[49], USE_100 = 0 ; East Bay Ferries                            
-              DIST_101=mw[50], USE_101 = 0 ; Golden Gate Ferry - Larkspur                
-              DIST_102=mw[51], USE_102 = 0 ; Golden Gate Ferry - Sausalito               
-              DIST_103=mw[52], USE_103 = 0 ; Tiburon Ferry                               
-              DIST_104=mw[53], USE_104 = 0 ; Vallejo Baylink Ferry                       
-              DIST_105=mw[54], USE_105 = 0 ; South San Francisco Ferry                   
-              DIST_120=mw[55], USE_120 = 0 ; BART & E-BART                               
-              DIST_121=mw[56], USE_121 = 0 ; Oakland Airport Connector                   
-              DIST_130=mw[57], USE_130 = 0 ; Caltrain                                    
-              DIST_135=mw[58], USE_135 = 0 ; SMART                                       
+              DIST_80 =mw[35], USE_80 =0 ; SamTrans - Express                          
+              DIST_81 =mw[36], USE_81 =0 ; Santa Clara VTA - Express                   
+              DIST_82 =mw[37], USE_82 =0 ; Dumbarton Express                           
+              DIST_84 =mw[38], USE_84 =0 ; AC Transit - Transbay (Local travel allowed)
+              DIST_86 =mw[39], USE_86 =0 ; County Connection - Express                 
+              DIST_87 =mw[40], USE_87 =0 ; Golden Gate Transit - Express San Francisco 
+              DIST_88 =mw[41], USE_88 =0 ; Golden Gate Transit - Express Richmond      
+              DIST_90 =mw[42], USE_90 =0 ; WestCAT - Express                           
+              DIST_91 =mw[43], USE_91 =0 ; SolTrans - Express                          
+              DIST_92 =mw[44], USE_92 =0 ; Fairfield And Suisun Transit - Express      
+              DIST_93 =mw[45], USE_93 =0 ; VINE - Express                              
+              DIST_95 =mw[46], USE_95 =0 ; VINE - Express                              
+              DIST_100=mw[47], USE_100=0 ; East Bay Ferries                            
+              DIST_101=mw[48], USE_101=0 ; Golden Gate Ferry - Larkspur                
+              DIST_102=mw[49], USE_102=0 ; Golden Gate Ferry - Sausalito               
+              DIST_103=mw[50], USE_103=0 ; Tiburon Ferry                               
+              DIST_104=mw[51], USE_104=0 ; Vallejo Baylink Ferry                       
+              DIST_105=mw[52], USE_105=0 ; South San Francisco Ferry                   
+              DIST_120=mw[53], USE_120=0 ; BART & E-BART                               
+              DIST_121=mw[54], USE_121=0 ; Oakland Airport Connector                   
+              DIST_130=mw[55], USE_130=0 ; Caltrain                                    
+              DIST_135=mw[56], USE_135=0 ; SMART                                       
 
               ; indicator of inclusion of Regional Services Operator on path, LL, 9/1/21
-              IF (DIST_80  > 0) USE_80  = 1   ; SamTrans - Express                          
-              IF (DIST_81  > 0) USE_81  = 1   ; Santa Clara VTA - Express                   
-              IF (DIST_82  > 0) USE_82  = 1   ; Dumbarton Express                           
-              IF (DIST_83  > 0) USE_83  = 1   ; AC Transit - Transbay                       
-              IF (DIST_84  > 0) USE_84  = 1   ; AC Transit - Transbay (Local travel allowed)
-              IF (DIST_86  > 0) USE_86  = 1   ; County Connection - Express                 
-              IF (DIST_87  > 0) USE_87  = 1   ; Golden Gate Transit - Express San Francisco 
-              IF (DIST_88  > 0) USE_88  = 1   ; Golden Gate Transit - Express Richmond      
-              IF (DIST_90  > 0) USE_90  = 1   ; WestCAT - Express                           
-              IF (DIST_91  > 0) USE_91  = 1   ; SolTrans - Express                          
-              IF (DIST_92  > 0) USE_92  = 1   ; Fairfield And Suisun Transit - Express      
-              IF (DIST_93  > 0) USE_93  = 1   ; VINE - Express                              
-              IF (DIST_94  > 0) USE_94  = 1   ; SMART - Temporary Express                   
-              IF (DIST_95  > 0) USE_95  = 1   ; VINE - Express                              
-              IF (DIST_100 > 0) USE_100 = 1   ; East Bay Ferries                            
-              IF (DIST_101 > 0) USE_101 = 1   ; Golden Gate Ferry - Larkspur                
-              IF (DIST_102 > 0) USE_102 = 1   ; Golden Gate Ferry - Sausalito               
-              IF (DIST_103 > 0) USE_103 = 1   ; Tiburon Ferry                               
-              IF (DIST_104 > 0) USE_104 = 1   ; Vallejo Baylink Ferry                       
-              IF (DIST_105 > 0) USE_105 = 1   ; South San Francisco Ferry                   
-              IF (DIST_120 > 0) USE_120 = 1   ; BART & E-BART                               
-              IF (DIST_121 > 0) USE_121 = 1   ; Oakland Airport Connector                   
-              IF (DIST_130 > 0) USE_130 = 1   ; Caltrain                                    
-              IF (DIST_135 > 0) USE_135 = 1   ; SMART 
+              IF (DIST_80 >0) USE_80 =1   ; SamTrans - Express                          
+              IF (DIST_81 >0) USE_81 =1   ; Santa Clara VTA - Express                   
+              IF (DIST_82 >0) USE_82 =1   ; Dumbarton Express                           
+              IF (DIST_84 >0) USE_84 =1   ; AC Transit - Transbay                       
+              IF (DIST_86 >0) USE_86 =1   ; AC Transit - Transbay (Local travel allowed)
+              IF (DIST_87 >0) USE_87 =1   ; County Connection - Express                 
+              IF (DIST_88 >0) USE_88 =1   ; Golden Gate Transit - Express San Francisco 
+              IF (DIST_90 >0) USE_90 =1   ; Golden Gate Transit - Express Richmond      
+              IF (DIST_91 >0) USE_91 =1   ; WestCAT - Express                           
+              IF (DIST_92 >0) USE_92 =1   ; SolTrans - Express                          
+              IF (DIST_93 >0) USE_93 =1   ; Fairfield And Suisun Transit - Express      
+              IF (DIST_95 >0) USE_95 =1   ; VINE - Express                              
+              IF (DIST_100>0) USE_100=1   ; SMART - Temporary Express                   
+              IF (DIST_101>0) USE_101=1   ; VINE - Express                              
+              IF (DIST_102>0) USE_102=1   ; East Bay Ferries                            
+              IF (DIST_103>0) USE_103=1   ; Golden Gate Ferry - Larkspur                
+              IF (DIST_104>0) USE_104=1   ; Golden Gate Ferry - Sausalito               
+              IF (DIST_105>0) USE_105=1   ; Tiburon Ferry                               
+              IF (DIST_120>0) USE_120=1   ; Vallejo Baylink Ferry                       
+              IF (DIST_121>0) USE_121=1   ; South San Francisco Ferry                   
+              IF (DIST_130>0) USE_130=1   ; BART & E-BART                               
+              IF (DIST_135>0) USE_135=1   ; Oakland Airport Connector                   
               
               ; number of Regional Services Operator used
-              NUM_REG_OPTRS=USE_80 + USE_81 + USE_82 + USE_83 + USE_84 + USE_86 + USE_87 + USE_88 + USE_90 +
-                            USE_91 + USE_92 + USE_93 + USE_94 + USE_95 + USE_100+ USE_101+ USE_102+ USE_103+
+              NUM_REG_OPTRS=USE_80 + USE_81 + USE_82 + USE_84 + USE_86 + USE_87 + USE_88 + USE_90 +
+                            USE_91 + USE_92 + USE_93 + USE_95 + USE_100+ USE_101+ USE_102+ USE_103+
                             USE_104+ USE_105+ USE_120+ USE_121+ USE_130+ USE_135                                      
 
               ; total distance of Regional Services Operator used                
-              DIST_REG_OPTRS=DIST_80 + DIST_81 + DIST_82 + DIST_83 + DIST_84 + DIST_86 + DIST_87 + DIST_88 + DIST_90 +
-                             DIST_91 + DIST_92 + DIST_93 + DIST_94 + DIST_95 + DIST_100+ DIST_101+ DIST_102+ DIST_103+
+              DIST_REG_OPTRS=DIST_80 + DIST_81 + DIST_82 + DIST_84 + DIST_86 + DIST_87 + DIST_88 + DIST_90 +
+                             DIST_91 + DIST_92 + DIST_93 + DIST_95 + DIST_100+ DIST_101+ DIST_102+ DIST_103+
                              DIST_104+ DIST_105+ DIST_120+ DIST_121+ DIST_130+ DIST_135                                      
 
               NUM_REG_XFERS=NUM_REG_OPTRS-1 ; number of regional transfers
               
-              ORIGIONAL_FARE=MW[10] ; original fare
+              ORIGINAL_FARE=MW[10] ; original fare
  
               ; dist_shuttle=0 AND dist_intercity=0 <- if in scope
               IF (DIST_Intercity+DIST_Free_SHTL=0)
  
                 IF (DIST_LOCAL=0)   ; no Local Services (only regional)
-                    ; no discount, and no change to BAU fares
+                    ; apply discount if there are regional transfers
+					IF (NUM_REG_XFERS=1) ; one regional transfer
+                        MW[10]=ORIGINAL_FARE*0.75 ; 75% discount on total regional fare
+					
+					ELSE ; 2+ regional transfers
+                        MW[10]=ORIGINAL_FARE*0.85 ; 85% discount on total regional fare
+					 
+					ENDIF ; check # of transfers                      
  
                 ELSE   ;
  
@@ -647,15 +644,15 @@ loop period = 1,5
  
 						IF (NUM_REG_XFERS=0) ; must have one transfer between local and regional
                             WT_DIST=DIST_LOCAL*1.6+DIST_REG_OPTRS ; weighted distance of Local and Regional
-                            MW[10]=ORIGIONAL_FARE*(DIST_REG_OPTRS/WT_DIST) ; only pay estimated regional fare
+                            MW[10]=ORIGINAL_FARE*(DIST_REG_OPTRS/WT_DIST) ; only pay estimated regional fare
  
 						ELSEIF (NUM_REG_XFERS=1) ; one regional transfer
                             WT_DIST=DIST_LOCAL*1.6+DIST_REG_OPTRS ; weighted distance of Local and Regional
-                            MW[10]=ORIGIONAL_FARE*(DIST_REG_OPTRS/WT_DIST)*0.75 ; 75% discount on estimated regional fare
+                            MW[10]=ORIGINAL_FARE*(DIST_REG_OPTRS/WT_DIST)*0.75 ; 75% discount on estimated regional fare
 						
 						ELSE ; 2+ regional transfers
                             WT_DIST=DIST_LOCAL*1.6+DIST_REG_OPTRS ; weighted distance of Local and Regional
-                            MW[10]=ORIGIONAL_FARE*(DIST_REG_OPTRS/WT_DIST)*0.50 ; 50% discount on estimated regional fare
+                            MW[10]=ORIGINAL_FARE*(DIST_REG_OPTRS/WT_DIST)*0.85 ; 85% discount on estimated regional fare
 						 
 						ENDIF ; check # of transfers                      
 					 
