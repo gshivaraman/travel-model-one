@@ -1,12 +1,5 @@
 ;
-; Specify FCIS modes, LL, 7/27/21
-;
-;FCIS_Local='15,20,21,24,27,28,30,33,38,42,44,46,49,52,55,56,60,63,66,68,70,110,111'
-;FCIS_Regional='80,81,82,84,86,87,88,90,91,92,93,95,100,101,102,103,104,120,121,130'
-;FCIS_Intercity='131,132,133'
-;FCIS_Free_SHTL='10,11,12,13,14,16,19'
-;
-; rev'd 7/27/21
+; Specify FCIS modes, LL, rev'd 7/27/21
 ;
 FCIS_Local='15,20,21,24,27,28,30,33,38,42,44,46,49,52,55,56,60,63,66,68,70,110,111'
 FCIS_Regional='80,81,82,84,86,87,88,90,91,92,93,95,100,101,102,103,104,105,120,121,122,130'
@@ -390,8 +383,8 @@ loop period = 1,5
                           d_105, ; South San Francisco Ferry                   
                           d_120, ; BART & E-BART                               
                           d_121, ; Oakland Airport Connector                   
+						  d_122, ; Caltrain
                           d_130, ; Caltrain                                    
-                          d_135, ; SMART                                       
                           
             ; in-vehicle time for all transit modes, use TP+ code 1001    
             mw[1]  = time(1001),
@@ -483,8 +476,8 @@ loop period = 1,5
             mw[52] = dist(105), ; South San Francisco Ferry                   
             mw[53] = dist(120), ; BART & E-BART                               
             mw[54] = dist(121), ; Oakland Airport Connector                   
-            mw[55] = dist(130), ; Caltrain                                    
-            mw[56] = dist(135)  ; SMART                                       
+			mw[55] = dist(122), ; Caltrain
+            mw[56] = dist(130) ; Caltrain                                    
 
           ; trace a selection of o/d pairs for debugging
 ;          select trace=(i=@token_debug_origin@ && j=@token_debug_destination@)            

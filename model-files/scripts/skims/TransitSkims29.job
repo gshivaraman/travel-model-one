@@ -468,7 +468,7 @@ loop period = 1,5
               
           FILLMW MW[1]=MI.1.1(34) ; read in original transit skims
           ;
-          ; Calculate FARE -- Test 16: Seamless Fare by Zone, LL, 8/2/21, edited by AM 20210827
+          ; Calculate FARE -- Test 16: Option 6 Fare by Zone, LL, 8/2/21, edited by AM 20210903
           ;          
           LOOKUP NAME=TAZ_to_FZ, LOOKUP[1]=1, RESULT=2, LOOKUPI=1
           
@@ -519,7 +519,7 @@ loop period = 1,5
 					  
 					  ENDIF
 				  
-					  MW[10][J]=MYFARE*100  ; convert to cents, LL, 8/19/21
+					  MW[10][J]=MYFARE*100*1.10  ; convert to cents, LL, 8/19/21, apply a 10% increase to the initial fares as previous runs suggest that the starting point might be too low.  
 					  ;PRINT FORM=6.0, LIST=I,',',J,',',FZ_O,',',FZ_D, MYFARE, FILE=FARE_QAQC.CSV 
 					  
 					ENDIF ; no Regional Services (only local)
