@@ -58,6 +58,8 @@
         <File name="model-files\scripts\skims\TransitSkims38.job" />
         <File name="model-files\scripts\skims\TransitSkims39.job" />
         <File name="model-files\scripts\skims\TransitSkims40.job" />
+        <File name="model-files\scripts\skims\TransitSkims41.job" />
+        <File name="model-files\scripts\skims\TransitSkims42.job" />
         <File name="utilities\outputs\JoinSkimsStr.R" />
         <File name="utilities\outputs\SummariseStr.R" />
         <File name="utilities\outputs\WorkbookStr.R" />
@@ -73,6 +75,7 @@
         <File name="model-files\scripts\skims\FareByDistLKUP.CSV" />
         <File name="model-files\scripts\skims\FareByDistLKUP2.csv" />
         <File name="model-files\scripts\skims\FareByDistLKUP3.csv" />
+        <File name="model-files\scripts\skims\FareByDistLKUP4.csv" />
         <File name="model-files\scripts\skims\Zone_Lookup_Seamless.csv" />
         <File name="model-files\scripts\skims\Zone_Lookup_Option_6.csv" />
         <File name="model-files\scripts\skims\Fare_by_Zone_Seamless.csv" />
