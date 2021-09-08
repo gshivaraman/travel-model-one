@@ -76,5 +76,8 @@
         <File name="model-files\scripts\skims\Zone_Lookup_Seamless.csv" />
         <File name="model-files\scripts\skims\Zone_Lookup_Option_6.csv" />
         <File name="model-files\scripts\skims\Fare_by_Zone_Seamless.csv" />
+        <File name="model-files\scripts\skims\Fare_by_Zone_Seamless_long.csv" />
+        <File name="model-files\scripts\skims\Fare_by_Zone_Seamless_auto.csv" />
+        <File name="model-files\scripts\skims\Fare_by_Zone_Seamless_auto_long.csv" />
     </Project>
 </NotepadPlus>
