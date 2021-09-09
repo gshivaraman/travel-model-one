@@ -62,6 +62,8 @@
         <File name="model-files\scripts\skims\TransitSkims40.job" />
         <File name="model-files\scripts\skims\TransitSkims41.job" />
         <File name="model-files\scripts\skims\TransitSkims42.job" />
+        <File name="model-files\scripts\skims\TransitSkims43.job" />
+        <File name="model-files\scripts\skims\TransitSkims44.job" />
         <File name="utilities\outputs\JoinSkimsStr.R" />
         <File name="utilities\outputs\SummariseStr.R" />
         <File name="utilities\outputs\WorkbookStr.R" />
