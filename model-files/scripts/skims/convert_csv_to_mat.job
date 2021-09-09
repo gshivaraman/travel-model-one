@@ -1,0 +1,21 @@
+
+
+token_model_dir = '%MODEL_DIR%'
+
+;convert long format .csv to .mat
+RUN PGM=MATRIX 
+    FILEI MATI=@token_model_dir@\trn\Fare_by_Zone_Seamless_auto_long.csv  PATTERN=IJ:V  FIELDS=#1-3
+    FILEO MATO=@token_model_dir@\trn\Fare_by_Zone_Seamless_auto.MAT, mo=1, DEC=2, NAME='Fare_Seamless'
+    PAR  ZONES=79 
+    mw[1]=mi.1.1
+ENDRUN
+
+;convert long format .csv to .mat
+RUN PGM=MATRIX 
+    FILEI MATI=@token_model_dir@\trn\Fare_by_Zone_Seamless_long.csv  PATTERN=IJ:V  FIELDS=#1-3
+    FILEO MATO=@token_model_dir@\trn\Fare_by_Zone_Seamless.MAT, mo=1, DEC=2, NAME='Fare_Seamless'
+    PAR  ZONES=79 
+    mw[1]=mi.1.1
+ENDRUN
+        
+        
