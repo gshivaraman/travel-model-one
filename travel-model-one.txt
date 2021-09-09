@@ -14,6 +14,7 @@
         <File name="model-files\RunIteration.bat" />
         <File name="model-files\LogRestartRunModel0.bat" />
         <File name="model-files\LogRestartRunModel1.bat" />
+        <File name="model-files\LogRestartRunModel40.bat" />
         <File name="model-files\RestartRunModel.bat" />
         <File name="model-files\RestartRunModelPostProcessing.bat" />
         <File name="model-files\runtime\mtcTourBasedRestartRun.properties" />
@@ -57,6 +58,7 @@
         <File name="model-files\scripts\skims\TransitSkims37.job" />
         <File name="model-files\scripts\skims\TransitSkims38.job" />
         <File name="model-files\scripts\skims\TransitSkims39.job" />
+        <File name="model-files\scripts\skims\convert_csv_to_mat.job" />
         <File name="model-files\scripts\skims\TransitSkims40.job" />
         <File name="model-files\scripts\skims\TransitSkims41.job" />
         <File name="model-files\scripts\skims\TransitSkims42.job" />
