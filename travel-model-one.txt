@@ -84,5 +84,6 @@
         <File name="model-files\scripts\skims\Fare_by_Zone_Seamless_long.csv" />
         <File name="model-files\scripts\skims\Fare_by_Zone_Seamless_auto.csv" />
         <File name="model-files\scripts\skims\Fare_by_Zone_Seamless_auto_long.csv" />
+        <File name="utilities\outputs\20210909_to_investigate_issue_with_fare_by_distance_scenarios.do" />
     </Project>
 </NotepadPlus>
