@@ -46,6 +46,12 @@ CompareStr(workbook1 = "WorkbookStr_2015_TM152_MTC_T26_20210902103141amitrani.xl
 
 CompareStr(workbook1 = "WorkbookStr_2015_TM152_MTC_T26_20210902103141amitrani.xlsx", workbook2 = "WorkbookStr_2015_TM152_MTC_T42_20210909114913amitrani.xlsx")
 
+CompareStr(workbook1 = "WorkbookStr_2015_TM152_MTC_T26_20210902103141amitrani.xlsx", workbook2 = "WorkbookStr_2015_TM152_MTC_T43_20210910073234amitrani.xlsx")
+
+CompareStr(workbook1 = "WorkbookStr_2015_TM152_MTC_T26_20210902103141amitrani.xlsx", workbook2 = "WorkbookStr_2015_TM152_MTC_T44_20210910074030amitrani.xlsx")
+
+
+
 # Steer base vs Steer tests
 
 CompareStr(workbook1 = "WorkbookStr_2015_TM152_STR_S2_20210818160843amitrani.xlsx", workbook2 = "WorkbookStr_2015_TM152_STR_T8_20210818162014amitrani.xlsx")
