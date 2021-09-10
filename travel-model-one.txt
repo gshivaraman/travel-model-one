@@ -80,6 +80,7 @@
         <File name="model-files\scripts\skims\FareByDistLKUP2.csv" />
         <File name="model-files\scripts\skims\FareByDistLKUP3.csv" />
         <File name="model-files\scripts\skims\FareByDistLKUP4.csv" />
+        <File name="model-files\scripts\skims\FareByDistLKUP5.csv" />
         <File name="model-files\scripts\skims\Zone_Lookup_Seamless.csv" />
         <File name="model-files\scripts\skims\Zone_Lookup_Option_6.csv" />
         <File name="model-files\scripts\skims\Fare_by_Zone_Seamless.csv" />
