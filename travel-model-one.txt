@@ -72,6 +72,7 @@
         <File name="utilities\outputs\JoinSkimsStr.R" />
         <File name="utilities\outputs\SummariseStr.R" />
         <File name="utilities\outputs\WorkbookStr.R" />
+        <File name="utilities\outputs\WorkbookStrMTC.R" />
         <File name="utilities\outputs\ProduceOutputsStr.R" />
         <File name="utilities\outputs\CompareStr.R" />
         <File name="utilities\outputs\20210803_to_process_CSVs.R" />
