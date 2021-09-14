@@ -99,3 +99,14 @@ WorkbookStrMTC(scenariocode="2015_TM152_MTC_T44")
 
 setwd("..")
 
+setwd("2015_TM152_MTC_T45")
+
+WorkbookStrMTC(scenariocode="2015_TM152_MTC_T45")
+
+setwd("..")
+
+setwd("2015_TM152_MTC_T46")
+
+WorkbookStrMTC(scenariocode="2015_TM152_MTC_T46")
+
+setwd("..")

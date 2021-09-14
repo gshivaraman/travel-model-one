@@ -1,4 +1,4 @@
-SummariseStr <- function(sampleshare=0.5, pnrparkingcost=2.0, logrun=FALSE, catvarslist=c("orig_taz", "dest_taz", "home_taz", "trip_mode", "incQ", "timeCodeNum", "ptype"), sumvarslist=c("num_participants", "walktime", "wait", "IVT", "transfers", "bau_fare", "fare", "othercost", "distance", "dFree", "dInterCity", "dLocal", "dRegional", "ddist", "dFareMat")) {
+SummariseStrMTC <- function(sampleshare=0.5, pnrparkingcost=2.0, logrun=FALSE, catvarslist=c("orig_taz", "dest_taz", "home_taz", "trip_mode", "incQ", "timeCodeNum", "ptype"), sumvarslist=c("num_participants", "walktime", "wait", "IVT", "transfers", "bau_fare", "fare", "othercost", "distance", "dFree", "dInterCity", "dLocal", "dRegional", "ddist", "dFareMat")) {
   
   
   library(tidyverse)
@@ -436,22 +436,22 @@ WorkbookStrMTC <- function(sampleshare=0.5, pnrparkingcost=2.0, logrun=TRUE, sce
 
   
   sheetname1 <- "trip_mode"
-  mydf1 <- SummariseStr(sampleshare=sampleshare, pnrparkingcost=pnrparkingcost, logrun=logrun, catvarslist = c("trip_mode"), sumvarslist=c("fare", "bau_fare", "num_participants", "walktime", "wait", "IVT", "transfers", "othercost", "distance", "dLocal", "dRegional", "dFree", "dInterCity", "ddist", "dFareMat"))
+  mydf1 <- SummariseStrMTC(sampleshare=sampleshare, pnrparkingcost=pnrparkingcost, logrun=logrun, catvarslist = c("trip_mode"), sumvarslist=c("fare", "bau_fare", "num_participants", "walktime", "wait", "IVT", "transfers", "othercost", "distance", "dLocal", "dRegional", "dFree", "dInterCity", "ddist", "dFareMat"))
   
   sheetname2 <- "incQ_trip_mode"
-  mydf2 <- SummariseStr(sampleshare=sampleshare, pnrparkingcost=pnrparkingcost, logrun=logrun, catvarslist = c("incQ", "trip_mode"), sumvarslist=c("fare", "bau_fare", "num_participants", "walktime", "wait", "IVT", "transfers", "othercost", "distance", "dLocal", "dRegional", "dFree", "dInterCity", "ddist", "dFareMat"))
+  mydf2 <- SummariseStrMTC(sampleshare=sampleshare, pnrparkingcost=pnrparkingcost, logrun=logrun, catvarslist = c("incQ", "trip_mode"), sumvarslist=c("fare", "bau_fare", "num_participants", "walktime", "wait", "IVT", "transfers", "othercost", "distance", "dLocal", "dRegional", "dFree", "dInterCity", "ddist", "dFareMat"))
   
   sheetname3 <- "timeCodeNum_trip_mode"
-  mydf3 <- SummariseStr(sampleshare=sampleshare, pnrparkingcost=pnrparkingcost, logrun=logrun, catvarslist = c("timeCodeNum", "trip_mode"), sumvarslist=c("fare", "bau_fare", "num_participants", "walktime", "wait", "IVT", "transfers", "othercost", "distance", "dLocal", "dRegional", "dFree", "dInterCity", "ddist", "dFareMat"))
+  mydf3 <- SummariseStrMTC(sampleshare=sampleshare, pnrparkingcost=pnrparkingcost, logrun=logrun, catvarslist = c("timeCodeNum", "trip_mode"), sumvarslist=c("fare", "bau_fare", "num_participants", "walktime", "wait", "IVT", "transfers", "othercost", "distance", "dLocal", "dRegional", "dFree", "dInterCity", "ddist", "dFareMat"))
   
   sheetname4 <- "ptype_trip_mode"
-  mydf4 <- SummariseStr(sampleshare=sampleshare, pnrparkingcost=pnrparkingcost, logrun=logrun, catvarslist = c("ptype", "trip_mode"), sumvarslist=c("fare", "bau_fare", "num_participants", "walktime", "wait", "IVT", "transfers", "othercost", "distance", "dLocal", "dRegional", "dFree", "dInterCity", "ddist", "dFareMat"))
+  mydf4 <- SummariseStrMTC(sampleshare=sampleshare, pnrparkingcost=pnrparkingcost, logrun=logrun, catvarslist = c("ptype", "trip_mode"), sumvarslist=c("fare", "bau_fare", "num_participants", "walktime", "wait", "IVT", "transfers", "othercost", "distance", "dLocal", "dRegional", "dFree", "dInterCity", "ddist", "dFareMat"))
   
   sheetname5 <- "incQ_trip_mode_home_taz"
-  mydf5 <- SummariseStr(sampleshare=sampleshare, pnrparkingcost=pnrparkingcost, logrun=logrun, catvarslist = c("incQ", "trip_mode", "home_taz"), sumvarslist=c("fare", "bau_fare", "num_participants", "walktime", "wait", "IVT", "transfers", "othercost", "distance", "dLocal", "dRegional", "dFree", "dInterCity", "ddist", "dFareMat"))
+  mydf5 <- SummariseStrMTC(sampleshare=sampleshare, pnrparkingcost=pnrparkingcost, logrun=logrun, catvarslist = c("incQ", "trip_mode", "home_taz"), sumvarslist=c("fare", "bau_fare", "num_participants", "walktime", "wait", "IVT", "transfers", "othercost", "distance", "dLocal", "dRegional", "dFree", "dInterCity", "ddist", "dFareMat"))
   
   sheetname6 <- "county_od_trip_mode"
-  mydf6 <- SummariseStr(sampleshare=sampleshare, pnrparkingcost=pnrparkingcost, logrun=logrun, catvarslist = c("orig_county", "dest_county", "trip_mode"), sumvarslist=c("fare", "bau_fare", "num_participants", "walktime", "wait", "IVT", "transfers", "othercost", "distance", "dLocal", "dRegional", "dFree", "dInterCity", "ddist", "dFareMat"))
+  mydf6 <- SummariseStrMTC(sampleshare=sampleshare, pnrparkingcost=pnrparkingcost, logrun=logrun, catvarslist = c("orig_county", "dest_county", "trip_mode"), sumvarslist=c("fare", "bau_fare", "num_participants", "walktime", "wait", "IVT", "transfers", "othercost", "distance", "dLocal", "dRegional", "dFree", "dInterCity", "ddist", "dFareMat"))
   
   
   # create output workbook
