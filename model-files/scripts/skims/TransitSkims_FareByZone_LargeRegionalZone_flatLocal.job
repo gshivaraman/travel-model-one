@@ -485,7 +485,7 @@ loop period = 1,5
 				
 						MW[10]=148
 				
-					ELSE 
+					ELSEIF (MI.1.dRegional>0)			 ; distance is travelled on Regional Services
 
  
 					  FZ_O = TAZ_to_FZ(1,I)                              ; Fare Zone - Origin
@@ -509,7 +509,7 @@ loop period = 1,5
 					  
 					  MW[10] = MYFARE*100*1.10 + @token_addfare@                     ; apply a 10% increase, add @token_addfare@ cents  
 					  
-					ENDIF					  
+					ENDIF											; end if no Regional Services (only local)			  
                   
               ENDIF                                                  ; end if in scope
               
