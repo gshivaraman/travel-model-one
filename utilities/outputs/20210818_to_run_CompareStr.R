@@ -58,7 +58,9 @@ CompareStr(workbook1 = "WorkbookStr_2015_TM152_MTC_T26_20210902103141amitrani.xl
 
 CompareStr(workbook1 = "WorkbookStr_2015_TM152_MTC_T26_20210902103141amitrani.xlsx", workbook2 = "WorkbookStr_2015_TM152_MTC_T48_20210915072039amitrani.xlsx")
 
+CompareStr(workbook1 = "WorkbookStr_2015_TM152_MTC_T26_20210902103141amitrani.xlsx", workbook2 = "WorkbookStr_2015_TM152_MTC_T49_20210915160506amitrani.xlsx")
 
+CompareStr(workbook1 = "WorkbookStr_2015_TM152_MTC_T26_20210902103141amitrani.xlsx", workbook2 = "WorkbookStr_2015_TM152_MTC_T50_20210915163519amitrani.xlsx")
 
 
 
