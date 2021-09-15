@@ -68,6 +68,7 @@
         <File name="model-files\scripts\skims\TransitSkims45.job" />
         <File name="model-files\scripts\skims\TransitSkims46.job" />
         <File name="model-files\scripts\skims\TransitSkims47.job" />
+        <File name="model-files\scripts\skims\TransitSkims_FareByZone_LargeRegionalZone_flatLocal.job" />
         <File name="model-files\scripts\skims\TransitSkims48.job" />
         <File name="utilities\outputs\JoinSkimsStr.R" />
         <File name="utilities\outputs\SummariseStr.R" />
